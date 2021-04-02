@@ -1,7 +1,38 @@
 package main
 
-import "fmt"
+import (
+    "encoding/json"
+    "github.com/tatoshko/tbot/core"
+    "io/ioutil"
+    "net/http"
+    "os"
+)
+
+var err error
+var PORT = os.Getenv("PORT")
 
 func main() {
-    fmt.Println("HW!")
+    var jsonFile *os.File
+
+    if jsonFile, err = os.Open("config.json"); err == nil {
+        defer jsonFile.Close()
+
+        var config core.Config
+
+        bytes, _ := ioutil.ReadAll(jsonFile)
+
+        if err = json.Unmarshal(bytes, &config); err != nil {
+            panic(err)
+        }
+
+        core.InitBot(config.Token, config.Hook)
+
+        if err = http.ListenAndServe("0.0.0.0:" + PORT, nil); err != nil {
+            panic(err)
+        }
+
+    } else {
+        panic(err)
+    }
+
 }
