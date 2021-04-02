@@ -8,7 +8,7 @@ import (
 
 var Storage = make(map[string]string)
 
-func handleSet(update tgbotapi.Update, text string) (tgbotapi.Message, error) {
+func handleSet(update tgbotapi.Update, text string) {
     parts := strings.SplitAfterN(text, " ", 2)
     key, value := parts[0], parts[1]
     Storage[key] = value
@@ -19,17 +19,18 @@ func handleSet(update tgbotapi.Update, text string) (tgbotapi.Message, error) {
     )
     msg.ReplyToMessageID = update.Message.MessageID
 
-    return Bot.Send(msg)
+    Bot.Send(msg)
 }
 
-func handleGet(update tgbotapi.Update, key string) (tgbotapi.Message, error) {
-    value, _ := Storage[key]
+func handleGet(update tgbotapi.Update, key string) {
+    if value, found := Storage[key]; found {
+        msg := tgbotapi.NewMessage(
+            update.Message.Chat.ID,
+            fmt.Sprintf("Value is *%s*", value),
+        )
 
-    msg := tgbotapi.NewMessage(
-        update.Message.Chat.ID,
-        fmt.Sprintf("Value is '%s'", value),
-    )
-    msg.ReplyToMessageID = update.Message.MessageID
+        msg.ReplyToMessageID = update.Message.MessageID
 
-    return Bot.Send(msg)
+        Bot.Send(msg)
+    }
 }
