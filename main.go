@@ -35,9 +35,11 @@ func main() {
             }
         })()
 
-        select {
-        case msg := <- output:
-            fmt.Println(msg)
+        for {
+            select {
+            case msg := <- output:
+                fmt.Println(msg)
+            }
         }
     } else {
         panic(err)
