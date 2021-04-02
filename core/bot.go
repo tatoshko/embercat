@@ -26,8 +26,6 @@ func InitBot(token, hook string, output chan string) {
             parts := strings.SplitAfterN(text, " ", 2)
             command, value := parts[0], parts[1]
 
-            output <- fmt.Sprintf("Command '%s' with value '%s'", command, value)
-
             switch command {
             case "set":
                 Bot.Send(tba.NewMessage(update.Message.Chat.ID, "WTF!"))
@@ -39,6 +37,8 @@ func InitBot(token, hook string, output chan string) {
                     output <- err.Error()
                 }
             }
+
+            output <- fmt.Sprintf("Command '%s' with value '%s'", command, value)
         }
 
     }
