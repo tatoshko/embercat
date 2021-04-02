@@ -30,9 +30,13 @@ func InitBot(token, hook string, output chan string) {
 
             switch command {
             case "set":
-                handleSet(update, value)
+                if _, err = handleSet(update, value); err != nil {
+                    output <- err.Error()
+                }
             case "get":
-                handleGet(update, value)
+                if _, err = handleGet(update, value); err != nil {
+                    output <- err.Error()
+                }
             }
         }
 
