@@ -29,9 +29,11 @@ func main() {
 
         go core.InitBot(config.Token, config.Hook, output)
 
-        if err = http.ListenAndServe("0.0.0.0:" + PORT, nil); err != nil {
-            panic(err)
-        }
+        go (func() {
+            if err = http.ListenAndServe("0.0.0.0:" + PORT, nil); err != nil {
+                panic(err)
+            }
+        })()
 
         select {
         case msg := <- output:
