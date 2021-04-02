@@ -28,12 +28,7 @@ func main() {
         }
 
         go core.InitBot(config.Token, config.Hook, output)
-
-        go (func() {
-            if err = http.ListenAndServe("0.0.0.0:" + PORT, nil); err != nil {
-                panic(err)
-            }
-        })()
+        go http.ListenAndServe("0.0.0.0:" + PORT, nil)
 
         for {
             select {

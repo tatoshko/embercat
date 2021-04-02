@@ -29,11 +29,12 @@ func InitBot(token, hook string, output chan string) {
             output <- fmt.Sprintf("Command '%s' with value '%s'", command, value)
 
             switch command {
-            case "set ":
+            case "set":
+                Bot.Send(tba.NewMessage(update.Message.Chat.ID, "WTF!"))
                 if _, err = handleSet(update, value); err != nil {
                     output <- err.Error()
                 }
-            case "get ":
+            case "get":
                 if _, err = handleGet(update, value); err != nil {
                     output <- err.Error()
                 }
