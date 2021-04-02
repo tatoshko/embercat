@@ -2,7 +2,6 @@ package core
 
 import (
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
-    "log"
     "strings"
 )
 
@@ -28,13 +27,9 @@ func InitBot(token, hook string) {
 
             switch strings.TrimSpace(command) {
             case "set":
-                if _, err = handleSet(update, value); err != nil {
-                    log.Fatal(err)
-                }
+                handleSet(update, value)
             case "get":
-                if _, err = handleGet(update, value); err != nil {
-                    log.Fatal(err)
-                }
+                handleGet(update, value)
             }
         }
 
