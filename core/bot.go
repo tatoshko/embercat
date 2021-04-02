@@ -26,7 +26,7 @@ func InitBot(token, hook string) {
             parts := strings.SplitAfterN(text, " ", 2)
             command, value := parts[0], parts[1]
 
-            switch command {
+            switch strings.TrimSpace(command) {
             case "set":
                 Bot.Send(tba.NewMessage(update.Message.Chat.ID, "WTF!"))
                 if _, err = handleSet(update, value); err != nil {
