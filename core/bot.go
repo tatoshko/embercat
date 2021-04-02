@@ -28,7 +28,6 @@ func InitBot(token, hook string) {
 
             switch strings.TrimSpace(command) {
             case "set":
-                Bot.Send(tba.NewMessage(update.Message.Chat.ID, "WTF!"))
                 if _, err = handleSet(update, value); err != nil {
                     log.Fatal(err)
                 }

@@ -15,7 +15,7 @@ func handleSet(update tgbotapi.Update, text string) (tgbotapi.Message, error) {
 
     msg := tgbotapi.NewMessage(
         update.Message.Chat.ID,
-        fmt.Sprintf("'%s' has benn set to key '%s'", value, key),
+        fmt.Sprintf("'%s' has been set to key '%s'", value, key),
     )
     msg.ReplyToMessageID = update.Message.MessageID
 
@@ -23,11 +23,11 @@ func handleSet(update tgbotapi.Update, text string) (tgbotapi.Message, error) {
 }
 
 func handleGet(update tgbotapi.Update, key string) (tgbotapi.Message, error) {
-    value := Storage[key]
+    value, _ := Storage[key]
 
     msg := tgbotapi.NewMessage(
         update.Message.Chat.ID,
-        fmt.Sprintf("%s", value),
+        fmt.Sprintf("Value is '%s'", value),
     )
     msg.ReplyToMessageID = update.Message.MessageID
 
