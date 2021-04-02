@@ -1,15 +1,15 @@
 package core
 
 import (
-    "fmt"
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
+    "log"
     "strings"
 )
 
 var err error
 var Bot *tba.BotAPI
 
-func InitBot(token, hook string, output chan string) {
+func InitBot(token, hook string) {
     if Bot, err = tba.NewBotAPI(token); err != nil {
         panic(err)
     }
@@ -30,15 +30,13 @@ func InitBot(token, hook string, output chan string) {
             case "set":
                 Bot.Send(tba.NewMessage(update.Message.Chat.ID, "WTF!"))
                 if _, err = handleSet(update, value); err != nil {
-                    output <- err.Error()
+                    log.Fatal(err)
                 }
             case "get":
                 if _, err = handleGet(update, value); err != nil {
-                    output <- err.Error()
+                    log.Fatal(err)
                 }
             }
-
-            output <- fmt.Sprintf("Command '%s' with value '%s'", command, value)
         }
 
     }
