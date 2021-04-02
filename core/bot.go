@@ -32,7 +32,7 @@ func InitBot(token, hook string, output chan string) {
             case "set":
                 go handleSet(update, value)
             case "get":
-                Get(value)
+                go handleGet(update, value)
             }
 
         }
