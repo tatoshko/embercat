@@ -2,6 +2,7 @@ package main
 
 import (
     "encoding/json"
+    "fmt"
     "github.com/tatoshko/tbot/core"
     "io/ioutil"
     "net/http"
@@ -9,6 +10,7 @@ import (
 )
 
 var err error
+var output = make(chan string)
 var PORT = os.Getenv("PORT")
 
 func main() {
@@ -25,12 +27,16 @@ func main() {
             panic(err)
         }
 
-        core.InitBot(config.Token, config.Hook)
+        go core.InitBot(config.Token, config.Hook, output)
 
         if err = http.ListenAndServe("0.0.0.0:" + PORT, nil); err != nil {
             panic(err)
         }
 
+        select {
+        case msg := <- output:
+            fmt.Println(msg)
+        }
     } else {
         panic(err)
     }
