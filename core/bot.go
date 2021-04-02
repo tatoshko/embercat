@@ -30,11 +30,10 @@ func InitBot(token, hook string, output chan string) {
 
             switch command {
             case "set":
-                go handleSet(update, value)
+                handleSet(update, value)
             case "get":
-                go handleGet(update, value)
+                handleGet(update, value)
             }
-
         }
 
     }

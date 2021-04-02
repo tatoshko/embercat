@@ -8,7 +8,7 @@ import (
 
 var Storage = make(map[string]string)
 
-func handleSet(update tgbotapi.Update, text string) {
+func handleSet(update tgbotapi.Update, text string) (tgbotapi.Message, error) {
     parts := strings.SplitAfterN(text, " ", 2)
     key, value := parts[0], parts[1]
     Storage[key] = value
@@ -19,10 +19,10 @@ func handleSet(update tgbotapi.Update, text string) {
     )
     msg.ReplyToMessageID = update.Message.MessageID
 
-    Bot.Send(msg)
+    return Bot.Send(msg)
 }
 
-func handleGet(update tgbotapi.Update, key string) {
+func handleGet(update tgbotapi.Update, key string) (tgbotapi.Message, error) {
     value := Storage[key]
 
     msg := tgbotapi.NewMessage(
@@ -31,5 +31,5 @@ func handleGet(update tgbotapi.Update, key string) {
     )
     msg.ReplyToMessageID = update.Message.MessageID
 
-    Bot.Send(msg)
+    return Bot.Send(msg)
 }
