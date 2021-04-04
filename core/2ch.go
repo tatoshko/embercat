@@ -11,7 +11,6 @@ import (
 )
 
 var CATALOG = "https://2ch.hk/b/catalog.json"
-var db []File = make([]File, 1)
 
 func parseThreads() []Thread {
     var threads []Thread = make([]Thread, 10)
@@ -46,15 +45,12 @@ func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
             log.Println(err)
         } else {
             thread := board.Threads[0]
+            var db = make([]File, 1)
 
             for _, post := range thread.Posts {
                 for _, file := range post.Files {
                     if file.Type == MP4 && file.Path != "" {
                         db = append(db, file)
-
-                        //msg := tgbotapi.NewMessage(update.Message.Chat.ID, path)
-                        //msg := tgbotapi.NewVideoUpload(update.Message.Chat.ID, path)
-                        //bot.Send(msg)
                     }
                 }
             }
@@ -62,6 +58,11 @@ func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
             for _, file := range db {
                 log.Printf("File path: %s", file.Path)
             }
+
+            path := "https:/2ch.hk" + db[1].Path
+            //msg := tgbotapi.NewMessage(update.Message.Chat.ID, path)
+            msg := tgbotapi.NewVideoUpload(update.Message.Chat.ID, path)
+            bot.Send(msg)
         }
     }
 }
