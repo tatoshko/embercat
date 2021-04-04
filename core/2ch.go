@@ -54,9 +54,9 @@ func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
 
                         log.Println(path)
 
-                        msg := tgbotapi.NewMessage(update.Message.Chat.ID, path)
+                        //msg := tgbotapi.NewMessage(update.Message.Chat.ID, path)
                         //msg := tgbotapi.NewVideoUpload(update.Message.Chat.ID, path)
-                        bot.Send(msg)
+                        //bot.Send(msg)
                     }
                 }
             }
