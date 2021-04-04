@@ -24,16 +24,16 @@ func handleSet(update tgbotapi.Update, text string) {
 }
 
 func handleGet(update tgbotapi.Update, key string) {
-    log.Printf("Getted from storage %q", Storage, Storage[key])
+    log.Printf("Getted from storage %q, by key %s, result %s", Storage, key, Storage[key])
 
-    if value, found := Storage[key]; found {
-        msg := tgbotapi.NewMessage(
-            update.Message.Chat.ID,
-            fmt.Sprintf("Value is *%s*", value),
-        )
+    value, found := Storage[key]
 
-        msg.ReplyToMessageID = update.Message.MessageID
+    msg := tgbotapi.NewMessage(
+        update.Message.Chat.ID,
+        fmt.Sprintf("Value is %v *%s*", found, value),
+    )
 
-        Bot.Send(msg)
-    }
+    msg.ReplyToMessageID = update.Message.MessageID
+
+    Bot.Send(msg)
 }
