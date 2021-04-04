@@ -1,8 +1,8 @@
 package core
 
 import (
-    "fmt"
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
+    "log"
     "regexp"
 )
 
@@ -24,7 +24,7 @@ func InitBot(token, hook string) {
         if commandMsg.MatchString(text) {
             match := reSubMatchMap(commandMsg, text)
 
-            fmt.Printf("Command: %s, data: %s", match["command"], match["data"])
+            log.Printf("Command: %s, data: %s", match["command"], match["data"])
 
             switch match["command"] {
             case "set":
