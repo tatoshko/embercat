@@ -27,12 +27,13 @@ func initStorage(db string) {
 }
 
 func handleSet(bot *tba.BotAPI, update tba.Update, text string) {
-    log.Println("Handle set")
     parts := strings.SplitAfterN(text, " ", 2)
     key, value := parts[0], parts[1]
 
     if Storage.IsReadOnly() {
-        Storage.Update(func(tx *bolt.Tx) error {
+        log.Println("Handle set")
+
+        if err = Storage.Update(func(tx *bolt.Tx) error {
             b := tx.Bucket(BUCKET_NAME)
             if err := b.Put([]byte(key), []byte(value)); err == nil {
                 msg := tba.NewMessage(
@@ -53,14 +54,19 @@ func handleSet(bot *tba.BotAPI, update tba.Update, text string) {
 
                 return err
             }
-        })
+        }); err != nil {
+            panic(err)
+        }
+    } else {
+        log.Println("DB is not ready")
     }
 }
 
 func handleGet(bot *tba.BotAPI, update tba.Update, key string) {
-    log.Println("Handle get")
     if Storage.IsReadOnly() {
-        Storage.View(func(tx *bolt.Tx) error {
+        log.Println("Handle get")
+
+        if err = Storage.View(func(tx *bolt.Tx) error {
             b := tx.Bucket(BUCKET_NAME)
             value := b.Get([]byte(key))
 
@@ -70,6 +76,10 @@ func handleGet(bot *tba.BotAPI, update tba.Update, key string) {
             bot.Send(msg)
 
             return nil
-        })
+        }); err != nil {
+            panic(err)
+        }
+    } else {
+        log.Println("DB is not ready")
     }
 }
