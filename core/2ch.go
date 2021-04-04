@@ -39,16 +39,17 @@ func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
         }
 
         threadPath := makeThreadPath(thread.Num)
-        log.Printf("Lookup for thread: %s. Thread: %q", threadPath, thread)
 
-        var data Thread
+        var board Board
 
-        if err = lookup(threadPath, &data); err != nil {
+        if err = lookup(threadPath, &board); err != nil {
             log.Println(err)
         } else {
-            log.Printf("Posts %q", data.Posts)
+            thread := board.Threads[0]
 
-            for _, post := range data.Posts {
+            log.Printf("Posts %q", thread.Posts)
+
+            for _, post := range thread.Posts {
                 for _, file := range post.Files {
                     if file.Type == MP4 {
                         db = append(db, file)
