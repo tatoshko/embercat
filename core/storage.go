@@ -31,7 +31,7 @@ func handleSet(db string) CommandHandler {
         log.Println("Handle set")
 
         parts := strings.SplitAfterN(text, " ", 2)
-        key, value := parts[0], parts[1]
+        key, value := strings.TrimSpace(parts[0]), strings.TrimSpace(parts[1])
 
         if Storage, err = bolt.Open(db, 0600, nil); err == nil {
             defer Storage.Close()
