@@ -6,6 +6,7 @@ type Board struct {
 
 type Thread struct {
     Subject string `json:"subject"`
+    Comment string `json:"comment"`
     Num     string `json:"num"`
     Posts   []Post `json:"posts"`
 }
