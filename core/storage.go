@@ -28,10 +28,10 @@ func initStorage(db string) {
 
 func handleSet(db string) CommandHandler {
     return func(bot *tba.BotAPI, update tba.Update, text string) {
+        log.Println("Handle set")
+
         parts := strings.SplitAfterN(text, " ", 2)
         key, value := parts[0], parts[1]
-
-        log.Println("Handle set")
 
         if Storage, err = bolt.Open(db, 0600, nil); err == nil {
             defer Storage.Close()
@@ -68,6 +68,8 @@ func handleSet(db string) CommandHandler {
 
 func handleGet(db string) CommandHandler {
     return func(bot *tba.BotAPI, update tba.Update, key string) {
+        log.Println("Handle get")
+
         if Storage, err = bolt.Open(db, 0600, nil); err == nil {
             defer Storage.Close()
 
