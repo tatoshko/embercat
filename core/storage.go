@@ -78,6 +78,10 @@ func handleGet(db string) CommandHandler {
 
             if err = Storage.View(func(tx *bolt.Tx) error {
                 b := tx.Bucket(BUCKET_NAME)
+                b.ForEach(func(k, v []byte) error {
+                    log.Printf("In bucket k%s: v%s", string(k), string(v))
+                    return nil
+                })
                 value := b.Get([]byte(key))
 
                 msg := tba.NewMessage(update.Message.Chat.ID, "By key **" + key + "** we found **" + string(value) + "**")
