@@ -66,6 +66,8 @@ func lookup(path string, data interface{}) error {
             }
         }
     }
+
+    return nil
 }
 
 func makeThreadPath(num string) string {
