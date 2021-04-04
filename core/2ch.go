@@ -49,7 +49,7 @@ func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
 
             for _, post := range thread.Posts {
                 for _, file := range post.Files {
-                    if file.Type == MP4 {
+                    if file.Type == MP4 && file.Path != "" {
                         db = append(db, file)
                     }
                 }
