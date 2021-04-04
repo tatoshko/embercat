@@ -1,6 +1,7 @@
 package core
 
 import (
+    "fmt"
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
     "regexp"
 )
@@ -18,7 +19,6 @@ func InitBot(token, hook string) {
     updates := Bot.ListenForWebhook("/" + Bot.Token)
 
     for update := range updates {
-        //output <- update.Message.Text
         text := update.Message.Text
 
         if commandMsg.MatchString(text) {
@@ -29,6 +29,7 @@ func InitBot(token, hook string) {
                 handleSet(update, match["data"])
                 break;
             case "get":
+                fmt.Printf("%q", match["data"])
                 handleGet(update, match["data"])
                 break;
             }
