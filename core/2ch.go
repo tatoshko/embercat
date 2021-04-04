@@ -76,5 +76,5 @@ func lookup(path string, data interface{}) error {
 }
 
 func makeThreadPath(num string) string {
-    return fmt.Sprintf("https://2ch.hk/b/res/%s.html", num)
+    return fmt.Sprintf("https://2ch.hk/b/res/%s.json", num)
 }
