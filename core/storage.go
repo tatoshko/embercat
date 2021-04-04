@@ -3,6 +3,7 @@ package core
 import (
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    "log"
     "strings"
 )
 
@@ -23,7 +24,7 @@ func handleSet(update tgbotapi.Update, text string) {
 }
 
 func handleGet(update tgbotapi.Update, key string) {
-    fmt.Printf("%q", Storage, Storage[key])
+    log.Printf("%q", Storage, Storage[key])
 
     if value, found := Storage[key]; found {
         msg := tgbotapi.NewMessage(
