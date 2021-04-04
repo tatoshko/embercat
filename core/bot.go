@@ -2,11 +2,12 @@ package core
 
 import (
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
-    "strings"
+    "regexp"
 )
 
 var err error
 var Bot *tba.BotAPI
+var commandMsg = regexp.MustCompile(`^\/(?P<command>\w+)\s*(?P<data>.*)$`)
 
 func InitBot(token, hook string) {
     if Bot, err = tba.NewBotAPI(token); err != nil {
@@ -20,18 +21,17 @@ func InitBot(token, hook string) {
         //output <- update.Message.Text
         text := update.Message.Text
 
-        if strings.HasPrefix(text, "/") {
-            text = strings.Trim(text, "/")
-            parts := strings.SplitAfterN(text, " ", 2)
-            command, value := parts[0], parts[1]
+        if commandMsg.MatchString(text) {
+            match := reSubMatchMap(commandMsg, text)
 
-            switch strings.TrimSpace(command) {
+            switch match["command"] {
             case "set":
-                handleSet(update, value)
+                handleSet(update, match["data"])
+                break;
             case "get":
-                handleGet(update, value)
+                handleGet(update, match["data"])
+                break;
             }
         }
-
     }
 }
