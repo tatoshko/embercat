@@ -21,7 +21,7 @@ func InitBot(token, hook string) {
     for update := range updates {
         text := update.Message.Text
 
-        fmt.Printf(text)
+        fmt.Printf("%s", text)
 
         if commandMsg.MatchString(text) {
             match := reSubMatchMap(commandMsg, text)
