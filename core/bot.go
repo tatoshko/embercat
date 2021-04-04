@@ -32,7 +32,7 @@ func InitBot(config Config) (tbot *TBot) {
     initStorage(config.DB)
 
     tbot.RegisterHandler("set", handleSet(config.DB))
-    tbot.RegisterHandler("get", handleGet)
+    tbot.RegisterHandler("get", handleGet(config.DB))
 
 
     if Bot, err = tba.NewBotAPI(token); err != nil {
