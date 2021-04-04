@@ -23,7 +23,7 @@ func parseThreads() []Thread {
         log.Fatalln(err)
     } else {
         for _, thread := range board.Threads {
-            if matcher.MatchString(thread.Subject) || matcher.MatchString(thread.Comment){
+            if matcher.MatchString(thread.Subject) || matcher.MatchString(thread.Comment) {
                 threads = append(threads, thread)
             }
         }
@@ -44,15 +44,17 @@ func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
         var data Thread
 
         if err = lookup(threadPath, &data); err != nil {
-           log.Println(err)
+            log.Println(err)
         } else {
-           for _, post := range data.Posts {
-               for _, file := range post.Files {
-                   if file.Type == MP4 {
-                       db = append(db, file)
-                   }
-               }
-           }
+            log.Printf("Posts %q", data.Posts)
+
+            for _, post := range data.Posts {
+                for _, file := range post.Files {
+                    if file.Type == MP4 {
+                        db = append(db, file)
+                    }
+                }
+            }
         }
     }
 
