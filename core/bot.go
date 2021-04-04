@@ -21,6 +21,8 @@ func InitBot(token, hook string) {
     for update := range updates {
         text := update.Message.Text
 
+        fmt.Printf(text)
+
         if commandMsg.MatchString(text) {
             match := reSubMatchMap(commandMsg, text)
 
@@ -29,7 +31,6 @@ func InitBot(token, hook string) {
                 handleSet(update, match["data"])
                 break;
             case "get":
-                fmt.Printf("%q", match["data"])
                 handleGet(update, match["data"])
                 break;
             }
