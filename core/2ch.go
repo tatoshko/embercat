@@ -34,9 +34,10 @@ func parseThreads() []Thread {
 
 func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
     for _, thread := range parseThreads() {
-        log.Printf("Lookup for thread: %s.", thread.Subject)
+        threadPath := makeThreadPath(thread.Num)
+        log.Printf("Lookup for thread: %s.", threadPath)
 
-        if err = lookup(makeThreadPath(thread.Num), &thread); err != nil {
+        if err = lookup(threadPath, &thread); err != nil {
             log.Fatalln(err)
         } else {
             for _, post := range thread.Posts {
