@@ -42,8 +42,13 @@ func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
     if res, err := http.Get(fileURL.String()); err == nil {
         defer res.Body.Close()
 
+        log.Printf("Lookup %s", fileURL.String())
+
         if body, err := io.ReadAll(res.Body); err == nil {
+            log.Printf("Readed body len %d", len(body))
+
             msg := tgbotapi.NewVideoUpload(update.Message.Chat.ID, body)
+            log.Printf("Try to send %v", msg)
             bot.Send(msg)
         } else {
             log.Fatalln(err)
