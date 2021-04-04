@@ -33,6 +33,28 @@ func parseThreads() []Thread {
 }
 
 func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
+    fileURL := url.URL{
+        Scheme:      "https",
+        Host:        "2ch.hk",
+        Path:        "/b/src/243772897/16175338978370.mp4",
+    }
+
+    if res, err := http.Get(fileURL.String()); err == nil {
+        defer res.Body.Close()
+
+        if body, err := io.ReadAll(res.Body); err == nil {
+            msg := tgbotapi.NewVideoUpload(update.Message.Chat.ID, body)
+            bot.Send(msg)
+        } else {
+            log.Fatalln(err)
+        }
+    } else {
+        log.Fatalln(err)
+    }
+
+
+
+    return
     for _, thread := range parseThreads() {
         if thread.Num == "" {
             continue
