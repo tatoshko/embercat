@@ -11,7 +11,7 @@ import (
 )
 
 var CATALOG = "https://2ch.hk/b/catalog.json"
-var db []File = make([]File, 1000)
+var db []File = make([]File, 1)
 
 func parseThreads() []Thread {
     var threads []Thread = make([]Thread, 10)
