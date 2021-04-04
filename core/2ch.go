@@ -51,19 +51,18 @@ func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
                 for _, file := range post.Files {
                     if file.Type == MP4 {
                         db = append(db, file)
-                    } else {
-                        log.Println(file.Path)
                     }
                 }
             }
         }
     }
 
-    path := "https://2ch.hk" + db[0].Path
-
-    log.Println(path)
-
-    msg := tgbotapi.NewMessage(update.Message.Chat.ID, path)
+    log.Printf("Files %q", db)
+    //path := "https://2ch.hk" + db[0].Path
+    //
+    //log.Println(path)
+    //
+    msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Done")
     //msg := tgbotapi.NewVideoUpload(update.Message.Chat.ID, path)
     bot.Send(msg)
 }
