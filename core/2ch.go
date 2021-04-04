@@ -50,15 +50,17 @@ func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
             for _, post := range thread.Posts {
                 for _, file := range post.Files {
                     if file.Type == MP4 && file.Path != "" {
-                        path := "https://2ch.hk" + file.Path
-
-                        log.Println(path)
+                        db = append(db, file)
 
                         //msg := tgbotapi.NewMessage(update.Message.Chat.ID, path)
                         //msg := tgbotapi.NewVideoUpload(update.Message.Chat.ID, path)
                         //bot.Send(msg)
                     }
                 }
+            }
+
+            for _, file := range db {
+                log.Printf("File path: %s", file.Path)
             }
         }
     }
