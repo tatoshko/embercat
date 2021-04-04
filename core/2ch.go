@@ -52,17 +52,17 @@ func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
     bot.Send(msg)
 }
 
-func lookup(path string, data interface{}) (err error) {
+func lookup(path string, data interface{}) error {
     if res, err := http.Get(path); err != nil {
-        return
+        return err
     } else {
         defer res.Body.Close()
 
         if body, err := io.ReadAll(res.Body); err != nil {
-            return
+            return err
         } else {
             if err = json.Unmarshal(body, &data); err != nil {
-                return
+                return err
             }
         }
     }
