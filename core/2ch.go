@@ -40,7 +40,7 @@ func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
         var data Thread
 
         if err = lookup(threadPath, &data); err != nil {
-           log.Fatalln(err)
+           log.Println(err)
         } else {
            for _, post := range data.Posts {
                for _, file := range post.Files {
