@@ -19,12 +19,17 @@ type TBot struct {
 var err error
 var Bot *tba.BotAPI
 
-func InitBot(token, hook string) (tbot *TBot) {
+func InitBot(config Config) (tbot *TBot) {
+    token := config.Token
+    hook := config.Hook
+
     tbot = &TBot{
         Bot:        nil,
         commandMsg: regexp.MustCompile(`^\/(?P<command>\w+)\s*(?P<data>.*)$`),
         HANDLERS:   make(map[string]CommandHandler),
     }
+
+    initStorage(config.DB)
 
     tbot.RegisterHandler("set", handleSet)
     tbot.RegisterHandler("get", handleGet)

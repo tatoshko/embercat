@@ -27,7 +27,7 @@ func main() {
 
         go http.ListenAndServe("0.0.0.0:" + PORT, nil)
 
-        core.InitBot(config.Token, config.Hook).Watch()
+        core.InitBot(config).Watch()
     } else {
         panic(err)
     }
