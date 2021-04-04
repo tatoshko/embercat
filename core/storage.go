@@ -39,9 +39,12 @@ func handleSet(db string) CommandHandler {
             if err = Storage.Update(func(tx *bolt.Tx) error {
                 b := tx.Bucket(BUCKET_NAME)
                 if err := b.Put([]byte(key), []byte(value)); err == nil {
+
+                    val := b.Get([]byte(key));
+
                     msg := tba.NewMessage(
                         update.Message.Chat.ID,
-                        fmt.Sprintf("'%s' has been set to key '%s'", value, key),
+                        fmt.Sprintf("*%s* has been set to key *%s*", val, key),
                     )
                     msg.ReplyToMessageID = update.Message.MessageID
 
