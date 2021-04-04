@@ -80,9 +80,7 @@ func handleGet(db string) CommandHandler {
                 b := tx.Bucket(BUCKET_NAME)
                 value := b.Get([]byte(key))
 
-                log.Printf("Bucket %q; Key is '%s'; Value is '%s'", b, key, value)
-
-                msg := tba.NewMessage(update.Message.Chat.ID, "Val *" + string(value) + "*.")
+                msg := tba.NewMessage(update.Message.Chat.ID, "By key **" + key + "** we found **" + string(value) + "**")
                 msg.ReplyToMessageID = update.Message.MessageID
 
                 bot.Send(msg)
