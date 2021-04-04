@@ -13,8 +13,6 @@ var BUCKET_NAME = []byte("tbot-kv-storage")
 
 func initStorage(db string) {
     if Storage, err = bolt.Open(db, 0600, nil); err == nil {
-        defer Storage.Close()
-
         if err = Storage.Update(func(tx *bolt.Tx) error {
             _, err := tx.CreateBucketIfNotExists(BUCKET_NAME)
             return err
