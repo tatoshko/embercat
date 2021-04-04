@@ -37,17 +37,17 @@ func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
         threadPath := makeThreadPath(thread.Num)
         log.Printf("Lookup for thread: %s. Thread: %q", threadPath, thread)
 
-        if err = lookup(threadPath, &thread); err != nil {
-            log.Fatalln(err)
-        } else {
-            for _, post := range thread.Posts {
-                for _, file := range post.Files {
-                    if file.Type == MP4 {
-                        db = append(db, file)
-                    }
-                }
-            }
-        }
+        //if err = lookup(threadPath, &thread); err != nil {
+        //    log.Fatalln(err)
+        //} else {
+        //    for _, post := range thread.Posts {
+        //        for _, file := range post.Files {
+        //            if file.Type == MP4 {
+        //                db = append(db, file)
+        //            }
+        //        }
+        //    }
+        //}
     }
 
     path := "https://2ch.hk" + db[0].Path
