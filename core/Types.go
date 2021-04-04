@@ -30,7 +30,7 @@ const (
     t1
     t2
     t3
-    t4
+    GIF
     t5
     WEBM
     t7

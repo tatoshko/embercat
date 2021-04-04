@@ -48,7 +48,7 @@ func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
         }
     }
 
-    msg := tgbotapi.NewVideoUpload(update.Message.Chat.ID, db[0].Path)
+    msg := tgbotapi.NewVideoUpload(update.Message.Chat.ID, "https://2ch.hk" + db[0].Path)
     bot.Send(msg)
 }
 
