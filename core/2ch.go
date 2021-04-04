@@ -47,12 +47,12 @@ func handle2ch(bot *tgbotapi.BotAPI, update tgbotapi.Update, data string) {
         } else {
             thread := board.Threads[0]
 
-            log.Printf("Posts %q", thread.Posts)
-
             for _, post := range thread.Posts {
                 for _, file := range post.Files {
                     if file.Type == MP4 {
                         db = append(db, file)
+                    } else {
+                        log.Println(file.Path)
                     }
                 }
             }
