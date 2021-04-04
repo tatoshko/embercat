@@ -13,6 +13,8 @@ var BUCKET_NAME = []byte("tbot-kv-storage")
 
 func initStorage(db string) {
     if Storage, err = bolt.Open(db, 0600, nil); err == nil {
+        defer Storage.Close()
+
         if err = Storage.Update(func(tx *bolt.Tx) error {
             _, err := tx.CreateBucketIfNotExists(BUCKET_NAME)
             return err
@@ -24,60 +26,66 @@ func initStorage(db string) {
     }
 }
 
-func handleSet(bot *tba.BotAPI, update tba.Update, text string) {
-    parts := strings.SplitAfterN(text, " ", 2)
-    key, value := parts[0], parts[1]
+func handleSet(db string) CommandHandler {
+    return func(bot *tba.BotAPI, update tba.Update, text string) {
+        parts := strings.SplitAfterN(text, " ", 2)
+        key, value := parts[0], parts[1]
 
-    if Storage.IsReadOnly() {
         log.Println("Handle set")
 
-        if err = Storage.Update(func(tx *bolt.Tx) error {
-            b := tx.Bucket(BUCKET_NAME)
-            if err := b.Put([]byte(key), []byte(value)); err == nil {
-                msg := tba.NewMessage(
-                    update.Message.Chat.ID,
-                    fmt.Sprintf("'%s' has been set to key '%s'", value, key),
-                )
+        if Storage, err = bolt.Open(db, 0600, nil); err == nil {
+            defer Storage.Close()
+
+            if err = Storage.Update(func(tx *bolt.Tx) error {
+                b := tx.Bucket(BUCKET_NAME)
+                if err := b.Put([]byte(key), []byte(value)); err == nil {
+                    msg := tba.NewMessage(
+                        update.Message.Chat.ID,
+                        fmt.Sprintf("'%s' has been set to key '%s'", value, key),
+                    )
+                    msg.ReplyToMessageID = update.Message.MessageID
+
+                    bot.Send(msg)
+
+                    return nil
+                } else {
+                    msg := tba.NewMessage(
+                        update.Message.Chat.ID,
+                        fmt.Sprintf("Error: %s", err.Error()),
+                    )
+                    bot.Send(msg)
+
+                    return err
+                }
+            }); err != nil {
+                panic(err)
+            }
+        } else {
+            panic(err)
+        }
+    }
+}
+
+func handleGet(db string) CommandHandler {
+    return func(bot *tba.BotAPI, update tba.Update, key string) {
+        if Storage, err = bolt.Open(db, 0600, nil); err == nil {
+            defer Storage.Close()
+
+            if err = Storage.View(func(tx *bolt.Tx) error {
+                b := tx.Bucket(BUCKET_NAME)
+                value := b.Get([]byte(key))
+
+                msg := tba.NewMessage(update.Message.Chat.ID, string(value))
                 msg.ReplyToMessageID = update.Message.MessageID
 
                 bot.Send(msg)
 
                 return nil
-            } else {
-                msg := tba.NewMessage(
-                    update.Message.Chat.ID,
-                    fmt.Sprintf("Error: %s", err.Error()),
-                )
-                bot.Send(msg)
-
-                return err
+            }); err != nil {
+                panic(err)
             }
-        }); err != nil {
+        } else {
             panic(err)
         }
-    } else {
-        log.Println("DB is not ready")
-    }
-}
-
-func handleGet(bot *tba.BotAPI, update tba.Update, key string) {
-    if Storage.IsReadOnly() {
-        log.Println("Handle get")
-
-        if err = Storage.View(func(tx *bolt.Tx) error {
-            b := tx.Bucket(BUCKET_NAME)
-            value := b.Get([]byte(key))
-
-            msg := tba.NewMessage(update.Message.Chat.ID, string(value))
-            msg.ReplyToMessageID = update.Message.MessageID
-
-            bot.Send(msg)
-
-            return nil
-        }); err != nil {
-            panic(err)
-        }
-    } else {
-        log.Println("DB is not ready")
     }
 }

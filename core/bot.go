@@ -31,7 +31,7 @@ func InitBot(config Config) (tbot *TBot) {
 
     initStorage(config.DB)
 
-    tbot.RegisterHandler("set", handleSet)
+    tbot.RegisterHandler("set", handleSet(config.DB))
     tbot.RegisterHandler("get", handleGet)
 
 
