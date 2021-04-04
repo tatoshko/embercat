@@ -62,9 +62,8 @@ func (bot *TBot) Watch() {
         if bot.commandMsg.MatchString(text) {
             match := reSubMatchMap(bot.commandMsg, text)
 
-            log.Printf("Command: '%s', data: '%s'", match["command"], match["data"])
-
             if handler, found := bot.HANDLERS[match["command"]]; found {
+                log.Printf("Command: '%s', data: '%s'", match["command"], match["data"])
                 go handler(bot.Bot, update, match["data"])
             }
         }

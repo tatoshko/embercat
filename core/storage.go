@@ -4,6 +4,7 @@ import (
     "fmt"
     "github.com/boltdb/bolt"
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
+    "log"
     "strings"
 )
 
@@ -14,16 +15,19 @@ func initStorage(db string) {
     if Storage, err = bolt.Open(db, 0600, nil); err == nil {
         defer Storage.Close()
 
-        Storage.Update(func(tx *bolt.Tx) error {
+        if err = Storage.Update(func(tx *bolt.Tx) error {
             _, err := tx.CreateBucketIfNotExists(BUCKET_NAME)
             return err
-        })
+        }); err != nil {
+            panic(err)
+        }
     } else {
         panic(err)
     }
 }
 
 func handleSet(bot *tba.BotAPI, update tba.Update, text string) {
+    log.Println("Handle set")
     parts := strings.SplitAfterN(text, " ", 2)
     key, value := parts[0], parts[1]
 
@@ -54,6 +58,7 @@ func handleSet(bot *tba.BotAPI, update tba.Update, text string) {
 }
 
 func handleGet(bot *tba.BotAPI, update tba.Update, key string) {
+    log.Println("Handle get")
     if Storage.IsReadOnly() {
         Storage.View(func(tx *bolt.Tx) error {
             b := tx.Bucket(BUCKET_NAME)
