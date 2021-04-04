@@ -4,6 +4,7 @@ import (
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
     "log"
     "regexp"
+    "strings"
 )
 
 type CommandHandler func(*tba.BotAPI, tba.Update, string)
@@ -64,7 +65,7 @@ func (bot *TBot) Watch() {
 
             if handler, found := bot.HANDLERS[match["command"]]; found {
                 log.Printf("Command: '%s', data: '%s'", match["command"], match["data"])
-                go handler(bot.Bot, update, match["data"])
+                go handler(bot.Bot, update, strings.TrimSpace(match["data"]))
             }
         }
     }
