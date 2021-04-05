@@ -1,6 +1,7 @@
 package core
 
 import (
+    "fmt"
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
     "log"
     "regexp"
@@ -15,6 +16,7 @@ type TBot struct {
     updates tba.UpdatesChannel
 
     HANDLERS map[string]CommandHandler
+    REPLAYS map[string]string
 }
 
 var err error
@@ -28,6 +30,7 @@ func InitBot(config Config) (tbot *TBot) {
         Bot:        nil,
         commandMsg: regexp.MustCompile(`^\/(?P<command>\w+)\s*(?P<data>.*)$`),
         HANDLERS:   make(map[string]CommandHandler),
+        REPLAYS:    make(map[string]string),
     }
 
     initStorage(config.DB)
@@ -35,6 +38,7 @@ func InitBot(config Config) (tbot *TBot) {
     tbot.RegisterHandler("set", handleSet(config.DB))
     tbot.RegisterHandler("get", handleGet(config.DB))
     tbot.RegisterHandler("thread", handleThread)
+    tbot.RegisterHandler("rebus", handleRebus(tbot))
     //tbot.RegisterHandler("twoch", handle2ch)
 
 
@@ -58,11 +62,17 @@ func (bot *TBot) UnregisterHandler(name string) {
     delete(bot.HANDLERS, name)
 }
 
+func (bot *TBot) RegisterReplay(id, answer string) {
+    bot.REPLAYS[id] = answer
+}
+
+func (bot *TBot) UnregisterReplay(id string) {
+    delete(bot.REPLAYS, id)
+}
+
 func (bot *TBot) Watch() {
     for update := range bot.updates {
         text := update.Message.Text
-
-        log.Printf("%q - %q", update.Message.Text, update.Message.ReplyToMessage.Text)
 
         if bot.commandMsg.MatchString(text) {
             match := reSubMatchMap(bot.commandMsg, text)
@@ -70,6 +80,16 @@ func (bot *TBot) Watch() {
             if handler, found := bot.HANDLERS[match["command"]]; found {
                 log.Printf("Command: '%s', data: '%s'", match["command"], match["data"])
                 go handler(bot.Bot, update, strings.TrimSpace(match["data"]))
+            }
+        }
+
+        id := fmt.Sprintf("id_%d", update.Message.ReplyToMessage.MessageID)
+        if value, found := bot.REPLAYS[id]; found {
+            if text == value {
+                msg := tba.NewMessage(update.Message.Chat.ID, "Верно!")
+                msg.ReplyToMessageID = update.Message.MessageID
+                bot.Bot.Send(msg)
+                bot.UnregisterReplay(id)
             }
         }
     }
