@@ -83,6 +83,10 @@ func (bot *TBot) Watch() {
             }
         }
 
+        if update.Message.ReplyToMessage == nil {
+            continue
+        }
+
         id := fmt.Sprintf("id_%d", update.Message.ReplyToMessage.MessageID)
         if value, found := bot.REPLAYS[id]; found {
             if text == value {
