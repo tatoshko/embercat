@@ -62,6 +62,8 @@ func (bot *TBot) Watch() {
     for update := range bot.updates {
         text := update.Message.Text
 
+        log.Printf("%q - %q", update.Message.Text, update.Message.ReplyToMessage.Text)
+
         if bot.commandMsg.MatchString(text) {
             match := reSubMatchMap(bot.commandMsg, text)
 
