@@ -5,9 +5,13 @@ import rice "github.com/GeertJohan/go.rice"
 var box *rice.Box
 
 func InitBox() {
-    rice.MustFindBox(".")
+    box = rice.MustFindBox(".")
 }
 
 func GetBox() *rice.Box {
+    if box == nil {
+        InitBox()
+    }
+
     return box
 }
