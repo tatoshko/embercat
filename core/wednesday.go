@@ -8,6 +8,8 @@ import (
 )
 
 func handleWednesday(bot *tgbotapi.BotAPI, update tgbotapi.Update, value string)  {
+    log.Printf("Weekday %v|%d", time.Now().Weekday(), time.Wednesday)
+
     if time.Now().Weekday() != time.Wednesday {
         return
     }
