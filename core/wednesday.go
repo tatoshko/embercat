@@ -13,7 +13,10 @@ func handleWednesday(bot *tgbotapi.BotAPI, update tgbotapi.Update, value string)
         log.Println(err)
     } else {
         id := update.Message.Chat.ID
-        msg := tgbotapi.NewDocumentUpload(id, b)
+        msg := tgbotapi.NewPhotoUpload(id, tgbotapi.FileBytes{
+            Name:  "wednesday.jpg",
+            Bytes: b,
+        })
 
         bot.Send(msg)
     }
