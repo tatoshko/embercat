@@ -39,6 +39,7 @@ func InitBot(config Config) (tbot *TBot) {
     tbot.RegisterHandler("get", handleGet(config.DB))
     tbot.RegisterHandler("thread", handleThread)
     tbot.RegisterHandler("rebus", handleRebus(tbot))
+    tbot.RegisterHandler("wednesday", handleWednesday)
     //tbot.RegisterHandler("twoch", handle2ch)
 
 

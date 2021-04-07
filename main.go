@@ -2,6 +2,7 @@ package main
 
 import (
     "encoding/json"
+    "github.com/tatoshko/tbot/assets"
     "github.com/tatoshko/tbot/core"
     "io/ioutil"
     "net/http"
@@ -16,6 +17,8 @@ func main() {
 
     if jsonFile, err = os.Open("config.json"); err == nil {
         defer jsonFile.Close()
+
+        assets.InitBox()
 
         var config core.Config
 
