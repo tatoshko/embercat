@@ -35,11 +35,11 @@ func InitBot(config Config) (tbot *TBot) {
 
     initStorage(config.DB)
 
-    tbot.RegisterHandler("set", handleSet(config.DB))
-    tbot.RegisterHandler("get", handleGet(config.DB))
+    //tbot.RegisterHandler("set", handleSet(config.DB))
+    //tbot.RegisterHandler("get", handleGet(config.DB))
     tbot.RegisterHandler("thread", handleThread)
-    tbot.RegisterHandler("rebus", handleRebus(tbot))
-    tbot.RegisterHandler("isitwednesday", handleWednesday)
+    //tbot.RegisterHandler("rebus", handleRebus(tbot))
+    tbot.RegisterHandler("day", handleWednesday)
     //tbot.RegisterHandler("twoch", handle2ch)
 
 
