@@ -73,6 +73,10 @@ func (bot *TBot) UnregisterReplay(id string) {
 
 func (bot *TBot) Watch() {
     for update := range bot.updates {
+        if update.Message == nil {
+            continue
+        }
+
         text := update.Message.Text
 
         if bot.commandMsg.MatchString(text) {
