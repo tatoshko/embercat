@@ -14,39 +14,32 @@ type TBot struct {
     updates tba.UpdatesChannel
 
     HANDLERS map[string]CommandHandler
-    REPLAYS map[string]string
 }
 
-var err error
-var Bot *tba.BotAPI
-
-func StartBot(token, hook string) (bot *TBot) {
-    bot = &TBot{
+func StartBot(token, hook string) {
+    bot := &TBot{
         Bot:        nil,
         commandMsg: regexp.MustCompile(`^/(?P<command>\w+)\s*(?P<data>.*)$`),
         HANDLERS:   make(map[string]CommandHandler),
-        REPLAYS:    make(map[string]string),
     }
 
     bot.RegisterHandler("thread", handleThread)
     bot.RegisterHandler("day", handleWednesday)
 
 
-    if Bot, err = tba.NewBotAPI(token); err != nil {
-        panic(err)
+    if Bot, err := tba.NewBotAPI(token); err == nil {
+        bot.Bot = Bot
+
+        if _, err := Bot.SetWebhook(tba.NewWebhook(hook + "/" + token)); err != nil {
+            log.Printf("SetHoook error %s", err.Error())
+        }
+
+        bot.updates = Bot.ListenForWebhook("/" + Bot.Token)
+
+        go bot.Watch()
+    } else {
+        log.Fatalf("NewAPIBot error %s", err.Error())
     }
-
-    bot.Bot = Bot
-
-    if _, err := Bot.SetWebhook(tba.NewWebhook(hook + "/" + token)); err != nil {
-        log.Printf("SetHoook error %s", err.Error())
-    }
-
-    bot.updates = Bot.ListenForWebhook("/" + Bot.Token)
-
-    go bot.Watch()
-
-    return
 }
 
 func (bot *TBot) RegisterHandler(name string, f CommandHandler) {
@@ -55,14 +48,6 @@ func (bot *TBot) RegisterHandler(name string, f CommandHandler) {
 
 func (bot *TBot) UnregisterHandler(name string) {
     delete(bot.HANDLERS, name)
-}
-
-func (bot *TBot) RegisterReplay(id, answer string) {
-    bot.REPLAYS[id] = answer
-}
-
-func (bot *TBot) UnregisterReplay(id string) {
-    delete(bot.REPLAYS, id)
 }
 
 func (bot *TBot) Watch() {
