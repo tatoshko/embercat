@@ -18,19 +18,17 @@ func main() {
     if jsonFile, err = os.Open("config.json"); err == nil {
         defer jsonFile.Close()
 
-        assets.InitBox()
-
-        var config core.Config
-
+        var config Config
         bytes, _ := ioutil.ReadAll(jsonFile)
 
         if err = json.Unmarshal(bytes, &config); err != nil {
             panic(err)
         }
 
-        go http.ListenAndServe("0.0.0.0:" + PORT, nil)
+        assets.InitBox()
 
-        core.InitBot(config).Watch()
+        go http.ListenAndServe("0.0.0.0:" + PORT, nil)
+        go core.StartBot(config.Token, config.Hook)
     } else {
         panic(err)
     }

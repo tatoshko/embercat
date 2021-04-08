@@ -8,21 +8,23 @@ import (
 )
 
 func handleWednesday(bot *tgbotapi.BotAPI, update tgbotapi.Update, value string)  {
-    if time.Now().Weekday() != time.Wednesday {
-        return
+    box := assets.GetBox()
+
+    var pic string
+
+    if time.Now().Weekday() == time.Wednesday {
+        pic = "wednesday.jpg"
+    } else {
+        pic = "no-wednesday.jpg"
     }
 
 
-    box := assets.GetBox()
-
-    if b, err := box.Bytes("wednesday.jpg"); err != nil {
+    if b, err := box.Bytes(pic); err != nil {
         log.Println(err)
     } else {
         id := update.Message.Chat.ID
-        msg := tgbotapi.NewPhotoUpload(id, tgbotapi.FileBytes{
-            Name:  "wednesday.jpg",
-            Bytes: b,
-        })
+        msg := tgbotapi.NewPhotoUpload(id, tgbotapi.FileBytes{Name:  "pic", Bytes: b})
+        msg.UseExisting = true
 
         bot.Send(msg)
     }

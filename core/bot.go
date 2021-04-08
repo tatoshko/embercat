@@ -22,10 +22,7 @@ type TBot struct {
 var err error
 var Bot *tba.BotAPI
 
-func InitBot(config Config) (tbot *TBot) {
-    token := config.Token
-    hook := config.Hook
-
+func StartBot(token, hook string) (tbot *TBot) {
     tbot = &TBot{
         Bot:        nil,
         commandMsg: regexp.MustCompile(`^\/(?P<command>\w+)\s*(?P<data>.*)$`),
@@ -33,14 +30,8 @@ func InitBot(config Config) (tbot *TBot) {
         REPLAYS:    make(map[string]string),
     }
 
-    initStorage(config.DB)
-
-    //tbot.RegisterHandler("set", handleSet(config.DB))
-    //tbot.RegisterHandler("get", handleGet(config.DB))
     tbot.RegisterHandler("thread", handleThread)
-    //tbot.RegisterHandler("rebus", handleRebus(tbot))
     tbot.RegisterHandler("day", handleWednesday)
-    //tbot.RegisterHandler("twoch", handle2ch)
 
 
     if Bot, err = tba.NewBotAPI(token); err != nil {
@@ -51,6 +42,8 @@ func InitBot(config Config) (tbot *TBot) {
 
     Bot.SetWebhook(tba.NewWebhook(hook + "/" + token))
     tbot.updates = Bot.ListenForWebhook("/" + Bot.Token)
+
+    go tbot.Watch()
 
     return
 }
