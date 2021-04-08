@@ -23,7 +23,7 @@ func handleWednesday(bot *tgbotapi.BotAPI, update tgbotapi.Update, value string)
     } else {
         id := update.Message.Chat.ID
         msg := tgbotapi.NewPhotoUpload(id, tgbotapi.FileBytes{Name:  pic, Bytes: b})
-        //msg.UseExisting = true
+        msg.UseExisting = true
 
         bot.Send(msg)
     }
