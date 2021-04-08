@@ -23,7 +23,6 @@ func handleWednesday(bot *tba.BotAPI, update tba.Update)  {
     } else {
         id := update.Message.Chat.ID
         msg := tba.NewPhotoUpload(id, tba.FileBytes{Name: pic, Bytes: b})
-        msg.UseExisting = true
 
         if _, err := bot.Send(msg); err != nil {
             log. Printf("Wednesday send error %s", err.Error())
