@@ -5,6 +5,7 @@ import (
     "github.com/tatoshko/tbot/assets"
     "github.com/tatoshko/tbot/core"
     "io/ioutil"
+    "log"
     "net/http"
     "os"
 )
@@ -15,7 +16,6 @@ var PORT = os.Getenv("PORT")
 type Config struct {
     Token string `json:"token"`
     Hook  string `json:"hook"`
-    DB    string `json:"db"`
 }
 
 func main() {
@@ -33,7 +33,12 @@ func main() {
 
         assets.InitBox()
 
-        go http.ListenAndServe("0.0.0.0:" + PORT, nil)
+        go (func() {
+            if err := http.ListenAndServe("0.0.0.0:" + PORT, nil); err != nil {
+                log.Fatalln(err.Error())
+            }
+        })()
+
         go core.StartBot(config.Token, config.Hook)
     } else {
         panic(err)
