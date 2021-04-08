@@ -3,6 +3,7 @@ package main
 import (
     "encoding/json"
     "github.com/tatoshko/tbot/assets"
+    config2 "github.com/tatoshko/tbot/config"
     "github.com/tatoshko/tbot/core"
     "io/ioutil"
     "net/http"
@@ -18,7 +19,7 @@ func main() {
     if jsonFile, err = os.Open("config.json"); err == nil {
         defer jsonFile.Close()
 
-        var config Config
+        var config config2.Config
         bytes, _ := ioutil.ReadAll(jsonFile)
 
         if err = json.Unmarshal(bytes, &config); err != nil {
