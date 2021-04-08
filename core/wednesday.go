@@ -1,13 +1,13 @@
 package core
 
 import (
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api"
     "github.com/tatoshko/tbot/assets"
     "log"
     "time"
 )
 
-func handleWednesday(bot *tgbotapi.BotAPI, update tgbotapi.Update, value string)  {
+func handleWednesday(bot *tba.BotAPI, update tba.Update)  {
     box := assets.GetBox()
 
     var pic string
@@ -22,9 +22,11 @@ func handleWednesday(bot *tgbotapi.BotAPI, update tgbotapi.Update, value string)
         log.Println(err)
     } else {
         id := update.Message.Chat.ID
-        msg := tgbotapi.NewPhotoUpload(id, tgbotapi.FileBytes{Name:  pic, Bytes: b})
+        msg := tba.NewPhotoUpload(id, tba.FileBytes{Name: pic, Bytes: b})
         msg.UseExisting = true
 
-        bot.Send(msg)
+        if _, err := bot.Send(msg); err != nil {
+            log. Printf("Wednesday send error %s", err.Error())
+        }
     }
 }

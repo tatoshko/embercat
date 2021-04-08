@@ -1,14 +1,12 @@
 package core
 
 import (
-    "fmt"
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
     "log"
     "regexp"
-    "strings"
 )
 
-type CommandHandler func(*tba.BotAPI, tba.Update, string)
+type CommandHandler func(*tba.BotAPI, tba.Update)
 
 type TBot struct {
     Bot *tba.BotAPI
@@ -22,28 +20,31 @@ type TBot struct {
 var err error
 var Bot *tba.BotAPI
 
-func StartBot(token, hook string) (tbot *TBot) {
-    tbot = &TBot{
+func StartBot(token, hook string) (bot *TBot) {
+    bot = &TBot{
         Bot:        nil,
-        commandMsg: regexp.MustCompile(`^\/(?P<command>\w+)\s*(?P<data>.*)$`),
+        commandMsg: regexp.MustCompile(`^/(?P<command>\w+)\s*(?P<data>.*)$`),
         HANDLERS:   make(map[string]CommandHandler),
         REPLAYS:    make(map[string]string),
     }
 
-    tbot.RegisterHandler("thread", handleThread)
-    tbot.RegisterHandler("day", handleWednesday)
+    bot.RegisterHandler("thread", handleThread)
+    bot.RegisterHandler("day", handleWednesday)
 
 
     if Bot, err = tba.NewBotAPI(token); err != nil {
         panic(err)
     }
 
-    tbot.Bot = Bot
+    bot.Bot = Bot
 
-    Bot.SetWebhook(tba.NewWebhook(hook + "/" + token))
-    tbot.updates = Bot.ListenForWebhook("/" + Bot.Token)
+    if _, err := Bot.SetWebhook(tba.NewWebhook(hook + "/" + token)); err != nil {
+        log.Printf("SetHoook error %s", err.Error())
+    }
 
-    go tbot.Watch()
+    bot.updates = Bot.ListenForWebhook("/" + Bot.Token)
+
+    go bot.Watch()
 
     return
 }
@@ -77,21 +78,7 @@ func (bot *TBot) Watch() {
 
             if handler, found := bot.HANDLERS[match["command"]]; found {
                 log.Printf("Command: '%s', data: '%s'", match["command"], match["data"])
-                go handler(bot.Bot, update, strings.TrimSpace(match["data"]))
-            }
-        }
-
-        if update.Message.ReplyToMessage == nil {
-            continue
-        }
-
-        id := fmt.Sprintf("id_%d", update.Message.ReplyToMessage.MessageID)
-        if value, found := bot.REPLAYS[id]; found {
-            if text == value {
-                msg := tba.NewMessage(update.Message.Chat.ID, "Верно!")
-                msg.ReplyToMessageID = update.Message.MessageID
-                bot.Bot.Send(msg)
-                bot.UnregisterReplay(id)
+                go handler(bot.Bot, update)
             }
         }
     }
