@@ -39,7 +39,7 @@ func main() {
             }
         })()
 
-        go core.StartBot(config.Token, config.Hook)
+        core.StartBot(config.Token, config.Hook)
     } else {
         panic(err)
     }

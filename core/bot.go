@@ -36,7 +36,7 @@ func StartBot(token, hook string) {
 
         bot.updates = Bot.ListenForWebhook("/" + Bot.Token)
 
-        go bot.Watch()
+        bot.Watch()
     } else {
         log.Fatalf("NewAPIBot error %s", err.Error())
     }
