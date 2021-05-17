@@ -28,13 +28,15 @@ func Start(token, hook string) {
 
                 if message.IsCommand() {
                     if handler, found := Commands[message.Command()]; found {
-                        log.Printf("Command: '%s', data: '%s'\n", message.Command(), message.CommandArguments())
+                        log.Printf("MessageID: '%d', Command: '%s', data: '%s'\n", message.MessageID, message.Command(), message.CommandArguments())
                         go handler(API, update)
                     }
                 }
             } else if update.CallbackQuery != nil {
-                log.Printf("DEBUG %v", update.CallbackQuery)
-                //query := update.CallbackQuery
+                query := update.CallbackQuery
+
+                log.Printf("DEBUG InlineMessageID: '%s', Data: '%s', MessageID: '%s'", query.InlineMessageID, query.Data, query.Message.MessageID)
+
                 //query.Data
             }
         }
