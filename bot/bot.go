@@ -6,11 +6,11 @@ import (
 )
 
 var (
-    API      *tba.BotAPI
-    HANDLERS map[string]CommandHandler
+    Commands map[string]Handler
+    Callbacks map[int]Handler
 )
 
-type CommandHandler func(api *tba.BotAPI, update tba.Update)
+type Handler func(api *tba.BotAPI, update tba.Update)
 
 func Start(token, hook string) {
     if API, err := tba.NewBotAPI(token); err == nil {
@@ -18,22 +18,23 @@ func Start(token, hook string) {
             log.Printf("SetHoook error %s\n", err.Error())
         }
 
-        registerHandlers()
+        registerCommands()
 
         updates := API.ListenForWebhook("/" + API.Token)
 
         for update := range updates {
-            if update.Message == nil {
-                continue
-            }
+            if update.Message != nil {
+                message := update.Message
 
-            message := update.Message
-
-            if message.IsCommand() {
-                if handler, found := HANDLERS[message.Command()]; found {
-                    log.Printf("Command: '%s', data: '%s'\n", message.Command(), message.CommandArguments())
-                    go handler(API, update)
+                if message.IsCommand() {
+                    if handler, found := Commands[message.Command()]; found {
+                        log.Printf("Command: '%s', data: '%s'\n", message.Command(), message.CommandArguments())
+                        go handler(API, update)
+                    }
                 }
+            } else if update.CallbackQuery != nil {
+                //query := update.CallbackQuery
+                //query.Data
             }
         }
     } else {
@@ -41,9 +42,20 @@ func Start(token, hook string) {
     }
 }
 
-func registerHandlers() {
-    HANDLERS = make(map[string]CommandHandler)
+func registerCommands() {
+    Commands = make(map[string]Handler)
 
-    HANDLERS["thread"] = handleThread
-    HANDLERS["day"] = handleWednesday
+    Commands["thread"] = handleThread
+    Commands["day"] = handleWednesday
+    Commands["yn"] = handlerYesNo
+}
+
+func registerCallback(id int, f Handler) {
+    Callbacks[id] = f
+}
+
+func unregisterCallback(id int) {
+    if _, found := Callbacks[id]; found {
+        delete(Callbacks, id)
+    }
 }
