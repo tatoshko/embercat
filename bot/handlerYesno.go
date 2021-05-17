@@ -5,14 +5,15 @@ import (
     "log"
 )
 
+const SOME_DATA = "some_data"
+
 func handlerYesNo(api *tba.BotAPI, update tba.Update)  {
-    msg := tba.NewMessage(update.Message.Chat.ID, "Yes/No")
+    msg := tba.NewMessage(update.Message.Chat.ID, "")
 
     keyboard := tba.InlineKeyboardMarkup{
         InlineKeyboard: [][]tba.InlineKeyboardButton{
             {
-                tba.NewInlineKeyboardButtonData("Yes", "y"),
-                tba.NewInlineKeyboardButtonData("No", "n"),
+                tba.NewInlineKeyboardButtonData("Жми уже", SOME_DATA),
             },
         },
     }
@@ -22,8 +23,9 @@ func handlerYesNo(api *tba.BotAPI, update tba.Update)  {
     if _, err := api.Send(msg); err != nil {
         log.Printf("handlerYesNo error %s\n", err.Error())
     } else {
-        registerCallback(update.Message.MessageID, func(api *tba.BotAPI, update tba.Update) {
-
+        registerCallback(SOME_DATA, func(api *tba.BotAPI, update tba.Update) {
+            msg := tba.NewMessage(update.Message.Chat.ID, "А если бы рвануло? Не жми на все кнопки подряд")
+            api.Send(msg)
         })
     }
 }

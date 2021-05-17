@@ -6,8 +6,8 @@ import (
 )
 
 var (
-    Commands map[string]Handler
-    Callbacks map[int]Handler = make(map[int]Handler)
+    Commands = make(map[string]Handler)
+    Callbacks = make(map[string]Handler)
 )
 
 type Handler func(api *tba.BotAPI, update tba.Update)
@@ -33,11 +33,11 @@ func Start(token, hook string) {
                     }
                 }
             } else if update.CallbackQuery != nil {
-                query := update.CallbackQuery
+                data := update.CallbackQuery.Data
 
-                log.Printf("DEBUG InlineMessageID: '%s', Data: '%s', MessageID: '%s'", query.InlineMessageID, query.Data, query.Message.MessageID)
-
-                //query.Data
+                if handler, found := Callbacks[data]; found {
+                    handler(API, update)
+                }
             }
         }
     } else {
@@ -46,18 +46,16 @@ func Start(token, hook string) {
 }
 
 func registerCommands() {
-    Commands = make(map[string]Handler)
-
     Commands["thread"] = handleThread
     Commands["day"] = handleWednesday
     Commands["yn"] = handlerYesNo
 }
 
-func registerCallback(id int, f Handler) {
+func registerCallback(id string, f Handler) {
     Callbacks[id] = f
 }
 
-func unregisterCallback(id int) {
+func unregisterCallback(id string) {
     if _, found := Callbacks[id]; found {
         delete(Callbacks, id)
     }
