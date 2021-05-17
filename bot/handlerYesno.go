@@ -8,7 +8,7 @@ import (
 const SOME_DATA = "some_data"
 
 func handlerYesNo(api *tba.BotAPI, update tba.Update)  {
-    msg := tba.NewMessage(update.Message.Chat.ID, "")
+    msg := tba.NewMessage(update.Message.Chat.ID, "Это кнопка для нажимания на неё")
 
     keyboard := tba.InlineKeyboardMarkup{
         InlineKeyboard: [][]tba.InlineKeyboardButton{
