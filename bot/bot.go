@@ -33,7 +33,7 @@ func Start(token, hook string) {
                     }
                 }
             } else if update.CallbackQuery != nil {
-                log.Printf("DEBUG %q", update.CallbackQuery)
+                log.Printf("DEBUG %v", update.CallbackQuery)
                 //query := update.CallbackQuery
                 //query.Data
             }
