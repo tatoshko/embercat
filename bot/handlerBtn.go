@@ -23,6 +23,11 @@ func handlerBtn(api *tba.BotAPI, update tba.Update)  {
     if _, err := api.Send(msg); err != nil {
         log.Printf("handlerBtn error %s\n", err.Error())
     } else {
+        delMsg := tba.NewDeleteMessage(update.Message.Chat.ID, update.Message.MessageID)
+        if _, err := api.Send(delMsg); err != nil {
+            log.Printf("Delete message error %s\n", err.Error())
+        }
+
         registerCallback(SOME_DATA, func(api *tba.BotAPI, update tba.Update) {
             callback := tba.NewCallback(update.CallbackQuery.ID, update.CallbackQuery.Data)
             if _, err := api.AnswerCallbackQuery(callback); err != nil {
