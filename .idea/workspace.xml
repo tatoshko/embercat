@@ -1,45 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="04e3839e-478f-48f7-a22f-1abc070976b7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/2chTypes.go_" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/bot.go" beforeDir="false" afterPath="$PROJECT_DIR$/bot/bot.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/fun.go" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlerThread.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/reSubMatch.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/wednesday.go" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlerWednesday.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-    </list>
+    <list default="true" id="b95af469-de57-40ac-a722-baef31d64be7" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Go File" />
-      </list>
-    </option>
-  </component>
   <component name="GOROOT" path="/usr/local/go1.16.3.darwin-amd64" />
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
   <component name="GoLibraries">
     <option name="indexEntireGoPath" value="false" />
   </component>
-  <component name="ProjectId" id="1qcjq1wXEyJvL7ZepTTCriNRTZX" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectId" id="1seh2LTtLkFWEYHXT6763Mu7Crz" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
-    <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="enableYiiStorm" value="true" />
@@ -49,7 +26,7 @@
     <property name="js-jscs-nodeInterpreter" value="/opt/local/bin/node" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="langName" value="en" />
-    <property name="last_opened_file_path" value="$USER_HOME$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="/opt/local/bin/node" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="options.lastSelected" value="configurable.group.appearance" />
@@ -61,77 +38,22 @@
     <property name="yiicFile" value="" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/core" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/config" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/core" />
+      <recent name="$PROJECT_DIR$/assets/files" />
     </key>
-  </component>
-  <component name="RunManager">
-    <configuration name="Deploy" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile">
-      <makefile filename="$PROJECT_DIR$/../tcc/Makefile" target="" workingDirectory="$PROJECT_DIR$/../tcc" arguments="">
-        <envs />
-      </makefile>
-      <method v="2" />
-    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="04e3839e-478f-48f7-a22f-1abc070976b7" name="Default Changelist" comment="" />
-      <created>1617385960023</created>
+      <changelist id="b95af469-de57-40ac-a722-baef31d64be7" name="Default Changelist" comment="" />
+      <created>1621238754820</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1617385960023</updated>
+      <updated>1621238754820</updated>
     </task>
     <servers />
   </component>
-  <component name="VcsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-  </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="184" y="109" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1617529144604">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="184" y="109" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1617529144604" />
-    <state x="576" y="179" key="EnvironmentVariablesDialog" timestamp="1617529143595">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="576" y="179" key="EnvironmentVariablesDialog/0.0.1440.900@0.0.1440.900" timestamp="1617529143595" />
-    <state width="1398" height="245" key="GridCell.Tab.0.bottom" timestamp="1617603178656">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900/-1920.-112.1920.1200@0.0.1440.900" timestamp="1617603178656" />
-    <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1617529198502" />
-    <state width="1398" height="245" key="GridCell.Tab.0.center" timestamp="1617603178655">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.center/0.0.1440.900/-1920.-112.1920.1200@0.0.1440.900" timestamp="1617603178655" />
-    <state width="1398" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1617529198501" />
-    <state width="1398" height="245" key="GridCell.Tab.0.left" timestamp="1617603178654">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.left/0.0.1440.900/-1920.-112.1920.1200@0.0.1440.900" timestamp="1617603178654" />
-    <state width="1398" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1617529198500" />
-    <state width="1398" height="245" key="GridCell.Tab.0.right" timestamp="1617603178656">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.right/0.0.1440.900/-1920.-112.1920.1200@0.0.1440.900" timestamp="1617603178656" />
-    <state width="1398" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1617529198501" />
-    <state x="421" y="68" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1617530767390">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="421" y="68" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1440.900@0.0.1440.900" timestamp="1617530767390" />
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1617774657790">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900/-1920.-112.1920.1200@0.0.1440.900" timestamp="1617774657790" />
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1617527456486" />
   </component>
 </project>

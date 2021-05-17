@@ -5,8 +5,8 @@ import (
     "log"
 )
 
-func handleThread(bot *tgbotapi.BotAPI, data string, chatID int64, update tgbotapi.Update) {
-    msg := tgbotapi.NewMessage(chatID, "*Обсуждение закрыто*. Разговаривайте про что-нибудь другое. Спасибо")
+func handleThread(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+    msg := tgbotapi.NewMessage(update.Message.Chat.ID, "*Обсуждение закрыто*. Разговаривайте про что-нибудь другое. Спасибо")
     msg.ParseMode = tgbotapi.ModeMarkdown
 
     if _, err := bot.Send(msg); err != nil {

@@ -1,5 +1,5 @@
 // +heroku goVersion go1.16
-module github.com/tatoshko/tbot
+module embercat
 
 go 1.16
 

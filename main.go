@@ -1,9 +1,9 @@
 package main
 
 import (
+    "embercat/assets"
+    "embercat/bot"
     "encoding/json"
-    "github.com/tatoshko/tbot/assets"
-    "github.com/tatoshko/tbot/bot"
     "io/ioutil"
     "log"
     "net/http"

@@ -2,12 +2,12 @@ package bot
 
 import (
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
-    "github.com/tatoshko/tbot/assets"
+    "embercat/assets"
     "log"
     "time"
 )
 
-func handleWednesday(bot *tba.BotAPI, data string, chatID int64, update tba.Update)  {
+func handleWednesday(bot *tba.BotAPI, update tba.Update)  {
     box := assets.GetBox()
 
     var pic string
@@ -21,7 +21,7 @@ func handleWednesday(bot *tba.BotAPI, data string, chatID int64, update tba.Upda
     if b, err := box.Bytes(pic); err != nil {
         log.Println(err)
     } else {
-        msg := tba.NewPhotoUpload(chatID, tba.FileBytes{Name: pic, Bytes: b})
+        msg := tba.NewPhotoUpload(update.Message.Chat.ID, tba.FileBytes{Name: pic, Bytes: b})
 
         if _, err := bot.Send(msg); err != nil {
             log.Printf("Wednesday send error %s\n", err.Error())
