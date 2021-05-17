@@ -24,7 +24,7 @@ func handlerYesNo(api *tba.BotAPI, update tba.Update)  {
         log.Printf("handlerYesNo error %s\n", err.Error())
     } else {
         registerCallback(SOME_DATA, func(api *tba.BotAPI, update tba.Update) {
-            msg := tba.NewMessage(update.Message.Chat.ID, "А если бы рвануло? Не жми на все кнопки подряд")
+            msg := tba.NewMessage(update.CallbackQuery.Message.Chat.ID, "А если бы рвануло? Не жми на все кнопки подряд")
             api.Send(msg)
         })
     }
