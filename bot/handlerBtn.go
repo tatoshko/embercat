@@ -7,7 +7,7 @@ import (
 
 const SOME_DATA = "some_data"
 
-func handlerYesNo(api *tba.BotAPI, update tba.Update)  {
+func handlerBtn(api *tba.BotAPI, update tba.Update)  {
     msg := tba.NewMessage(update.Message.Chat.ID, "Это кнопка для нажимания на неё")
 
     keyboard := tba.InlineKeyboardMarkup{
@@ -21,7 +21,7 @@ func handlerYesNo(api *tba.BotAPI, update tba.Update)  {
     msg.ReplyMarkup = keyboard
 
     if _, err := api.Send(msg); err != nil {
-        log.Printf("handlerYesNo error %s\n", err.Error())
+        log.Printf("handlerBtn error %s\n", err.Error())
     } else {
         registerCallback(SOME_DATA, func(api *tba.BotAPI, update tba.Update) {
             callback := tba.NewCallback(update.CallbackQuery.ID, update.CallbackQuery.Data)
@@ -39,6 +39,8 @@ func handlerYesNo(api *tba.BotAPI, update tba.Update)  {
                 if _, err := api.Send(msg); err != nil {
                     log.Printf("Delete message error %s", err.Error())
                 }
+
+                unregisterCallback(SOME_DATA)
             }
         })
     }

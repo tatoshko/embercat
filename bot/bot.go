@@ -48,7 +48,7 @@ func Start(token, hook string) {
 func registerCommands() {
     Commands["thread"] = handleThread
     Commands["day"] = handleWednesday
-    Commands["yn"] = handlerYesNo
+    Commands["btn"] = handlerBtn
 }
 
 func registerCallback(id string, f Handler) {
