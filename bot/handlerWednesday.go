@@ -1,4 +1,4 @@
-package core
+package bot
 
 import (
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -24,7 +24,7 @@ func handleWednesday(bot *tba.BotAPI, data string, chatID int64, update tba.Upda
         msg := tba.NewPhotoUpload(chatID, tba.FileBytes{Name: pic, Bytes: b})
 
         if _, err := bot.Send(msg); err != nil {
-            log. Printf("Wednesday send error %s", err.Error())
+            log.Printf("Wednesday send error %s\n", err.Error())
         }
     }
 }

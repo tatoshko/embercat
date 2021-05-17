@@ -3,7 +3,7 @@ package main
 import (
     "encoding/json"
     "github.com/tatoshko/tbot/assets"
-    "github.com/tatoshko/tbot/core"
+    "github.com/tatoshko/tbot/bot"
     "io/ioutil"
     "log"
     "net/http"
@@ -39,7 +39,7 @@ func main() {
             }
         })()
 
-        core.StartBot(config.Token, config.Hook)
+        bot.Start(config.Token, config.Hook)
     } else {
         panic(err)
     }
