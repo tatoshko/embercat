@@ -28,8 +28,17 @@ func handlerYesNo(api *tba.BotAPI, update tba.Update)  {
             if _, err := api.AnswerCallbackQuery(callback); err != nil {
                 log.Printf("Callback error %s", err.Error())
             } else {
+                delMsg := tba.NewDeleteMessage(update.CallbackQuery.Message.Chat.ID, update.CallbackQuery.Message.MessageID)
+
+                if _, err := api.Send(delMsg); err != nil {
+                    log.Printf("Delete message error %s", err.Error())
+                }
+
                 msg := tba.NewMessage(update.CallbackQuery.Message.Chat.ID, "А если бы рвануло? Не жми на все кнопки подряд")
-                api.Send(msg)
+
+                if _, err := api.Send(msg); err != nil {
+                    log.Printf("Delete message error %s", err.Error())
+                }
             }
         })
     }
