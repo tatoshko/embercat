@@ -7,7 +7,7 @@ import (
 
 var (
     Commands map[string]Handler
-    Callbacks map[int]Handler
+    Callbacks map[int]Handler = make(map[int]Handler)
 )
 
 type Handler func(api *tba.BotAPI, update tba.Update)
