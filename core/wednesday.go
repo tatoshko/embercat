@@ -7,7 +7,7 @@ import (
     "time"
 )
 
-func handleWednesday(bot *tba.BotAPI, update tba.Update)  {
+func handleWednesday(bot *tba.BotAPI, data string, chatID int64, update tba.Update)  {
     box := assets.GetBox()
 
     var pic string
@@ -21,8 +21,7 @@ func handleWednesday(bot *tba.BotAPI, update tba.Update)  {
     if b, err := box.Bytes(pic); err != nil {
         log.Println(err)
     } else {
-        id := update.Message.Chat.ID
-        msg := tba.NewPhotoUpload(id, tba.FileBytes{Name: pic, Bytes: b})
+        msg := tba.NewPhotoUpload(chatID, tba.FileBytes{Name: pic, Bytes: b})
 
         if _, err := bot.Send(msg); err != nil {
             log. Printf("Wednesday send error %s", err.Error())

@@ -2,7 +2,7 @@ package core
 
 import "regexp"
 
-func reSubMatchMap(r *regexp.Regexp, str string) (map[string]string) {
+func ParseCommand(r *regexp.Regexp, str string) (map[string]string) {
     match := r.FindStringSubmatch(str)
     subMatchMap := make(map[string]string)
     for i, name := range r.SubexpNames() {
