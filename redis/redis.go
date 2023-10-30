@@ -6,7 +6,7 @@ import (
 
 func GetClient() *redis.Client {
     return redis.NewClient(&redis.Options{
-        Addr: "127.0.0.1",
+        Addr: "127.0.0.1:6379",
         DB:   1,
     })
 }
