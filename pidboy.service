@@ -1,0 +1,13 @@
+[Unit]
+Description=Embercat bot service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/var/bot/embercat/embercat
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
