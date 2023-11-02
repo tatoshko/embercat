@@ -75,7 +75,7 @@ func HandlerGive(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    var member tgbotapi.Chat
+    var member tgbotapi.ChatMember
     if member, err = GetChatMember(bot, recipient); err != nil {
         log.Printf("Get chatMember error %s", err.Error())
 
