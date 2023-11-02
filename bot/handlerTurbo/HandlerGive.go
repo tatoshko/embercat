@@ -23,7 +23,7 @@ func HandlerGive(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     localCollectionKey := makeLocalKey(REDIS_KEY_TURBO_COLLECTION, userID)
 
-    validCommand := regexp.MustCompile(`^/give\s\d{3}\s\@\w+$`)
+    validCommand := regexp.MustCompile(`^/give\@embercatbot\s\d{3}\s\@\w+$`)
     text := update.Message.Text
 
     if !validCommand.MatchString(text) {
