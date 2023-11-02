@@ -75,21 +75,28 @@ func HandlerGive(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    var member tgbotapi.ChatMember
-    if member, err = GetChatMember(bot, recipient); err != nil {
-        log.Printf("Get chatMember error %s", err.Error())
+    msg := tgbotapi.NewMessage(chantID, fmt.Sprintf("хер его знает, как получить userID по @username, беда-беда", liner))
+    msg.ParseMode = tgbotapi.ModeHTML
 
-        msg := tgbotapi.NewMessage(chantID, fmt.Sprintf("Не могу найти пользователя <b>%s</b>", recipient))
-        msg.ParseMode = tgbotapi.ModeHTML
-
-        if _, err := bot.Send(msg); err != nil {
-            log.Printf("Send error %s", err.Error())
-        }
-
-        return
+    if _, err := bot.Send(msg); err != nil {
+        log.Printf("Send error %s", err.Error())
     }
 
-    log.Printf("Chat member %v", member)
+    //var member tgbotapi.ChatMember
+    //if member, err = GetChatMember(bot, recipient); err != nil {
+    //    log.Printf("Get chatMember error %s", err.Error())
+    //
+    //    msg := tgbotapi.NewMessage(chantID, fmt.Sprintf("Не могу найти пользователя <b>%s</b>", recipient))
+    //    msg.ParseMode = tgbotapi.ModeHTML
+    //
+    //    if _, err := bot.Send(msg); err != nil {
+    //        log.Printf("Send error %s", err.Error())
+    //    }
+    //
+    //    return
+    //}
+    //
+    //log.Printf("Chat member %v", member)
 
     // пользователь играет
     // отнять у текущего
