@@ -25,9 +25,8 @@ func GetScore(stats []redis.Z, number string) float64 {
 }
 
 func GetChatMember(bot *tgbotapi.BotAPI, username string) (tgbotapi.ChatMember, error) {
-    config := tgbotapi.ChatConfigWithUser{
-        ChatID: username,
-    }
-
-    return bot.GetChatMember(config)
+    return bot.GetChatMember(tgbotapi.ChatConfigWithUser{
+        SuperGroupUsername: username,
+        UserID:             0,
+    })
 }
