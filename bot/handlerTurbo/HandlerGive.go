@@ -75,7 +75,7 @@ func HandlerGive(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    msg := tgbotapi.NewMessage(chantID, fmt.Sprintf("хер его знает, как получить userID по @username, беда-беда", liner))
+    msg := tgbotapi.NewMessage(chantID, fmt.Sprintf("хер его знает, как получить userID по @username, беда-беда"))
     msg.ParseMode = tgbotapi.ModeHTML
 
     if _, err := bot.Send(msg); err != nil {
