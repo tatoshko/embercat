@@ -16,7 +16,10 @@ func HandlerGive(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     if validCommand.MatchString(text) {
         parts := strings.Split(text, " ")
 
-        log.Printf("%v", parts)
+        liner := parts[1]
+        recipient := parts[2]
+
+        log.Printf("%s -> %s", liner, recipient)
     } else {
         log.Printf("Incorrect command '%s'", text)
         msg := tgbotapi.NewMessage(chantID, "Неверный формат команды. Пример:\n<code>/give 001 @username</code>")
