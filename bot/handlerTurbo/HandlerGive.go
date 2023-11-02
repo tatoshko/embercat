@@ -10,7 +10,7 @@ import (
 func HandlerGive(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     chantID := update.Message.Chat.ID
 
-    validCommand := regexp.MustCompile(`^give\s\d{3}\s\@\w+$`)
+    validCommand := regexp.MustCompile(`^\/give\s\d{3}\s\@\w+$`)
     text := update.Message.Text
 
     if validCommand.MatchString(text) {
