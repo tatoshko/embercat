@@ -76,7 +76,7 @@ func HandlerGive(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 
     var member tgbotapi.ChatMember
-    if member, err = GetChatMember(bot, recipient); err != nil {
+    if member, err = GetChatMember(bot, chantID, recipient); err != nil {
         log.Printf("Get chatMember error %s", err.Error())
 
         msg := tgbotapi.NewMessage(chantID, fmt.Sprintf("Не могу найти пользователя <b>%s</b>", recipient))
