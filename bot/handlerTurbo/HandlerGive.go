@@ -75,7 +75,7 @@ func HandlerGive(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    var member tgbotapi.ChatMember
+    var member tgbotapi.Chat
     if member, err = GetChatMember(bot, chantID, recipient); err != nil {
         log.Printf("Get chatMember error %s", err.Error())
 
@@ -89,7 +89,7 @@ func HandlerGive(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    log.Printf("Chat member %v", member.User)
+    log.Printf("Chat member %v", member.ID)
 
     // пользователь играет
     // отнять у текущего
