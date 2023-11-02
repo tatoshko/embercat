@@ -89,7 +89,7 @@ func HandlerGive(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    log.Printf("Chat member %v", member.ID)
+    log.Printf("Chat member %v", member)
 
     // пользователь играет
     // отнять у текущего
