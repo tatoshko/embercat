@@ -18,7 +18,7 @@ func HandlerGive(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
         log.Printf("%v", parts)
     } else {
-        log.Printf("Incorrect command %s", text)
+        log.Printf("Incorrect command '%s'", text)
         msg := tgbotapi.NewMessage(chantID, "Неверный формат команды. Пример:\n<code>/give 001 @username</code>")
         msg.ParseMode = tgbotapi.ModeHTML
 
