@@ -1,9 +1,11 @@
 package handlerTurbo
 
 import (
+    "encoding/json"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
     "gopkg.in/redis.v3"
+    "net/url"
 )
 
 func makeLocalKey(key string, userID int) string {
@@ -25,8 +27,16 @@ func GetScore(stats []redis.Z, number string) float64 {
 }
 
 func GetChatMember(bot *tgbotapi.BotAPI, username string) (tgbotapi.ChatMember, error) {
-    return bot.GetChatMember(tgbotapi.ChatConfigWithUser{
-        SuperGroupUsername: username,
-        UserID:             0,
-    })
+    v := url.Values{}
+    v.Add("chat_id", username)
+
+    resp, err := bot.MakeRequest("getChatMember", v)
+    if err != nil {
+        return tgbotapi.ChatMember{}, err
+    }
+
+    var member tgbotapi.ChatMember
+    err = json.Unmarshal(resp.Result, &member)
+
+    return member, err
 }
