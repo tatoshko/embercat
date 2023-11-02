@@ -20,7 +20,7 @@ func Start(name, token, hook string) {
             log.Printf("SetHoook error %s\n", err.Error())
         }
 
-        API.Debug = true
+        API.Debug = false
 
         registerCommands()
 
