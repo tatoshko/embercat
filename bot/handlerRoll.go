@@ -10,7 +10,7 @@ import (
 func handleRoll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     msg := tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("https://animego.org/anime/random?%d", time.Now().Unix()))
     msg.ReplyToMessageID = update.Message.MessageID
-    msg.DisableWebPagePreview = true
+    msg.DisableWebPagePreview = false
 
     if _, err := bot.Send(msg); err != nil {
         log.Printf("handleRoll error %s\n", err.Error())
