@@ -7,19 +7,26 @@ import (
     "time"
 )
 
-func handleDay(bot *tba.BotAPI, update tba.Update)  {
+func handlerDay(bot *tba.BotAPI, update tba.Update) {
     box := assets.GetBox()
 
     var pic string
 
     switch time.Now().Weekday() {
-    case time.Monday: pic = "mon.jpg"
-    case time.Tuesday: pic = "tue.jpg"
-    case time.Wednesday: pic = "wed.jpg"
-    case time.Thursday: pic = "thu.jpg"
-    case time.Friday: pic = "fri.jpg"
-    case time.Saturday: pic = "sat.jpg"
-    case time.Sunday: pic = "sun.jpg"
+    case time.Monday:
+        pic = "mon.jpg"
+    case time.Tuesday:
+        pic = "tue.jpg"
+    case time.Wednesday:
+        pic = "wed.jpg"
+    case time.Thursday:
+        pic = "thu.jpg"
+    case time.Friday:
+        pic = "fri.jpg"
+    case time.Saturday:
+        pic = "sat.jpg"
+    case time.Sunday:
+        pic = "sun.jpg"
     }
 
     if b, err := box.Bytes("days/" + pic); err != nil {
@@ -32,4 +39,3 @@ func handleDay(bot *tba.BotAPI, update tba.Update)  {
         }
     }
 }
-

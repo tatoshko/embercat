@@ -1,6 +1,7 @@
 package bot
 
 import (
+    "embercat/bot/ai"
     "embercat/bot/callbacks"
     "embercat/bot/handlerThreat"
     "embercat/bot/handlerTurbo"
@@ -41,6 +42,8 @@ func Start(name, token, hook string) {
                         )
                         go handler(API, update)
                     }
+                } else {
+                    go ai.HandlerTextAnalizer(API, update)
                 }
             } else if update.CallbackQuery != nil {
                 data := update.CallbackQuery.Data
@@ -69,10 +72,10 @@ func registerCommands() {
     initHandleTime()
 
     Commands["thread"] = handlerThreat.HandleThread
-    Commands["day"] = handleDay
+    Commands["day"] = handlerDay
     Commands["wed"] = handleWednesday
     Commands["btn"] = handlerBtn
-    Commands["time"] = handleTime
+    Commands["time"] = handlerTime
     Commands["roll"] = handleRoll
 
     Commands["turbo"] = handlerTurbo.HandlerTurbo

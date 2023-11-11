@@ -21,11 +21,11 @@ import (
 )
 
 var (
-	ttf   *truetype.Font
-    face1 font.Face
-	face2 font.Face
-	pic   *image.RGBA
-	printer *message.Printer
+    ttf     *truetype.Font
+    face1   font.Face
+    face2   font.Face
+    pic     *image.RGBA
+    printer *message.Printer
 )
 
 func initHandleTime() {
@@ -67,7 +67,7 @@ func initHandleTime() {
 
 }
 
-func handleTime(bot *tba.BotAPI, update tba.Update) {
+func handlerTime(bot *tba.BotAPI, update tba.Update) {
     currentTime := time.Now()
     newYear := Date(currentTime.Year()+1, 1, 1)
 
@@ -90,7 +90,7 @@ func handleTime(bot *tba.BotAPI, update tba.Update) {
 }
 
 func addLabel(img *image.RGBA, x, y int, label string, face font.Face) {
-    col := color.RGBA{255, 255, 255, 255}
+    col := color.RGBA{255, 255, 255, 50}
     point := fixed.Point26_6{fixed.Int26_6(x * 64), fixed.Int26_6(y * 64)}
 
     d := &font.Drawer{
