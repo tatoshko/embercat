@@ -12,7 +12,7 @@ func getDonatesList(donates *redis.ZSliceCmd) string {
     msg := "Список донатеров:\n\n"
     for _, d := range donates.Val() {
         m := fmt.Sprintf("%s", d.Member)
-        msg += fmt.Sprintf("%s: %*.2f\n", m, 28-len(m), d.Score)
+        msg += fmt.Sprintf("%s %*.2f\n", m, 20-len(m), d.Score)
     }
     return fmt.Sprintf("<code>%s</code>", msg)
 }
