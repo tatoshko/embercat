@@ -16,6 +16,7 @@ func HandlerShow(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     donates := redis.ZRevRangeWithScores(types.REDIS_SUPPORTERS_COLLECTION, 0, -1)
     msg := tgbotapi.NewMessage(update.Message.Chat.ID, getDonatesList(donates))
+    msg.ParseMode = tgbotapi.ModeHTML
     if _, err := bot.Send(msg); err != nil {
         log.Printf("HandlerShow error %s\n", err.Error())
     }
