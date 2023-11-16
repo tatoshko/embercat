@@ -13,7 +13,7 @@ func getDonatesList(donates *redis.ZSliceCmd) string {
     for _, d := range donates.Val() {
         msg += fmt.Sprintf("%s: %*.2f\n", d.Member, 10, d.Score)
     }
-    return msg
+    return fmt.Sprintf("<code>%s</code>", msg)
 }
 
 func getDonateMessage(info redis.Z) string {
