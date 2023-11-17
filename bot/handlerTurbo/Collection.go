@@ -28,8 +28,6 @@ func LoadCollection(redisClient *redis.Client, userId int64) (collection Collect
     collection.redisKey = makeUserCollectionKey(REDIS_KEY_TURBO_COLLECTION, userId)
     collection.connection = redisClient
 
-    log.Printf("%v ", collection)
-
     var data []redis.Z
     if data, err = redisClient.ZRangeWithScores(collection.redisKey, 0, -1).Result(); err != nil {
         return Collection{}, errors.New("can't load collection")
@@ -53,11 +51,7 @@ func (c Collection) Has(liner Liner) bool {
 }
 
 func (c Collection) ScoreOf(liner Liner) int64 {
-    log.Printf("DATA: %v", c.data)
-
     for _, v := range c.data {
-
-        log.Printf("%s = %s ? %v", v.Member, liner.ID, v.Member == liner.ID)
         if v.Member == liner.ID {
             return int64(v.Score)
         }
