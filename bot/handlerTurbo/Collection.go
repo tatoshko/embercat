@@ -34,7 +34,7 @@ func LoadCollection(redisClient *redis.Client, userId int64) (collection Collect
 
     collection.data = data
 
-    log.Printf("DATA: %v, col.DATA %s. ERROR: %s", data, collection.data, err.Error())
+    log.Printf("DATA: %v, col.DATA %v. ERROR: %v", data, collection.data, err)
 
     if err != nil {
         return Collection{}, errors.New("empty collection")
