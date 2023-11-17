@@ -28,25 +28,20 @@ func HandlerWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    var liner int64
-    if liner, err = strconv.ParseInt(args, 10, 32); err != nil {
-        logErr(err)
-        return
-    }
-
-    if liner > TOTAL_LINERS {
-        msg := tgbotapi.NewMessage(chatID, "Вкладышей всего 330")
+    var liner Liner
+    if liner, err = NewLinerFromString(args); err != nil {
+        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Не могу понять, что ты хочешь.\n<code>%s</code>", err.Error()))
+        msg.ParseMode = tgbotapi.ModeHTML
 
         if _, err := bot.Send(msg); err != nil {
             logErr(err)
         }
-
-        return
     }
 
-    msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("%s хочет получить в дар вкладыш <b>%d</d>", helpers.GetUserName(update.Message.From, true), liner))
+    msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("%s хочет получить в дар вкладыш <b>%s</d>", helpers.GetUserName(update.Message.From, true), liner.ID))
+    msg.ParseMode = tgbotapi.ModeHTML
 
-    button := tgbotapi.NewInlineKeyboardButtonData("Подарить", fmt.Sprintf("/wantans %d %d", liner, update.Message.From.ID))
+    button := tgbotapi.NewInlineKeyboardButtonData("Подарить", fmt.Sprintf("/wantans %s %d", liner.ID, update.Message.From.ID))
     row := tgbotapi.NewInlineKeyboardRow(button)
     msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(row)
 

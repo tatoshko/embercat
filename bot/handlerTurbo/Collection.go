@@ -124,7 +124,7 @@ func (c Collection) GenerateCollectionPicture() *image.RGBA {
     var err error
     var b []byte
     for i := 0; i < TOTAL_LINERS; i++ {
-        liner := NewLiner(i + 1)
+        liner, _ := NewLiner(i + 1)
 
         if c.Has(liner) {
             if b, err = liner.GetPicture(); err != nil {
