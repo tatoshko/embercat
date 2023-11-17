@@ -1,24 +1,78 @@
 package handlerTurbo
 
 import (
-	"embercat/assets"
-	"fmt"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-	"log"
-	"strings"
+    redis2 "embercat/redis"
+    "fmt"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    "golang.org/x/text/feature/plural"
+    "golang.org/x/text/language"
+    "golang.org/x/text/message"
 )
 
-func HandlerShow(api *tgbotapi.BotAPI, update tgbotapi.Update) {
-	parts := strings.SplitN(update.Message.Text, " ", 2)
+func HandlerShow(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+    var err error
 
-	box := assets.GetBox()
-	if b, err := box.Bytes(fmt.Sprintf(TURBO_FILENAME_KEY, parts[1])); err != nil {
-		log.Printf("CallbackCollection Bytes error %s", err.Error())
-	} else {
-		msg := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, tgbotapi.FileBytes{Name: parts[1], Bytes: b})
+    redis := redis2.GetClient()
+    if redis == nil {
+        return
+    }
+    defer redis.Close()
 
-		if _, err := api.Send(msg); err != nil {
-			log.Printf("Delete message error %s", err.Error())
-		}
-	}
+    chatID := update.Message.Chat.ID
+    args := update.Message.CommandArguments()
+
+    var liner Liner
+    if liner, err = NewLinerFromString(args); err != nil {
+        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Неверный номер вкладыша <b>%s</b>", args))
+        msg.ParseMode = tgbotapi.ModeHTML
+
+        if _, err = bot.Send(msg); err != nil {
+            logErr(err)
+        }
+        return
+    }
+
+    var b []byte
+    if b, err = liner.GetPicture(); err != nil {
+        logErr(err)
+        return
+    }
+
+    msgp := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, tgbotapi.FileBytes{Name: liner.ID, Bytes: b})
+    if _, err := bot.Send(msgp); err != nil {
+        logErr(err)
+    }
+
+    var collection Collection
+    if collection, err = LoadCollection(redis, int64(update.Message.From.ID)); err != nil {
+        logErr(err)
+
+        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Что-то не так с твоей колекцией/n%s", err.Error()))
+        msg.ParseMode = tgbotapi.ModeHTML
+        if _, err = bot.Send(msg); err != nil {
+            logErr(err)
+        }
+        return
+    }
+
+    score := collection.ScoreOf(liner)
+
+    message.Set(language.Russian, "В твоей коллекции %d вкладышей <b>%s</b>",
+        plural.Selectf(1, "%d",
+            "=0", "У тебя <b>нет</b> вкладыша <b>%s</b>",
+            plural.One, "У тебя пока <b>только один</b> вкладыш <b>%s</b>",
+            plural.Few, "В твоей коллекции <b>%d</b> вкладыша <b>%s</b>",
+            plural.Many, "В твоей коллекции <b>%d</b> вкладышей <b>%s</b>",
+        ),
+    )
+
+    printer := message.NewPrinter(language.Russian)
+    message := printer.Sprintf("В твоей коллекции %d вкладышей <b>%s</b>", score, liner.ID)
+
+    msg := tgbotapi.NewMessage(chatID, message)
+    msg.ParseMode = tgbotapi.ModeHTML
+
+    if _, err := bot.Send(msg); err != nil {
+        logErr(err)
+    }
 }
