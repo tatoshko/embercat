@@ -114,9 +114,12 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         if _, err = bot.Send(msg); err != nil {
             logErr(err)
         }
+
+        return
     }
 
     msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Вкладыш <b>%s</b> подарен!", liner.ID))
+    msg.ParseMode = tgbotapi.ModeHTML
     if _, err := bot.Send(msg); err != nil {
         logErr(err)
     }
