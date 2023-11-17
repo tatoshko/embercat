@@ -19,7 +19,7 @@ func HandlerWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     validateArgs := regexp.MustCompile(`^\d{3}$`)
 
     if !validateArgs.MatchString(args) {
-        msg := tgbotapi.NewMessage(chatID, "Неверный номер вкладыша, должно быть трицифры, например: 001")
+        msg := tgbotapi.NewMessage(chatID, "Неверный номер вкладыша, должно быть три цифры, например: 001")
 
         if _, err := bot.Send(msg); err != nil {
             logErr(err)
@@ -38,7 +38,7 @@ func HandlerWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         }
     }
 
-    msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("%s хочет получить в дар вкладыш <b>%s</d>", helpers.GetUserName(update.Message.From, true), liner.ID))
+    msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("%s хочет получить в дар вкладыш <b>%s</b>", helpers.GetUserName(update.Message.From, true), liner.ID))
     msg.ParseMode = tgbotapi.ModeHTML
 
     button := tgbotapi.NewInlineKeyboardButtonData("Подарить", fmt.Sprintf("/wantans %s %d", liner.ID, update.Message.From.ID))
