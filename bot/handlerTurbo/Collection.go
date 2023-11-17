@@ -27,7 +27,12 @@ func LoadCollection(redisClient *redis.Client, userId int64) (collection Collect
     collection.userId = userId
     collection.redisKey = makeUserCollectionKey(REDIS_KEY_TURBO_COLLECTION, userId)
     collection.connection = redisClient
-    collection.data, err = redisClient.ZRangeWithScores(collection.redisKey, 0, -1).Result()
+    var data []redis.Z
+    if data, err = redisClient.ZRangeWithScores(collection.redisKey, 0, -1).Result(); err != nil {
+        return Collection{}, errors.New("can't load collection")
+    }
+
+    collection.data = data
 
     if err != nil {
         return Collection{}, errors.New("empty collection")
