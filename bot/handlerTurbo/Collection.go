@@ -34,6 +34,8 @@ func LoadCollection(redisClient *redis.Client, userId int64) (collection Collect
 
     collection.data = data
 
+    log.Printf("DATA: %v, col.DATA %s. ERROR: %s", data, collection.data, err.Error())
+
     if err != nil {
         return Collection{}, errors.New("empty collection")
     }
@@ -46,8 +48,6 @@ func (c Collection) Count() int {
 }
 
 func (c Collection) Has(liner Liner) bool {
-    log.Printf("%d", c.ScoreOf(liner))
-
     return c.ScoreOf(liner) > 0
 }
 
