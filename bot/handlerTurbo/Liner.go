@@ -16,10 +16,11 @@ type Liner struct {
 }
 
 func NewLiner(num int) Liner {
+    id := fmt.Sprintf("%03d", num)
     return Liner{
-        ID:       fmt.Sprintf("%03d", num),
+        ID:       id,
         box:      assets.GetBox(),
-        filename: fmt.Sprintf(TURBO_FILENAME_KEY, fmt.Sprintf("%d", num)),
+        filename: fmt.Sprintf(TURBO_FILENAME_KEY, id),
     }
 }
 
