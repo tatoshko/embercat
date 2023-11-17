@@ -15,7 +15,8 @@ func makeUserCollectionKey(key string, userID int64) string {
 
 func GetRandomLiner() Liner {
     rand.Seed(time.Now().UnixNano())
-    return NewLiner(rand.Intn(TOTAL_LINERS))
+    liner, _ := NewLiner(rand.Intn(TOTAL_LINERS))
+    return liner
 }
 
 func GetChatMember(bot *tgbotapi.BotAPI, username string) (tgbotapi.ChatMember, error) {
