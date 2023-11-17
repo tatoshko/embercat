@@ -4,26 +4,18 @@ import (
     "encoding/json"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-    "gopkg.in/redis.v3"
+    "math/rand"
     "net/url"
+    "time"
 )
 
-func makeLocalKey(key string, userID int) string {
+func makeUserCollectionKey(key string, userID int64) string {
     return fmt.Sprintf(key, userID)
 }
 
-func checkExists(stats []redis.Z, number string) bool {
-    return GetScore(stats, number) > 0
-}
-
-func GetScore(stats []redis.Z, number string) float64 {
-    for _, v := range stats {
-        if v.Member == number {
-            return v.Score
-        }
-    }
-
-    return 0
+func GetRandomLiner() Liner {
+    rand.Seed(time.Now().UnixNano())
+    return NewLiner(rand.Intn(TOTAL_LINERS))
 }
 
 func GetChatMember(bot *tgbotapi.BotAPI, username string) (tgbotapi.ChatMember, error) {
