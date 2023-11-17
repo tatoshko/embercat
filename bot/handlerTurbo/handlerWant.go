@@ -89,7 +89,7 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     log.Printf("Trying to move liner '%s' from '%d' to '%d'", liner.ID, update.CallbackQuery.Message.From.ID, recipient)
 
     var giverCollection Collection
-    if giverCollection, err = LoadCollection(redisInst, int64(update.Message.From.ID)); err != nil {
+    if giverCollection, err = LoadCollection(redisInst, int64(update.CallbackQuery.Message.From.ID)); err != nil {
         msg := tgbotapi.NewMessage(chatID, "У тебя нет вкладышей, жмакай\n<code>/turbo@embercatbot</code>")
         msg.ParseMode = tgbotapi.ModeHTML
 
