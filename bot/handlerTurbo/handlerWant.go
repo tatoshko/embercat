@@ -109,11 +109,8 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         }
     }
 
-    log.Printf(`
-* %v
-* %v
-`, recipientCollection, liner)
     if err = giverCollection.MoveTo(recipientCollection, liner); err != nil {
+        logErr(err)
         msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Не получилось передать вкладыш, сорян.\n%s", err.Error()))
         msg.ParseMode = tgbotapi.ModeHTML
         if _, err = bot.Send(msg); err != nil {
