@@ -80,7 +80,7 @@ func (c Collection) RemoveOne(liner Liner) (collection Collection, err error) {
 // Moves liner from one collection to another
 func (c Collection) MoveTo(collection Collection, liner Liner) (err error) {
     if !c.Has(liner) {
-        return errors.New(fmt.Sprintf("В твоей коллекции нет вкладыша с номером '%s'", liner.ID))
+        return errors.New(fmt.Sprintf("В твоей коллекции нет вкладыша с номером <b>%s</b>", liner.ID))
     }
 
     if _, err = c.RemoveOne(liner); err != nil {
