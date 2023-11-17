@@ -58,7 +58,7 @@ func HandlerShow(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     score := collection.ScoreOf(liner)
 
     message.Set(language.Russian, "В твоей коллекции %d вкладышей <b>%s</b>",
-        plural.Selectf(1, "%d",
+        plural.Selectf(2, "%d",
             "=0", "У тебя <b>нет</b> вкладыша <b>%s</b>",
             plural.One, "У тебя пока <b>только один</b> вкладыш <b>%s</b>",
             plural.Few, "В твоей коллекции <b>%d</b> вкладыша <b>%s</b>",
