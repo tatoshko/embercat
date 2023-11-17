@@ -47,6 +47,8 @@ func (c Collection) Has(liner Liner) bool {
 }
 
 func (c Collection) ScoreOf(liner Liner) int64 {
+    log.Printf("DATA: %v", c.data)
+
     for _, v := range c.data {
 
         log.Printf("%s = %s ? %v", v.Member, liner.ID, v.Member == liner.ID)
