@@ -41,13 +41,17 @@ func (c Collection) Count() int {
 }
 
 func (c Collection) Has(liner Liner) bool {
+    log.Printf("%d", c.ScoreOf(liner))
+
     return c.ScoreOf(liner) > 0
 }
 
-func (c Collection) ScoreOf(liner Liner) float64 {
+func (c Collection) ScoreOf(liner Liner) int64 {
     for _, v := range c.data {
+
+        log.Printf("%s = %s ? %v", v.Member, liner.ID, v.Member == liner.ID)
         if v.Member == liner.ID {
-            return v.Score
+            return int64(v.Score)
         }
     }
 
