@@ -1,71 +1,75 @@
 package handlerTurbo
 
 import (
-	"embercat/assets"
-	redis2 "embercat/redis"
-	"fmt"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-	"log"
-	"math/rand"
-	"time"
+    redis2 "embercat/redis"
+    "fmt"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    "log"
 )
 
-func HandlerTurbo(api *tgbotapi.BotAPI, update tgbotapi.Update) {
-	redis := redis2.GetClient()
-	if redis == nil {
-		return
-	}
-	defer redis.Close()
+func HandlerTurbo(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+    var err error
+    redis := redis2.GetClient()
+    if redis == nil {
+        return
+    }
+    defer redis.Close()
 
-	chatID := update.Message.Chat.ID
-	userID := update.Message.From.ID
+    chatID := update.Message.Chat.ID
+    userID := update.Message.From.ID
 
-	localCollectionKey := makeLocalKey(REDIS_KEY_TURBO_COLLECTION, userID)
-	localDayKey := makeLocalKey(REDIS_KEY_TURBO_DAY, userID)
+    // Only one gum per day
+    todayer := NewTodayer(redis, int64(userID))
+    var dirty bool
 
-	currentDateString := time.Now().Format("2006-Jan-02")
+    if dirty, err = todayer.Dirty(); err != nil {
+        logErr(err)
+        return
+    }
 
-	var isTodayGot bool
-	var err error
-	if isTodayGot, err = redis.SIsMember(localDayKey, currentDateString).Result(); err != nil {
-		log.Printf("HandlerTurbo SIsMember error %s", err.Error())
-		return
-	}
+    if dirty {
+        msg := tgbotapi.NewMessage(chatID, "Можно только одну жвачку в день")
+        if _, err = bot.Send(msg); err != nil {
+            log.Printf("HandlerTurbo bot.Send error %s", err.Error())
+        }
 
-	if isTodayGot {
-		msg := tgbotapi.NewMessage(chatID, "Можно только одну жвачку в день")
-		if _, err = api.Send(msg); err != nil {
-			log.Printf("HandlerTurbo api.Send error %s", err.Error())
-		}
+        return
+    }
 
-		return
-	} else {
-		if _, err = redis.SAdd(localDayKey, currentDateString).Result(); err != nil {
-			log.Printf("HandlerTurbo SAdd error %s", err.Error())
-			return
-		}
-	}
+    // Ok, load collection
+    var collection Collection
+    if collection, err = LoadCollection(redis, int64(userID)); err != nil {
+        logErr(err)
+        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Что-то не так с твоей коллекцией\n%s", err.Error()))
+        msg.ParseMode = tgbotapi.ModeHTML
 
-	box := assets.GetBox()
+        return
+    }
 
-	rand.Seed(time.Now().UnixNano())
-	n := fmt.Sprintf("%03d", rand.Intn(TOTAL_PICTURES))
-	filename := fmt.Sprintf(TURBO_FILENAME_KEY, n)
+    // Add new liner to collection
+    liner := GetRandomLiner()
+    if _, err := collection.Add(liner); err != nil {
+        logErr(err)
+        msg := tgbotapi.NewMessage(
+            chatID,
+            fmt.Sprintf("Что-то не так с выдачей новых вкладышей, а тебе почти достался <b>%s</b>", liner.ID),
+        )
+        msg.ParseMode = tgbotapi.ModeHTML
 
-	if _, err := redis.ZIncrBy(localCollectionKey, 1, n).Result(); err != nil {
-		log.Printf("HandlerTurbo ZIncrBy error %s", err.Error())
-		return
-	}
+        if _, err = bot.Send(msg); err != nil {
+            log.Printf("HandlerTurbo bot.Send error %s", err.Error())
+        }
+    }
 
-	if b, err := box.Bytes(filename); err != nil {
-		log.Printf("HandlerTurbo box.Bytes error %s", err.Error())
-		return
-	} else {
-		msg := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, tgbotapi.FileBytes{Name: filename, Bytes: b})
+    // Load liner's picture
+    if b, err := liner.GetPicture(); err != nil {
+        logErr(err)
+    } else {
+        msg := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, tgbotapi.FileBytes{Name: liner.ID, Bytes: b})
 
-		if _, err = api.Send(msg); err != nil {
-			log.Printf("HandlerTurbo api.Send error %s", err.Error())
-		}
-	}
+        if _, err = bot.Send(msg); err != nil {
+            logErr(err)
+        }
+    }
 
 }
