@@ -86,7 +86,7 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         logErr(err)
     }
 
-    giver := int64(query.Message.From.ID)
+    giver := int64(query.From.ID)
 
     log.Printf("Trying to move liner '%s' from '%d' to '%d'", liner.ID, giver, recipient)
 
