@@ -87,10 +87,22 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         logErr(err)
     }
 
-    log.Printf("Trying to move liner '%s' from '%d' to '%d'", liner.ID, update.CallbackQuery.Message.From.ID, recipient)
+    giver := int64(update.CallbackQuery.Message.From.ID)
+
+    log.Printf("Trying to move liner '%s' from '%d' to '%d'", liner.ID, giver, recipient)
+
+    if giver == recipient {
+        msg := tgbotapi.NewMessage(chatID, "Сам у себя это как вообще?")
+
+        if _, err := bot.Send(msg); err != nil {
+            logErr(err)
+        }
+
+        return
+    }
 
     var giverCollection Collection
-    if giverCollection, err = LoadCollection(redisInst, int64(update.CallbackQuery.Message.From.ID)); err != nil {
+    if giverCollection, err = LoadCollection(redisInst, giver); err != nil {
         msg := tgbotapi.NewMessage(chatID, "У тебя нет вкладышей, жмакай\n<code>/turbo@embercatbot</code>")
         msg.ParseMode = tgbotapi.ModeHTML
 
