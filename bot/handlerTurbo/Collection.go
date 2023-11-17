@@ -128,7 +128,7 @@ func (c Collection) GenerateCollectionPicture() *image.RGBA {
 
         if c.Has(liner) {
             if b, err = liner.GetPicture(); err != nil {
-                log.Printf("HandlerCollection box.Bytes error %s", err.Error())
+                log.Printf("HandlerCollection liner.GetPicture error %s", err.Error())
                 continue
             }
 
