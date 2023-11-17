@@ -7,6 +7,7 @@ import (
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
     "log"
     "regexp"
+    "runtime"
     "strconv"
     "strings"
 )
@@ -127,5 +128,6 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 }
 
 func logErr(err error) {
-    log.Printf("turbo.HandlerWant error %s", err.Error())
+    _, filename, line, _ := runtime.Caller(1)
+    log.Printf("%s at %d: turbo.HandlerWant error %s", filename, line, err.Error())
 }
