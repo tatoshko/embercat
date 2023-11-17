@@ -16,8 +16,8 @@ type Liner struct {
 }
 
 func NewLiner(num int) (liner Liner, err error) {
-    if num > TOTAL_LINERS {
-        return Liner{}, errors.New(fmt.Sprintf("there is no liner larger than number %d", TOTAL_LINERS))
+    if num > TOTAL_LINERS || num <= 0 {
+        return Liner{}, errors.New(fmt.Sprintf("There is existing liners only with numbers from 001 to %d", TOTAL_LINERS))
     }
 
     id := fmt.Sprintf("%03d", num)
