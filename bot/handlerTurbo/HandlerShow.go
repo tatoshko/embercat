@@ -57,17 +57,17 @@ func HandlerShow(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     score := collection.ScoreOf(liner)
 
-    message.Set(language.Russian, "В твоей коллекции %d вкладышей <b>%s</b>",
-        plural.Selectf(2, "%s",
-            "=0", "У тебя <b>нет</b> вкладыша <b>%s</b>",
-            plural.One, "У тебя пока <b>только один</b> вкладыш <b>%s</b>",
-            plural.Few, "В твоей коллекции <b>%d</b> вкладыша <b>%s</b>",
-            plural.Many, "В твоей коллекции <b>%d</b> вкладышей <b>%s</b>",
+    message.Set(language.Russian, "В твоей коллекции %d вкладышей",
+        plural.Selectf(1, "%d",
+            "=0", "У тебя <b>нет</b> вкладыша",
+            plural.One, "У тебя пока <b>только один</b> вкладыш",
+            plural.Few, "В твоей коллекции <b>%d</b> вкладыша",
+            plural.Many, "В твоей коллекции <b>%d</b> вкладышей",
         ),
     )
 
     printer := message.NewPrinter(language.Russian)
-    message := printer.Sprintf("В твоей коллекции %d вкладышей <b>%s</b>", score, liner.ID)
+    message := fmt.Sprintf("%s <b>%s</b>", printer.Sprintf("В твоей коллекции %d вкладышей", score), liner.ID)
 
     msg := tgbotapi.NewMessage(chatID, message)
     msg.ParseMode = tgbotapi.ModeHTML
