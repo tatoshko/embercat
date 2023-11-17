@@ -49,7 +49,6 @@ func HandlerWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     if _, err := bot.Send(msg); err != nil {
         logErr(err)
     }
-
 }
 
 func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -62,13 +61,13 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     query := update.CallbackQuery
     callback := tgbotapi.NewCallback(query.ID, query.Data)
-    chatID := update.CallbackQuery.Message.Chat.ID
+    chatID := query.Message.Chat.ID
 
     if _, err := bot.AnswerCallbackQuery(callback); err != nil {
         logErr(err)
         return
     }
-
+    log.Printf("Q DATA: %s", query.Data)
     data := strings.Split(strings.TrimLeft(query.Data, "/wantans "), " ")
 
     var liner Liner
@@ -87,7 +86,7 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         logErr(err)
     }
 
-    giver := int64(update.CallbackQuery.Message.From.ID)
+    giver := int64(query.Message.From.ID)
 
     log.Printf("Trying to move liner '%s' from '%d' to '%d'", liner.ID, giver, recipient)
 
