@@ -97,9 +97,9 @@ func registerCommands() {
     Commands["donates"] = handlerDonate.Show
 
     // Pictures
-    Commands["prnd"] = handlerPic.RndServer
-    Commands["psave"] = handlerPic.Save
-    Commands["pload"] = handlerPic.Load
+    Commands["aserver"] = handlerPic.RndServer
+    Commands["ashare"] = handlerPic.RndShare
+    Commands["asave"] = handlerPic.Save
 
     callbacks.RegisterCallback("wantans", handlerTurbo.CallbackWant)
 }

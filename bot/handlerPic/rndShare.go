@@ -5,7 +5,7 @@ import (
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-func Load(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func RndShare(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
     logger := getLogger("LOAD")
 
@@ -16,7 +16,7 @@ func Load(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     defer redis.Close()
 
     var pic string
-    if pic, err = redis.SRandMember(KEY).Result(); err != nil {
+    if pic, err = redis.SRandMember(REDIS_KEY).Result(); err != nil {
         logger(err.Error())
     }
 
