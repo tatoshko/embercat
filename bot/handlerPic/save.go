@@ -9,6 +9,6 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     reply := update.Message.ReplyToMessage
 
     if reply != nil {
-        logger("PSAVE", fmt.Sprintf("%v", reply.Document))
+        logger("PSAVE", fmt.Sprintf("%q", reply.Entities))
     }
 }
