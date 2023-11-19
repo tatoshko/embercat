@@ -1,4 +1,4 @@
-package bot
+package handlerCatacul
 
 import (
     "bytes"
@@ -28,7 +28,7 @@ var (
     printer   *message.Printer
 )
 
-func initHandleTime() {
+func Init() {
     ttf, _ = truetype.Parse(gobold.TTF)
     face1 = truetype.NewFace(ttf, &truetype.Options{
         Size:    42.0,
@@ -64,10 +64,9 @@ func initHandleTime() {
     )
 
     printer = message.NewPrinter(language.Russian)
-
 }
 
-func handlerTime(bot *tba.BotAPI, update tba.Update) {
+func Hny(bot *tba.BotAPI, update tba.Update) {
     pic := sourcePIC
     currentTime := time.Now()
     newYear := Date(currentTime.Year()+1, 1, 1)

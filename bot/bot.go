@@ -3,19 +3,20 @@ package bot
 import (
     "embercat/bot/ai"
     "embercat/bot/callbacks"
+    "embercat/bot/core"
+    "embercat/bot/handlerCatacul"
     "embercat/bot/handlerDonate"
     "embercat/bot/handlerPic"
     "embercat/bot/handlerThreat"
     "embercat/bot/handlerTurbo"
     "embercat/bot/handlerWednesday"
-    "embercat/bot/types"
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
     "log"
     "strings"
 )
 
 var (
-    Commands = make(map[string]types.Handler)
+    Commands = make(map[string]core.Handler)
 )
 
 func Start(name, token, hook string) {
@@ -72,15 +73,13 @@ func Start(name, token, hook string) {
 }
 
 func registerCommands() {
-    initHandleTime()
-
     // Other
     Commands["thread"] = handlerThreat.HandleThread
-    Commands["btn"] = handlerBtn
 
     // Catacul
-    Commands["day"] = handlerDay
-    Commands["time"] = handlerTime
+    handlerCatacul.Init()
+    Commands["day"] = handlerCatacul.Day
+    Commands["hny"] = handlerCatacul.Hny
 
     // Turbo
     Commands["turbo"] = handlerTurbo.HandlerTurbo
