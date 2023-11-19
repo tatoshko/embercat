@@ -4,6 +4,7 @@ import (
     "embercat/bot/ai"
     "embercat/bot/callbacks"
     "embercat/bot/handlerDonate"
+    "embercat/bot/handlerPic"
     "embercat/bot/handlerThreat"
     "embercat/bot/handlerTurbo"
     "embercat/bot/types"
@@ -85,6 +86,8 @@ func registerCommands() {
 
     Commands["donate"] = handlerDonate.Add
     Commands["donates"] = handlerDonate.Show
+
+    Commands["prnd"] = handlerPic.Rnd
 
     callbacks.RegisterCallback("wantans", handlerTurbo.CallbackWant)
 }
