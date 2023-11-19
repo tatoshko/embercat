@@ -7,8 +7,8 @@ import (
     "embercat/bot/handlerPic"
     "embercat/bot/handlerThreat"
     "embercat/bot/handlerTurbo"
+    "embercat/bot/handlerWednesday"
     "embercat/bot/types"
-    "embercat/bot/wednesday"
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
     "log"
     "strings"
@@ -89,15 +89,15 @@ func registerCommands() {
     Commands["want"] = handlerTurbo.HandlerWant
 
     // Wednesday
-    Commands["wed"] = wednesday.Check
-    Commands["newfrog"] = wednesday.Save
+    Commands["wed"] = handlerWednesday.Check
+    Commands["newfrog"] = handlerWednesday.Save
 
     // Donates
     Commands["donate"] = handlerDonate.Add
     Commands["donates"] = handlerDonate.Show
 
     // Pictures
-    Commands["prnd"] = handlerPic.Rnd
+    Commands["prnd"] = handlerPic.RndServer
     Commands["psave"] = handlerPic.Save
     Commands["pload"] = handlerPic.Load
 

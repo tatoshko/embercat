@@ -1,4 +1,4 @@
-package wednesday
+package handlerWednesday
 
 import (
     "fmt"
@@ -7,7 +7,7 @@ import (
 
 const (
     REDIS_KEY    = "frogs"
-    NO_WEDNESDAY = "no-wednesday.jpg"
+    NO_WEDNESDAY = "no-handlerWednesday.jpg"
 )
 
 func getLogger(scope string) func(s string) {

@@ -7,6 +7,8 @@ import (
 
 func Load(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
+    logger := getLogger("LOAD")
+
     redis := redis2.GetClient()
     if redis == nil {
         return
@@ -15,11 +17,11 @@ func Load(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     var pic string
     if pic, err = redis.SRandMember(KEY).Result(); err != nil {
-        logger("LOAD SMEMBERS", err.Error())
+        logger(err.Error())
     }
 
     msg := tgbotapi.NewPhotoShare(update.Message.Chat.ID, pic)
     if _, err = bot.Send(msg); err != nil {
-        logger("LOAD SEND", err.Error())
+        logger(err.Error())
     }
 }
