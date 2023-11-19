@@ -88,6 +88,7 @@ func registerCommands() {
     Commands["donates"] = handlerDonate.Show
 
     Commands["prnd"] = handlerPic.Rnd
+    Commands["psave"] = handlerPic.Save
 
     callbacks.RegisterCallback("wantans", handlerTurbo.CallbackWant)
 }
