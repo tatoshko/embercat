@@ -84,8 +84,8 @@ func registerCommands() {
     Commands["show"] = handlerTurbo.HandlerShow
     Commands["want"] = handlerTurbo.HandlerWant
 
-    Commands["donate"] = handlerDonate.HandlerAdd
-    Commands["donates"] = handlerDonate.HandlerShow
+    Commands["donate"] = handlerDonate.Add
+    Commands["donates"] = handlerDonate.Show
 
     callbacks.RegisterCallback("wantans", handlerTurbo.CallbackWant)
 }
