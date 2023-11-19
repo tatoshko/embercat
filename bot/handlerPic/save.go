@@ -9,7 +9,11 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     if reply != nil && reply.Photo != nil {
         for _, pic := range *reply.Photo {
-            logger("PSAVE", pic.FileID)
+            msg := tgbotapi.NewPhotoShare(update.Message.Chat.ID, pic.FileID)
+
+            if _, err := bot.Send(msg); err != nil {
+                logger("PSAVE", err.Error())
+            }
         }
     }
 }
