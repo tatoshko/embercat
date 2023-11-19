@@ -3,7 +3,6 @@ package handlerPic
 import (
     redis2 "embercat/redis"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-    "strings"
 )
 
 func Load(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -14,14 +13,12 @@ func Load(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
     defer redis.Close()
 
-    var res []string
-    if res, err = redis.SMembers(KEY).Result(); err != nil {
+    var pic string
+    if pic, err = redis.SRandMember(KEY).Result(); err != nil {
         logger("LOAD SMEMBERS", err.Error())
     }
 
-    msg := tgbotapi.NewMessage(update.Message.Chat.ID, strings.Join(res, "\n"))
-    msg.ParseMode = tgbotapi.ModeHTML
-
+    msg := tgbotapi.NewPhotoShare(update.Message.Chat.ID, pic)
     if _, err = bot.Send(msg); err != nil {
         logger("LOAD SEND", err.Error())
     }
