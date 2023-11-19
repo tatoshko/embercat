@@ -89,6 +89,7 @@ func registerCommands() {
 
     Commands["prnd"] = handlerPic.Rnd
     Commands["psave"] = handlerPic.Save
+    Commands["pload"] = handlerPic.Load
 
     callbacks.RegisterCallback("wantans", handlerTurbo.CallbackWant)
 }
