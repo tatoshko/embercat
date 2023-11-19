@@ -5,8 +5,6 @@ import (
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-const KEY = "pic:anime"
-
 func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     logger := getLogger("SAVE")
 
@@ -35,7 +33,7 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
     defer redis.Close()
 
-    if _, err = redis.SAdd(KEY, photoID).Result(); err != nil {
+    if _, err = redis.SAdd(REDIS_KEY, photoID).Result(); err != nil {
         logger(err.Error())
         return
     }

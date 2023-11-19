@@ -1,6 +1,7 @@
 package handlerPic
 
 import (
+    "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
     "io"
     "net/http"
@@ -21,7 +22,7 @@ func RndServer(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     defer resp.Body.Close()
 
     if resp.StatusCode != 200 {
-        logger(string(resp.StatusCode))
+        logger(fmt.Sprintf("%d", resp.StatusCode))
         return
     }
 

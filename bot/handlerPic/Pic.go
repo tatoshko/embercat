@@ -7,9 +7,6 @@ import (
     "time"
 )
 
-const MAX = 409
-const CDN = "https://pics.useful.team"
-
 type Pic struct {
     id   string
     link string
@@ -22,7 +19,7 @@ func NewPic(n int) *Pic {
 
 func NewPicRND() *Pic {
     rand.Seed(time.Now().UnixMicro())
-    return NewPic(rand.Intn(MAX))
+    return NewPic(rand.Intn(MAX_PICS))
 }
 
 func (p Pic) URL() string {
