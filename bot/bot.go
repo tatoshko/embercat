@@ -37,7 +37,7 @@ func Start(name, token, hook string) {
                 direct := int64(message.From.ID) == message.Chat.ID
                 tagMe := strings.Index(message.CommandWithAt(), name) != -1
 
-                if message.IsCommand() && (tagMe || direct || message.CommandArguments() == "newfrog") {
+                if message.IsCommand() && (tagMe || direct || message.CommandArguments() == "/newfrog") {
                     if handler, found := Commands[message.Command()]; found {
                         log.Printf(
                             "MessageID: '%d', Command: '%s', Data: '%s', From: '%d'\n",
