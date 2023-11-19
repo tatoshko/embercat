@@ -77,7 +77,6 @@ func registerCommands() {
     Commands["wed"] = handleWednesday
     Commands["btn"] = handlerBtn
     Commands["time"] = handlerTime
-    Commands["roll"] = handleRoll
 
     Commands["turbo"] = handlerTurbo.HandlerTurbo
     Commands["collection"] = handlerTurbo.HandlerCollection
