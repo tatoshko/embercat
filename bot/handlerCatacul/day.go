@@ -1,4 +1,4 @@
-package bot
+package handlerCatacul
 
 import (
     "embercat/assets"
@@ -7,7 +7,7 @@ import (
     "time"
 )
 
-func handlerDay(bot *tba.BotAPI, update tba.Update) {
+func Day(bot *tba.BotAPI, update tba.Update) {
     box := assets.GetBox()
 
     var pic string

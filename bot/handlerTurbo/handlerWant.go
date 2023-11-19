@@ -1,7 +1,7 @@
 package handlerTurbo
 
 import (
-    "embercat/bot/helpers"
+    "embercat/bot/core"
     redisServ "embercat/redis"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -39,7 +39,7 @@ func HandlerWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         }
     }
 
-    msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("%s хочет получить в дар вкладыш <b>%s</b>", helpers.GetUserName(update.Message.From, true), liner.ID))
+    msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("%s хочет получить в дар вкладыш <b>%s</b>", core.GetUserName(update.Message.From, true), liner.ID))
     msg.ParseMode = tgbotapi.ModeHTML
 
     button := tgbotapi.NewInlineKeyboardButtonData("Подарить", fmt.Sprintf("/wantans %s %d", liner.ID, update.Message.From.ID))

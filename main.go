@@ -5,7 +5,7 @@ import (
     "embercat/bot"
     "encoding/json"
     "fmt"
-    "io/ioutil"
+    "io"
     "log"
     "net/http"
     "os"
@@ -28,7 +28,7 @@ func main() {
         defer jsonFile.Close()
 
         var config Config
-        bytes, _ := ioutil.ReadAll(jsonFile)
+        bytes, _ := io.ReadAll(jsonFile)
 
         if err = json.Unmarshal(bytes, &config); err != nil {
             panic(err)
