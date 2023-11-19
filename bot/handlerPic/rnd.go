@@ -8,7 +8,7 @@ import (
 )
 
 func Rnd(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
-    var err error
+    //var err error
     chatID := update.Message.Chat.ID
 
     pic := NewPicRND()
