@@ -7,7 +7,7 @@ import (
     "log"
 )
 
-func HandlerShow(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     redis := redis2.GetClient()
     if redis == nil {
         return
@@ -18,6 +18,6 @@ func HandlerShow(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     msg := tgbotapi.NewMessage(update.Message.Chat.ID, getDonatesList(donates))
     msg.ParseMode = tgbotapi.ModeHTML
     if _, err := bot.Send(msg); err != nil {
-        log.Printf("HandlerShow error %s\n", err.Error())
+        log.Printf("Show error %s\n", err.Error())
     }
 }
