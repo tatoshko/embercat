@@ -1,12 +1,10 @@
 package handlerPic
 
 import (
-    "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
     "io"
     "log"
     "net/http"
-    "time"
 )
 
 func Rnd(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -34,7 +32,7 @@ func Rnd(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 
     msg := tgbotapi.NewPhotoUpload(chatID, tgbotapi.FileBytes{Name: pic.URL(), Bytes: b})
-    msg.Caption = fmt.Sprintf("%v", time.Now())
+    msg.Caption = pic.GetID()
 
     if _, err := bot.Send(msg); err != nil {
         log.Printf("Pic.RND send message error: %s", err.Error())
