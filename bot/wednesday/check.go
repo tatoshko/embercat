@@ -12,7 +12,7 @@ func Check(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     chatID := update.Message.Chat.ID
     logger := getLogger("CHECK")
 
-    if time.Now().Weekday() == time.Wednesday {
+    if time.Now().Weekday() != time.Wednesday {
         redis := redis2.GetClient()
         if redis == nil {
             return
