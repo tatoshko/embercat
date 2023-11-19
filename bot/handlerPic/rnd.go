@@ -18,8 +18,10 @@ func Rnd(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     rand.Seed(time.Now().UnixMicro())
     i := rand.Intn(MAX)
     id := fmt.Sprintf("%05d", i)
+    link := strings.Join([]string{CDN, id}, "/")
 
-    msg := tgbotapi.NewMessage(chatID, strings.Join([]string{CDN, id}, "/"))
+    msg := tgbotapi.NewMessage(chatID, link)
+    msg.DisableWebPagePreview = false
 
     if _, err := bot.Send(msg); err != nil {
         log.Printf("Pic.RND send message error: %s", err.Error())
