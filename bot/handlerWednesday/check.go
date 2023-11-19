@@ -1,4 +1,4 @@
-package wednesday
+package handlerWednesday
 
 import (
     "embercat/assets"

@@ -2,6 +2,8 @@ package handlerPic
 
 import "log"
 
-func logger(scoope, s string) {
-    log.Printf("Handler Pic: [%s] %s", scoope, s)
+func getLogger(scope string) func(s string) {
+    return func(s string) {
+        log.Printf("Handler Pic: [%s] %s", scope, s)
+    }
 }

@@ -8,6 +8,8 @@ import (
 const KEY = "pic:anime"
 
 func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+    logger := getLogger("SAVE")
+
     chatID := update.Message.Chat.ID
     reply := update.Message.ReplyToMessage
 
@@ -15,7 +17,7 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         msg := tgbotapi.NewMessage(chatID, "Вызов этой команды возможен только в ответ на сообщение с картинкой")
 
         if _, err := bot.Send(msg); err != nil {
-            logger("bot send", err.Error())
+            logger(err.Error())
         }
         return
     }
@@ -34,7 +36,7 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     defer redis.Close()
 
     if _, err = redis.SAdd(KEY, photoID).Result(); err != nil {
-        logger("REDIS SADD", err.Error())
+        logger(err.Error())
         return
     }
 }
