@@ -2,7 +2,6 @@ package handlerPic
 
 import (
     redis2 "embercat/redis"
-    "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
@@ -34,7 +33,7 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
     defer redis.Close()
 
-    if _, err = redis.SAdd(fmt.Sprintf(KEY, photoID)).Result(); err != nil {
+    if _, err = redis.SAdd(KEY, photoID).Result(); err != nil {
         logger("REDIS SADD", err.Error())
         return
     }
