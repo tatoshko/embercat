@@ -5,16 +5,22 @@ type Donate struct {
     Sum      float64
 }
 
-func NewDonate(username string, sum float64) Donate {
-    return Donate{Username: username, Sum: sum}
+func NewDonate() *Donate {
+    return &Donate{}
 }
 
-type Donates []Donate
-
-func NewDonates() Donates {
-    return Donates{}
+type Donates struct {
+    data []*Donate
 }
 
-func (d Donates) Add(username string, sum float64) {
-    d = append(d, NewDonate(username, sum))
+func NewDonates() *Donates {
+    return &Donates{}
+}
+
+func (d *Donates) Add(donate *Donate) {
+    d.data = append(d.data, donate)
+}
+
+func (d Donates) GetAll() []*Donate {
+    return d.data
 }
