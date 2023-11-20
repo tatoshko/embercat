@@ -27,7 +27,7 @@ func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         var sum float64
         err = rows.Scan(&username, &sum)
 
-        logger(username, sum)
+        logger(username, fmt.Sprintf("%.f", sum))
 
         donates.Add(username, sum)
     }
