@@ -9,6 +9,6 @@ const COLLECTOR = "tatoshko"
 
 func getLogger(scope string) func(s ...string) {
     return func(s ...string) {
-        fmt.Printf("DONATE [%s] %s/n", s, strings.Join(s, ""))
+        fmt.Printf("DONATE [%s] %s\n", scope, strings.Join(s, ""))
     }
 }
