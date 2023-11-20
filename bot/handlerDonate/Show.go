@@ -1,19 +1,32 @@
 package handlerDonate
 
 import (
-    redis2 "embercat/redis"
+    "database/sql"
+    "embercat/pgsql"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
     "log"
 )
 
 func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
-    redis := redis2.GetClient()
-    if redis == nil {
-        return
-    }
-    defer redis.Close()
+    logger := getLogger("SHOW")
+    pg := pgsql.GetClient()
 
-    donates := redis.ZRevRangeWithScores(REDIS_SUPPORTERS_COLLECTION, 0, -1)
+    q := `select username, sum from donate order by sum desc`
+
+    var err error
+    var rows *sql.Rows
+    if rows, err = pg.Query(q); err != nil {
+        logger(err.Error())
+    }
+    defer rows.Close()
+
+    donates := NewDonates()
+    for rows.Next() {
+        donate := NewDonate()
+        err = rows.Scan(&donate.Username, &donate.Sum)
+        donates.Add(donate)
+    }
+
     msg := tgbotapi.NewMessage(update.Message.Chat.ID, getDonatesList(donates))
     msg.ParseMode = tgbotapi.ModeHTML
     if _, err := bot.Send(msg); err != nil {
