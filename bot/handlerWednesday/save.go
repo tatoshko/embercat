@@ -3,6 +3,7 @@ package handlerWednesday
 import (
     redis2 "embercat/redis"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    "log"
 )
 
 func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -62,10 +63,13 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
 func checkAdmin(admins []tgbotapi.ChatMember, user *tgbotapi.User) bool {
     for _, admin := range admins {
+        log.Printf("DEBUG %d, %d", admin.User.ID, user.ID)
+
         if admin.User.ID != user.ID {
             continue
         }
 
+        log.Printf("DEBUG CAN DELETE %t", admin.CanDeleteMessages)
         if !admin.CanDeleteMessages {
             continue
         }
