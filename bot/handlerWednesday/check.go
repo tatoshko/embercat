@@ -15,10 +15,6 @@ func Check(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     if time.Now().Weekday() == time.Wednesday {
         pg := pgsql.GetClient()
-        if pg == nil {
-            return
-        }
-        defer pg.Close()
 
         var row *sql.Row
         q := `SELECT * FROM frog ORDER BY random()`
