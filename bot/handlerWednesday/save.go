@@ -1,7 +1,7 @@
 package handlerWednesday
 
 import (
-    redis2 "embercat/redis"
+    "embercat/pgsql"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
@@ -42,15 +42,16 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         break
     }
 
-    // Connect to redis and save
-    redis := redis2.GetClient()
-    if redis == nil {
+    // Connect to DB and save
+    pg := pgsql.GetClient()
+    if pg == nil {
         return
     }
-    defer redis.Close()
+    defer pg.Close()
 
-    if _, err = redis.SAdd(REDIS_KEY, photoID).Result(); err != nil {
-        logger(err.Error())
+    q := `insert into frog (photoId) VALUES ($1)`
+    if _, err = pg.Exec(q, photoID); err != nil {
+        logger("unable to save")
         return
     }
 
