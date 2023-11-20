@@ -19,9 +19,9 @@ var (
     Commands = make(map[string]core.Handler)
 )
 
-func Start(name, token, hook string) {
-    if API, err := tba.NewBotAPI(token); err == nil {
-        if _, err := API.SetWebhook(tba.NewWebhook(hook + "/" + token)); err != nil {
+func Start(config Config) {
+    if API, err := tba.NewBotAPI(config.Token); err == nil {
+        if _, err := API.SetWebhook(tba.NewWebhook(config.Hook + "/" + config.Token)); err != nil {
             log.Printf("SetHoook error %s\n", err.Error())
         }
 
@@ -36,7 +36,7 @@ func Start(name, token, hook string) {
                 message := update.Message
 
                 direct := int64(message.From.ID) == message.Chat.ID
-                tagMe := strings.Index(message.CommandWithAt(), name) != -1
+                tagMe := strings.Index(message.CommandWithAt(), config.Name) != -1
 
                 if message.IsCommand() && (tagMe || direct) {
                     if handler, found := Commands[message.Command()]; found {
