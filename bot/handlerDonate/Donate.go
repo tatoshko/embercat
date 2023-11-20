@@ -11,8 +11,8 @@ func NewDonate(username string, sum float64) *Donate {
 
 type Donates []*Donate
 
-func NewDonates() *Donates {
-    return &Donates{}
+func NewDonates() Donates {
+    return Donates{}
 }
 
 func (d Donates) Add(username string, sum float64) {
