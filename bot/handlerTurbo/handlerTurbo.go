@@ -1,22 +1,27 @@
 package handlerTurbo
 
 import (
-    redis2 "embercat/redis"
+    "embercat/pgsql"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
     "log"
 )
 
-func HandlerTurbo(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
-    redis := redis2.GetClient()
-    if redis == nil {
-        return
-    }
-    defer redis.Close()
+    logger := getLogger("ROLL")
 
     chatID := update.Message.Chat.ID
     userID := update.Message.From.ID
+
+    pg := pgsql.GetClient()
+    q := `select 1 from turbo where userid = $1 and createdAt = now()`
+
+    r, err := pg.Exec(q)
+
+    logger(fmt.Sprintf("%q | %q", r, err))
+
+    return
 
     // Only one gum per day
     todayer := NewTodayer(redis, int64(userID))
@@ -30,7 +35,7 @@ func HandlerTurbo(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     if dirty {
         msg := tgbotapi.NewMessage(chatID, "Можно только одну жвачку в день")
         if _, err = bot.Send(msg); err != nil {
-            log.Printf("HandlerTurbo bot.Send error %s", err.Error())
+            log.Printf("Roll bot.Send error %s", err.Error())
         }
 
         return
@@ -57,7 +62,7 @@ func HandlerTurbo(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         msg.ParseMode = tgbotapi.ModeHTML
 
         if _, err = bot.Send(msg); err != nil {
-            log.Printf("HandlerTurbo bot.Send error %s", err.Error())
+            log.Printf("Roll bot.Send error %s", err.Error())
         }
     }
 

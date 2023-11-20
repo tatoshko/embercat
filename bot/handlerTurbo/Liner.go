@@ -40,7 +40,7 @@ func NewLinerFromString(id string) (liner Liner, err error) {
 
 func (l Liner) GetPicture() (b []byte, err error) {
     if b, err = l.box.Bytes(l.filename); err != nil {
-        log.Printf("HandlerTurbo box.Bytes error %s", err.Error())
+        log.Printf("Roll box.Bytes error %s", err.Error())
         return nil, errors.New("can't load picture from box")
     }
 
