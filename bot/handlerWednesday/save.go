@@ -51,7 +51,7 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     q := `insert into frog (photoId) VALUES ($1)`
     if _, err = pg.Exec(q, photoID); err != nil {
-        logger("unable to save")
+        logger("unable to save: ", err.Error())
         return
     }
 
