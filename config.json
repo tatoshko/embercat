@@ -9,7 +9,7 @@
     "hook": "https://embercat.useful.team"
   },
   "pg": {
-    "host": "localhost",
+    "host": "127.0.0.1",
     "port": 5432,
     "user": "bot",
     "password": "K3H27ppDcNOe",
