@@ -44,10 +44,6 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     // Connect to DB and save
     pg := pgsql.GetClient()
-    if pg == nil {
-        return
-    }
-    defer pg.Close()
 
     q := `insert into frog (photoId) VALUES ($1)`
     if _, err = pg.Exec(q, photoID); err != nil {
