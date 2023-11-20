@@ -69,8 +69,8 @@ func checkAdmin(admins []tgbotapi.ChatMember, user *tgbotapi.User) bool {
             continue
         }
 
-        log.Printf("DEBUG CAN DELETE %t", admin.CanDeleteMessages)
-        if !admin.CanDeleteMessages {
+        log.Printf("DEBUG CAN PROMOTE %t", admin.CanPromoteMembers)
+        if !admin.CanPromoteMembers {
             continue
         }
 
