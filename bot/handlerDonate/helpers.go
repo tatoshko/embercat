@@ -7,9 +7,9 @@ import (
     "strings"
 )
 
-func getDonatesList(donates Donates) string {
+func getDonatesList(donates *Donates) string {
     msg := "Список донатеров:\n\n"
-    for _, d := range donates {
+    for _, d := range donates.GetAll() {
         m := fmt.Sprintf("%s", d.Username)
         msg += fmt.Sprintf("%s %*.2f\n", m, 20-len(m), d.Sum)
     }
