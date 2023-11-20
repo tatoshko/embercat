@@ -82,7 +82,7 @@ func registerCommands() {
     Commands["hny"] = handlerCatacul.Hny
 
     // Turbo
-    Commands["turbo"] = handlerTurbo.HandlerTurbo
+    Commands["turbo"] = handlerTurbo.Roll
     Commands["collection"] = handlerTurbo.HandlerCollection
     Commands["show"] = handlerTurbo.HandlerShow
     Commands["want"] = handlerTurbo.HandlerWant
