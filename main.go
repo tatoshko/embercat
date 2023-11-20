@@ -52,7 +52,7 @@ func ReadConfig() (config Config) {
 }
 
 func initHttpServer(config ServerConfig) {
-    addr := fmt.Sprintf("%s%d", config.Host, config.Port)
+    addr := fmt.Sprintf("%s:%d", config.Host, config.Port)
 
     log.Printf("Bind to: [%s]", addr)
 
