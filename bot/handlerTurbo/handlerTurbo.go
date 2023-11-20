@@ -10,8 +10,8 @@ func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
     logger := getLogger("ROLL")
 
-    chatID := update.Message.Chat.ID
-    userID := update.Message.From.ID
+    //chatID := update.Message.Chat.ID
+    //userID := update.Message.From.ID
 
     pg := pgsql.GetClient()
     q := `select 1 from turbo where userid = $1 and createdAt = now()`
