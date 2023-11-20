@@ -23,9 +23,10 @@ func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     donates := NewDonates()
     for rows.Next() {
-        donate := NewDonate()
-        err = rows.Scan(&donate.Username, &donate.Sum)
-        donates.Add(donate)
+        var username string
+        var sum float64
+        err = rows.Scan(&username, &sum)
+        donates.Add(username, sum)
     }
 
     logger(fmt.Sprintf("%q", donates))
