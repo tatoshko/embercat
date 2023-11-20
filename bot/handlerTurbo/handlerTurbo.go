@@ -11,12 +11,12 @@ func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     logger := getLogger("ROLL")
 
     //chatID := update.Message.Chat.ID
-    //userID := update.Message.From.ID
+    userID := update.Message.From.ID
 
     pg := pgsql.GetClient()
     q := `select 1 from turbo where userid = $1 and createdAt = now()`
 
-    r, err := pg.Exec(q)
+    r, err := pg.Exec(q, userID)
 
     logger(fmt.Sprintf("%q | %q", r, err))
 
