@@ -3,6 +3,7 @@ package handlerDonate
 import (
     "database/sql"
     "embercat/pgsql"
+    "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
     "log"
 )
@@ -26,6 +27,8 @@ func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         err = rows.Scan(&donate.Username, &donate.Sum)
         donates.Add(donate)
     }
+
+    logger(fmt.Sprintf("%q", donates))
 
     msg := tgbotapi.NewMessage(update.Message.Chat.ID, getDonatesList(donates))
     msg.ParseMode = tgbotapi.ModeHTML
