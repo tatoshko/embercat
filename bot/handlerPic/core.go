@@ -3,9 +3,8 @@ package handlerPic
 import "log"
 
 const (
-    CDN       = "https://pics.useful.team"
-    REDIS_KEY = "pic:anime"
-    MAX_PICS  = 409
+    CDN      = "https://pics.useful.team"
+    MAX_PICS = 409
 )
 
 func getLogger(scope string) func(s string) {

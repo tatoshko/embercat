@@ -17,4 +17,9 @@ CREATE TABLE IF NOT EXISTS donate (
     username varchar(16) not null,
     sum float not null,
     createdAt timestamp default current_timestamp
-)
+);
+
+CREATE TABLE IF NOT EXISTS anime (
+    id uuid default uuid_generate_v4() primary key,
+    photoId varchar unique not null
+);
