@@ -7,7 +7,6 @@ import (
 )
 
 const (
-    REDIS_KEY    = "frogs"
     NO_WEDNESDAY = "no-wednesday.jpg"
 )
 

@@ -1,15 +1,20 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE IF NOT EXISTS frog (
-    id uuid DEFAULT uuid_generate_v4(),
-    photoId VARCHAR UNIQUE NOT NULL,
-    PRIMARY KEY (id)
+    id uuid default uuid_generate_v4() primary key,
+    photoId varchar unique not null
 );
 
 CREATE TABLE IF NOT EXISTS turbo (
-    id uuid DEFAULT uuid_generate_v4(),
-    userId INT NOT NULL,
-    linerId VARCHAR(3) NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
+    id uuid default uuid_generate_v4() primary key,
+    userId int not null,
+    linerId varchar(3) not null,
+    createdAt timestamp default current_timestamp
 );
+
+CREATE TABLE IF NOT EXISTS donate (
+    id uuid default uuid_generate_v4() primary key,
+    username varchar(16) not null,
+    sum float not null,
+    createdAt timestamp default current_timestamp
+)
