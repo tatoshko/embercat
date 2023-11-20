@@ -5,11 +5,11 @@ type Donate struct {
     Sum      float64
 }
 
-func NewDonate(username string, sum float64) *Donate {
-    return &Donate{Username: username, Sum: sum}
+func NewDonate(username string, sum float64) Donate {
+    return Donate{Username: username, Sum: sum}
 }
 
-type Donates []*Donate
+type Donates []Donate
 
 func NewDonates() Donates {
     return Donates{}
