@@ -7,7 +7,7 @@ import (
 )
 
 func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
-    var err error
+    //var err error
     logger := getLogger("ROLL")
 
     //chatID := update.Message.Chat.ID
@@ -16,9 +16,11 @@ func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     pg := pgsql.GetClient()
     q := `select 1 from turbo where userid = $1 and createdAt = now()`
 
-    r, err := pg.Exec(q, userID)
+    r, _ := pg.Exec(q, userID)
 
-    logger(fmt.Sprintf("%q | %q", r, err))
+    f, g := r.RowsAffected()
+
+    logger(fmt.Sprintf("%q | %q", f, g))
 
     return
     //
