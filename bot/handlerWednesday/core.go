@@ -8,7 +8,7 @@ import (
 
 const (
     REDIS_KEY    = "frogs"
-    NO_WEDNESDAY = "no-handlerWednesday.jpg"
+    NO_WEDNESDAY = "no-wednesday.jpg"
 )
 
 func getLogger(scope string) func(s ...string) {
