@@ -5,5 +5,5 @@ type Config struct {
     Port     int    `json:"port"`
     User     string `json:"user"`
     Password string `json:"password"`
-    DBName   string `json:"db-name"`
+    DBName   string `json:"dbname"`
 }
