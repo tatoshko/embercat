@@ -86,6 +86,7 @@ func registerCommands() {
     Commands["collection"] = handlerTurbo.MyCollection
     Commands["show"] = handlerTurbo.Show
     Commands["want"] = handlerTurbo.Want
+    callbacks.RegisterCallback("wantans", handlerTurbo.CallbackWant)
 
     // Wednesday
     Commands["wed"] = handlerWednesday.Check
@@ -99,6 +100,4 @@ func registerCommands() {
     Commands["aserver"] = handlerPic.RndServer
     Commands["ashare"] = handlerPic.RndShare
     Commands["asave"] = handlerPic.Save
-
-    callbacks.RegisterCallback("wantans", handlerTurbo.CallbackWant)
 }
