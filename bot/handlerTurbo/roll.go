@@ -42,7 +42,7 @@ func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         logger(err.Error())
         msg := tgbotapi.NewMessage(
             chatID,
-            fmt.Sprintf("Что-то не так с выдачей новых вкладышей, а тебе почти достался <b>%s</b>", liner.ID),
+            fmt.Sprintf("Что-то не так с выдачей новых вкладышей, а тебе почти достался <b>%s</b>", liner.ToString()),
         )
         msg.ParseMode = tgbotapi.ModeHTML
 
