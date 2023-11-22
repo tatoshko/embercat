@@ -68,6 +68,8 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     data := strings.Split(strings.TrimLeft(query.Data, "/wantans "), " ")
 
+    log.Printf("%q", data)
+
     var liner Liner
     if liner, err = NewLinerFromString(data[0]); err != nil {
         logger(err.Error())
