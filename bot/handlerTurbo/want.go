@@ -43,7 +43,7 @@ func Want(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("%s хочет получить в дар вкладыш <b>%s</b>", core.GetUserName(update.Message.From, true), liner.ToString()))
     msg.ParseMode = tgbotapi.ModeHTML
 
-    button := tgbotapi.NewInlineKeyboardButtonData("Подарить", fmt.Sprintf("/wantans %s %d", liner.ToString(), update.Message.From.ID))
+    button := tgbotapi.NewInlineKeyboardButtonData("Подарить", fmt.Sprintf("/wantans %d %d", liner.ID, update.Message.From.ID))
     row := tgbotapi.NewInlineKeyboardRow(button)
     msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(row)
 
@@ -66,11 +66,7 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    log.Printf("%q", query.Data)
-
     data := strings.Split(strings.TrimLeft(query.Data, "/wantans "), " ")
-
-    log.Printf("%q", data)
 
     var liner Liner
     if liner, err = NewLinerFromString(data[0]); err != nil {
