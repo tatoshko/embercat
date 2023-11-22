@@ -4,7 +4,6 @@ import (
     "embercat/bot/core"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-    "log"
     "regexp"
     "strconv"
     "strings"
@@ -44,7 +43,6 @@ func Want(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     msg.ParseMode = tgbotapi.ModeHTML
 
     action := fmt.Sprintf("/wantans %d %d", liner.ID, update.Message.From.ID)
-    log.Printf("%q", action)
     button := tgbotapi.NewInlineKeyboardButtonData("Подарить", action)
     row := tgbotapi.NewInlineKeyboardRow(button)
     msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(row)
@@ -89,7 +87,7 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     giver := int64(query.From.ID)
 
-    log.Printf("Trying to move liner '%s' from '%d' to '%d'", liner.ToString(), giver, recipient)
+    logger(fmt.Sprintf("Trying to move liner '%s' from '%d' to '%d'", liner.ToString(), giver, recipient))
 
     if giver == recipient {
         msg := tgbotapi.NewMessage(chatID, "Сам у себя это как вообще?")

@@ -82,7 +82,7 @@ func (c Collection) Add(liner Liner) (collection Collection, err error) {
     return LoadCollection(c.userId)
 }
 
-// Removes one liner and returns new collection. If liner total count is one removes liner from collection
+// RemoveOne liner and returns new collection. If liner total count is one removes liner from collection
 func (c Collection) RemoveOne(liner Liner) (collection Collection, err error) {
     pg := pgsql.GetClient()
     q := `delete from turbo where createdat = (select createdat from turbo where userid = $1 and linerid = $2 order by createdat limit 1)`
@@ -93,10 +93,10 @@ func (c Collection) RemoveOne(liner Liner) (collection Collection, err error) {
     return LoadCollection(c.userId)
 }
 
-// Moves liner from one collection to another
+// MoveTo liner from one collection to another
 func (c Collection) MoveTo(collection Collection, liner Liner) (err error) {
     if !c.Has(liner) {
-        return errors.New(fmt.Sprintf("В твоей коллекции нет вкладыша с номером <b>%s</b>", liner.ID))
+        return errors.New(fmt.Sprintf("В твоей коллекции нет вкладыша с номером <b>%s</b>", liner.ToString()))
     }
 
     if _, err = c.RemoveOne(liner); err != nil {
