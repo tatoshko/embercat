@@ -80,7 +80,7 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 
     var recipient int64
-    if recipient, err = strconv.ParseInt(data[1], 10, 64); err != nil {
+    if recipient, err = strconv.ParseInt(data[1], 10, 32); err != nil {
         logger(err.Error())
     }
 
