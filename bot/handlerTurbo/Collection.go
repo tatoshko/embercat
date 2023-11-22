@@ -76,8 +76,8 @@ func (c Collection) ScoreOf(liner Liner) int64 {
 }
 
 func (c Collection) Add(liner Liner) (collection Collection, err error) {
-    pg := pgsql.GetClient()
-    q := `insert into turbo (userid, linerid) values ($1, $2)`
+    //pg := pgsql.GetClient()
+    //q := `insert into turbo (userid, linerid) values ($1, $2)`
 
     log.Printf("WTF!!!!!")
 
