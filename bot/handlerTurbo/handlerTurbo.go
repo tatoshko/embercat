@@ -14,7 +14,7 @@ func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     userID := update.Message.From.ID
 
     pg := pgsql.GetClient()
-    q := `select 1 from turbo where userid = $1 and createdAt = now()`
+    q := `select 1 from turbo where userid = $1 and date(createdAt) = current_date`
 
     r, _ := pg.Exec(q, userID)
 
