@@ -70,6 +70,7 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     var liner Liner
     if liner, err = NewLinerFromString(data[0]); err != nil {
+        logger(err.Error())
         msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Неверный номер вкладыша <b>%s</b>", data[0]))
         msg.ParseMode = tgbotapi.ModeHTML
 
