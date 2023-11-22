@@ -40,10 +40,10 @@ func Want(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         }
     }
 
-    msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("%s хочет получить в дар вкладыш <b>%s</b>", core.GetUserName(update.Message.From, true), liner.ID))
+    msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("%s хочет получить в дар вкладыш <b>%s</b>", core.GetUserName(update.Message.From, true), liner.ToString()))
     msg.ParseMode = tgbotapi.ModeHTML
 
-    button := tgbotapi.NewInlineKeyboardButtonData("Подарить", fmt.Sprintf("/wantans %s %d", liner.ID, update.Message.From.ID))
+    button := tgbotapi.NewInlineKeyboardButtonData("Подарить", fmt.Sprintf("/wantans %s %d", liner.ToString(), update.Message.From.ID))
     row := tgbotapi.NewInlineKeyboardRow(button)
     msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(row)
 
@@ -86,7 +86,7 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     giver := int64(query.From.ID)
 
-    log.Printf("Trying to move liner '%s' from '%d' to '%d'", liner.ID, giver, recipient)
+    log.Printf("Trying to move liner '%s' from '%d' to '%d'", liner.ToString(), giver, recipient)
 
     if giver == recipient {
         msg := tgbotapi.NewMessage(chatID, "Сам у себя это как вообще?")
@@ -129,7 +129,7 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Вкладыш <b>%s</b> подарен!", liner.ID))
+    msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Вкладыш <b>%s</b> подарен!", liner.ToString()))
     msg.ParseMode = tgbotapi.ModeHTML
     if _, err := bot.Send(msg); err != nil {
         logger(err.Error())
