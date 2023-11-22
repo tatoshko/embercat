@@ -2,7 +2,6 @@ package handlerTurbo
 
 import (
     "bytes"
-    redis2 "embercat/redis"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
     "golang.org/x/text/feature/plural"
@@ -12,22 +11,18 @@ import (
     "log"
 )
 
-func HandlerCollection(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func MyCollection(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
 
-    redis := redis2.GetClient()
-    if redis == nil {
-        return
-    }
-    defer redis.Close()
+    logger := getLogger("MY COLLECTION")
 
     chatID := update.Message.Chat.ID
     userID := update.Message.From.ID
 
     // Load collection and notify user
     var collection Collection
-    if collection, err = LoadCollection(redis, int64(userID)); err != nil {
-        logErr(err)
+    if collection, err = LoadCollection(int64(userID)); err != nil {
+        logger(err.Error())
         msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Что-то не так с твоей коллекцией\n%s", err.Error()))
         msg.ParseMode = tgbotapi.ModeHTML
 

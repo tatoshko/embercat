@@ -1,7 +1,6 @@
 package handlerTurbo
 
 import (
-    redis2 "embercat/redis"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
     "golang.org/x/text/feature/plural"
@@ -9,14 +8,10 @@ import (
     "golang.org/x/text/message"
 )
 
-func HandlerShow(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
 
-    redis := redis2.GetClient()
-    if redis == nil {
-        return
-    }
-    defer redis.Close()
+    logger := getLogger("Show")
 
     chatID := update.Message.Chat.ID
     args := update.Message.CommandArguments()
@@ -27,30 +22,30 @@ func HandlerShow(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         msg.ParseMode = tgbotapi.ModeHTML
 
         if _, err = bot.Send(msg); err != nil {
-            logErr(err)
+            logger(err.Error())
         }
         return
     }
 
     var b []byte
-    if b, err = liner.GetPicture(); err != nil {
-        logErr(err)
+    if b, err = liner.ToPicture(); err != nil {
+        logger(err.Error())
         return
     }
 
-    msgp := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, tgbotapi.FileBytes{Name: liner.ID, Bytes: b})
+    msgp := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, tgbotapi.FileBytes{Name: liner.ToString(), Bytes: b})
     if _, err := bot.Send(msgp); err != nil {
-        logErr(err)
+        logger(err.Error())
     }
 
     var collection Collection
-    if collection, err = LoadCollection(redis, int64(update.Message.From.ID)); err != nil {
-        logErr(err)
+    if collection, err = LoadCollection(int64(update.Message.From.ID)); err != nil {
+        logger(err.Error())
 
         msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Что-то не так с твоей колекцией/n%s", err.Error()))
         msg.ParseMode = tgbotapi.ModeHTML
         if _, err = bot.Send(msg); err != nil {
-            logErr(err)
+            logger(err.Error())
         }
         return
     }
@@ -73,6 +68,6 @@ func HandlerShow(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     msg.ParseMode = tgbotapi.ModeHTML
 
     if _, err := bot.Send(msg); err != nil {
-        logErr(err)
+        logger(err.Error())
     }
 }

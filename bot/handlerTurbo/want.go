@@ -2,18 +2,19 @@ package handlerTurbo
 
 import (
     "embercat/bot/core"
-    redisServ "embercat/redis"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
     "log"
     "regexp"
-    "runtime"
     "strconv"
     "strings"
 )
 
-func HandlerWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func Want(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
+
+    logger := getLogger("WANT")
+
     chatID := update.Message.Chat.ID
     args := update.Message.CommandArguments()
 
@@ -23,7 +24,7 @@ func HandlerWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         msg := tgbotapi.NewMessage(chatID, "Неверный номер вкладыша, должно быть три цифры, например: 001")
 
         if _, err := bot.Send(msg); err != nil {
-            logErr(err)
+            logger(err.Error())
         }
 
         return
@@ -35,7 +36,7 @@ func HandlerWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         msg.ParseMode = tgbotapi.ModeHTML
 
         if _, err := bot.Send(msg); err != nil {
-            logErr(err)
+            logger(err.Error())
         }
     }
 
@@ -47,24 +48,21 @@ func HandlerWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(row)
 
     if _, err := bot.Send(msg); err != nil {
-        logErr(err)
+        logger(err.Error())
     }
 }
 
 func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
-    redisInst := redisServ.GetClient()
-    if redisInst == nil {
-        return
-    }
-    defer redisInst.Close()
+
+    logger := getLogger("WANTCALLBACK")
 
     query := update.CallbackQuery
     callback := tgbotapi.NewCallback(query.ID, query.Data)
     chatID := query.Message.Chat.ID
 
     if _, err := bot.AnswerCallbackQuery(callback); err != nil {
-        logErr(err)
+        logger(err.Error())
         return
     }
 
@@ -76,14 +74,14 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         msg.ParseMode = tgbotapi.ModeHTML
 
         if _, err := bot.Send(msg); err != nil {
-            logErr(err)
+            logger(err.Error())
         }
         return
     }
 
     var recipient int64
-    if recipient, err = strconv.ParseInt(data[1], 10, 32); err != nil {
-        logErr(err)
+    if recipient, err = strconv.ParseInt(data[1], 10, 64); err != nil {
+        logger(err.Error())
     }
 
     giver := int64(query.From.ID)
@@ -94,38 +92,38 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         msg := tgbotapi.NewMessage(chatID, "Сам у себя это как вообще?")
 
         if _, err := bot.Send(msg); err != nil {
-            logErr(err)
+            logger(err.Error())
         }
 
         return
     }
 
     var giverCollection Collection
-    if giverCollection, err = LoadCollection(redisInst, giver); err != nil {
+    if giverCollection, err = LoadCollection(giver); err != nil {
         msg := tgbotapi.NewMessage(chatID, "У тебя нет вкладышей, жмакай\n<code>/turbo@embercatbot</code>")
         msg.ParseMode = tgbotapi.ModeHTML
 
         if _, err := bot.Send(msg); err != nil {
-            logErr(err)
+            logger(err.Error())
         }
     }
 
     var recipientCollection Collection
-    if recipientCollection, err = LoadCollection(redisInst, recipient); err != nil {
+    if recipientCollection, err = LoadCollection(recipient); err != nil {
         msg := tgbotapi.NewMessage(chatID, "Что-то сломалось")
         msg.ParseMode = tgbotapi.ModeHTML
 
         if _, err := bot.Send(msg); err != nil {
-            logErr(err)
+            logger(err.Error())
         }
     }
 
     if err = giverCollection.MoveTo(recipientCollection, liner); err != nil {
-        logErr(err)
+        logger(err.Error())
         msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Не получилось передать вкладыш, сорян.\n%s", err.Error()))
         msg.ParseMode = tgbotapi.ModeHTML
         if _, err = bot.Send(msg); err != nil {
-            logErr(err)
+            logger(err.Error())
         }
 
         return
@@ -134,12 +132,7 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Вкладыш <b>%s</b> подарен!", liner.ID))
     msg.ParseMode = tgbotapi.ModeHTML
     if _, err := bot.Send(msg); err != nil {
-        logErr(err)
+        logger(err.Error())
     }
 
-}
-
-func logErr(err error) {
-    _, filename, line, _ := runtime.Caller(1)
-    log.Printf("%s at %d: turbo.HandlerWant error %s", filename, line, err.Error())
 }
