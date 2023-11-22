@@ -43,7 +43,9 @@ func Want(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("%s хочет получить в дар вкладыш <b>%s</b>", core.GetUserName(update.Message.From, true), liner.ToString()))
     msg.ParseMode = tgbotapi.ModeHTML
 
-    button := tgbotapi.NewInlineKeyboardButtonData("Подарить", fmt.Sprintf("/wantans %d %d", liner.ID, update.Message.From.ID))
+    action := fmt.Sprintf("/wantans %d %d", liner.ID, update.Message.From.ID)
+    log.Printf("%q", action)
+    button := tgbotapi.NewInlineKeyboardButtonData("Подарить", action)
     row := tgbotapi.NewInlineKeyboardRow(button)
     msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(row)
 
