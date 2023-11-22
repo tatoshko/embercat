@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS frog (
 CREATE TABLE IF NOT EXISTS turbo (
     id uuid default uuid_generate_v4() primary key,
     userId int not null,
-    linerId varchar(3) not null,
+    linerId int not null,
     createdAt timestamp default current_timestamp
 );
 

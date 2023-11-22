@@ -2,6 +2,8 @@ package handlerTurbo
 
 import (
     "bytes"
+    "database/sql"
+    "embercat/pgsql"
     "errors"
     "fmt"
     "github.com/golang/freetype/truetype"
@@ -9,7 +11,6 @@ import (
     "golang.org/x/image/font"
     "golang.org/x/image/font/gofont/gobold"
     "golang.org/x/image/math/fixed"
-    "gopkg.in/redis.v3"
     "image"
     "image/color"
     "log"
@@ -17,26 +18,40 @@ import (
 )
 
 type Collection struct {
-    connection *redis.Client
-    userId     int64
-    data       []redis.Z
-    redisKey   string
+    userId int64
+    data   []Liner
 }
 
-func LoadCollection(redisClient *redis.Client, userId int64) (collection Collection, err error) {
-    collection.userId = userId
-    collection.redisKey = makeUserCollectionKey(REDIS_KEY_TURBO_COLLECTION, userId)
-    collection.connection = redisClient
+func LoadCollection(userId int64) (collection Collection, err error) {
+    pg := pgsql.GetClient()
+    logger := getLogger("LoadCollection")
 
-    var data []redis.Z
-    if data, err = redisClient.ZRangeWithScores(collection.redisKey, 0, -1).Result(); err != nil {
-        return Collection{}, errors.New("can't load collection")
+    collection.userId = userId
+    q := `select linerid, count(linerid) from turbo where userid = $1 group by userId, linerid order by linerid`
+
+    var rows *sql.Rows
+    if rows, err = pg.Query(q, collection.userId); err != nil {
+        logger(err.Error())
+        return Collection{}, errors.New("unable to load collection")
     }
 
-    collection.data = data
+    for rows.Next() {
+        var num, count int64
+        if err = rows.Scan(&num, &count); err != nil {
+            logger(err.Error())
+            continue
+        }
 
-    if err != nil {
-        return Collection{}, errors.New("empty collection")
+        var liner Liner
+        if liner, err = NewLiner(num, count); err != nil {
+            logger(err.Error())
+            continue
+        }
+
+        if _, err = collection.Add(liner); err != nil {
+            logger(err.Error())
+            continue
+        }
     }
 
     return
@@ -52,8 +67,8 @@ func (c Collection) Has(liner Liner) bool {
 
 func (c Collection) ScoreOf(liner Liner) int64 {
     for _, v := range c.data {
-        if v.Member == liner.ID {
-            return int64(v.Score)
+        if v.ID == liner.ID {
+            return v.Count
         }
     }
 
@@ -61,26 +76,24 @@ func (c Collection) ScoreOf(liner Liner) int64 {
 }
 
 func (c Collection) Add(liner Liner) (collection Collection, err error) {
-    if _, err = c.connection.ZIncrBy(c.redisKey, 1, liner.ID).Result(); err != nil {
-        return c, err
+    pg := pgsql.GetClient()
+    q := `insert into turbo (userid, linerid) values ($1, $2)`
+    if _, err = pg.Exec(q, c.userId, liner.ID); err != nil {
+        return
     }
 
-    return LoadCollection(c.connection, c.userId)
+    return LoadCollection(c.userId)
 }
 
 // Removes one liner and returns new collection. If liner total count is one removes liner from collection
 func (c Collection) RemoveOne(liner Liner) (collection Collection, err error) {
-    if c.ScoreOf(liner) <= 1 {
-        if _, err = c.connection.ZRem(c.redisKey, liner.ID).Result(); err != nil {
-            return c, err
-        }
-    } else {
-        if _, err = c.connection.ZIncrBy(c.redisKey, -1, liner.ID).Result(); err != nil {
-            return c, err
-        }
+    pg := pgsql.GetClient()
+    q := `delete from turbo where createdat = (select createdat from turbo where userid = $1 and linerid = $2 order by createdat limit 1)`
+    if _, err = pg.Exec(q, c.userId, liner.ID); err != nil {
+        return
     }
 
-    return LoadCollection(c.connection, c.userId)
+    return LoadCollection(c.userId)
 }
 
 // Moves liner from one collection to another
@@ -130,10 +143,10 @@ func (c Collection) GenerateCollectionPicture() *image.RGBA {
     var err error
     var b []byte
     for i := 0; i < TOTAL_LINERS; i++ {
-        liner, _ := NewLiner(i + 1)
+        liner, _ := NewLiner(int64(i+1), 1)
 
         if c.Has(liner) {
-            if b, err = liner.GetPicture(); err != nil {
+            if b, err = liner.ToPicture(); err != nil {
                 log.Printf("HandlerCollection liner.GetPicture error %s", err.Error())
                 continue
             }
@@ -156,7 +169,7 @@ func (c Collection) GenerateCollectionPicture() *image.RGBA {
                 Face: face,
                 Dot:  point,
             }
-            d.DrawString(liner.ID)
+            d.DrawString(liner.ToString())
         }
     }
 

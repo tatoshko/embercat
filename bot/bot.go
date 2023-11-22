@@ -83,9 +83,9 @@ func registerCommands() {
 
     // Turbo
     Commands["turbo"] = handlerTurbo.Roll
-    Commands["collection"] = handlerTurbo.HandlerCollection
-    Commands["show"] = handlerTurbo.HandlerShow
-    Commands["want"] = handlerTurbo.HandlerWant
+    Commands["collection"] = handlerTurbo.MyCollection
+    Commands["show"] = handlerTurbo.Show
+    Commands["want"] = handlerTurbo.Want
 
     // Wednesday
     Commands["wed"] = handlerWednesday.Check

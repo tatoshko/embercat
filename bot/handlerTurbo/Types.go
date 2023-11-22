@@ -1,7 +1,5 @@
 package handlerTurbo
 
-const REDIS_KEY_TURBO_COLLECTION = "turbo:%d:collection"
-const REDIS_KEY_TURBO_DAY = "turbo:%d:day"
 const TURBO_FILENAME_KEY = "turbo/2_turbo_old_%s.jpg"
 const TOTAL_LINERS = 330
 
