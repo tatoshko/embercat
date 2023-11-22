@@ -31,7 +31,7 @@ func parseArgs(args string) (donater string, sum float64, err error) {
         return "", 0.0, errors.New("incorrect number of arguments, must be 2")
     }
 
-    if sum, err = strconv.ParseFloat(argList[1], 64); err != nil {
+    if sum, err = strconv.ParseFloat(argList[1], 32); err != nil {
         return
     }
 
