@@ -30,7 +30,7 @@ func NewLiner(num, count int64) (liner Liner, err error) {
 func NewLinerFromString(id string) (liner Liner, err error) {
     var num int64
     if num, err = strconv.ParseInt(id, 10, 32); err != nil {
-        return Liner{}, errors.New("can't parse liner id from string")
+        return Liner{}, errors.New(fmt.Sprintf("can't parse liner id from string: %s", id))
     }
     return NewLiner(num, 1)
 }
