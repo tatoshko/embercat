@@ -15,7 +15,7 @@ func makeUserCollectionKey(key string, userID int64) string {
 
 func GetRandomLiner() Liner {
     rand.Seed(time.Now().UnixNano())
-    liner, _ := NewLiner(rand.Intn(TOTAL_LINERS))
+    liner, _ := NewLiner(rand.Int63n(TOTAL_LINERS), 1)
     return liner
 }
 
