@@ -29,7 +29,7 @@ func MyCollection(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    message.Set(language.Russian, "В твоей коллекции %d вкладышей",
+    if err = message.Set(language.Russian, "В твоей коллекции %d вкладышей",
         plural.Selectf(1, "%d",
             "=0", "У тебя <b>нет</b> вкладышей",
             "=1", "У тебя пока <b>только один</b> вкладыш",
@@ -41,7 +41,9 @@ func MyCollection(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
             plural.Few, "В твоей коллекции <b>%d</b> вкладыша",
             plural.Many, "В твоей коллекции <b>%d</b> вкладышей",
         ),
-    )
+    ); err != nil {
+        logger(err.Error())
+    }
 
     printer := message.NewPrinter(language.Russian)
     result := printer.Sprintf("В твоей коллекции %d вкладышей", collection.Count())

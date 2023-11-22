@@ -52,19 +52,21 @@ func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     score := collection.ScoreOf(liner)
 
-    message.Set(language.Russian, "В твоей коллекции %d вкладышей",
+    if err = message.Set(language.Russian, "В твоей коллекции %d вкладышей",
         plural.Selectf(1, "%d",
             "=0", "У тебя <b>нет</b> вкладыша",
             plural.One, "У тебя пока <b>только один</b> вкладыш",
             plural.Few, "В твоей коллекции <b>%d</b> вкладыша",
             plural.Many, "В твоей коллекции <b>%d</b> вкладышей",
         ),
-    )
+    ); err != nil {
+        logger(err.Error())
+    }
 
     printer := message.NewPrinter(language.Russian)
-    message := fmt.Sprintf("%s <b>%s</b>", printer.Sprintf("В твоей коллекции %d вкладышей", score), liner.ID)
+    txt := fmt.Sprintf("%s <b>%s</b>", printer.Sprintf("В твоей коллекции %d вкладышей", score), liner.ToString())
 
-    msg := tgbotapi.NewMessage(chatID, message)
+    msg := tgbotapi.NewMessage(chatID, txt)
     msg.ParseMode = tgbotapi.ModeHTML
 
     if _, err := bot.Send(msg); err != nil {
