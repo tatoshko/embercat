@@ -20,7 +20,7 @@ func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     f, g := r.RowsAffected()
 
-    logger(fmt.Sprintf("%d | %s", f, g.Error()))
+    logger(fmt.Sprintf("%d | %s", f, g))
 
     return
     //
