@@ -17,7 +17,7 @@ func Check(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         pg := pgsql.GetClient()
 
         var row *sql.Row
-        q := `SELECT * FROM frog ORDER BY random()`
+        q := `SELECT photoid FROM frog ORDER BY random()`
         if row = pg.QueryRow(q); err != nil {
             logger(err.Error())
         }
