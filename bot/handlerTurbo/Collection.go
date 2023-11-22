@@ -38,20 +38,17 @@ func LoadCollection(userId int64) (collection Collection, err error) {
     for rows.Next() {
         var num, count int64
         if err = rows.Scan(&num, &count); err != nil {
-            logger(err.Error())
+            logger("SCAN ", err.Error())
             continue
         }
 
         var liner Liner
         if liner, err = NewLiner(num, count); err != nil {
-            logger(err.Error())
+            logger("LINER ", err.Error())
             continue
         }
 
-        if _, err = collection.Add(liner); err != nil {
-            logger(err.Error())
-            continue
-        }
+        collection.data = append(collection.data, liner)
     }
 
     return
