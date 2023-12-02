@@ -67,7 +67,9 @@ func Init() {
 }
 
 func Hny(bot *tba.BotAPI, update tba.Update) {
-    pic := sourcePIC
+    var pic *image.RGBA
+    *pic = *sourcePIC
+
     currentTime := time.Now()
     newYear := Date(currentTime.Year()+1, 1, 1)
 
