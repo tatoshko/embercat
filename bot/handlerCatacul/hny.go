@@ -85,7 +85,7 @@ func Hny(bot *tba.BotAPI, update tba.Update) {
 }
 
 func addLabel(img *image.RGBA, x, y int, label string, face font.Face) {
-    col := color.RGBA{255, 255, 255, 50}
+    col := color.RGBA{255, 255, 255, 255}
     point := fixed.Point26_6{fixed.Int26_6(x * 64), fixed.Int26_6(y * 64)}
 
     d := &font.Drawer{
