@@ -52,8 +52,6 @@ func Start(config Config) {
             } else if update.CallbackQuery != nil {
                 data := update.CallbackQuery.Data
 
-                //log.Printf("CallBackQuery DATA: %v, user: %d, message: %q", data, update.CallbackQuery.From.ID, update.CallbackQuery.Message)
-
                 var handlerID string
                 if strings.HasPrefix(data, "/") {
                     parts := strings.SplitN(data, " ", 2)
