@@ -12,7 +12,7 @@ func HandlerTextAnalizer(API *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    r := regexp.MustCompile(`(\w+|[А-я]+)`)
+    r := regexp.MustCompile(`[А-я]+`)
     parts := r.FindAllString(update.Message.Text, -1)
 
     pg := pgsql.GetClient()
