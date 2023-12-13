@@ -24,7 +24,10 @@ func HandlerTextAnalizer(API *tgbotapi.BotAPI, update tgbotapi.Update) {
         q := `insert into words (word) values ($1) on conflict (word) do update set count = count + 1`
 
         for _, word := range parts {
-            tx.Exec(q, word)
+            if _, err = tx.Exec(q, word); err != nil {
+                log.Printf("Text anilizer insert error %s", err.Error())
+                break
+            }
         }
 
         if err = tx.Commit(); err != nil {
