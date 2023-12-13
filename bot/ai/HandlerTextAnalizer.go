@@ -21,7 +21,7 @@ func HandlerTextAnalizer(API *tgbotapi.BotAPI, update tgbotapi.Update) {
         log.Printf("TextAnalizer error %s", err.Error())
         return
     } else {
-        q := `insert into words (word) values ($1) on conflict (word) do update set count = count + 1`
+        q := `insert into words as t (word) values ($1) on conflict (word) do update set count = t.count + 1`
 
         for _, word := range parts {
             if _, err = tx.Exec(q, word); err != nil {
