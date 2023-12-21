@@ -27,7 +27,7 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         logger(err.Error())
     }
 
-    if !checkAdmin(admins, update.Message.From) {
+    if !isAdmin(admins, update.Message.From) {
         msg := tgbotapi.NewMessage(chatID, "Слыш, пёс. Не только лишь все могут это делать.")
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
@@ -57,7 +57,7 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 }
 
-func checkAdmin(admins []tgbotapi.ChatMember, user *tgbotapi.User) bool {
+func isAdmin(admins []tgbotapi.ChatMember, user *tgbotapi.User) bool {
     for _, admin := range admins {
         if admin.IsCreator() {
             return true
