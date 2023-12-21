@@ -1,6 +1,7 @@
 package handlerWednesday
 
 import (
+    "embercat/bot/core"
     "embercat/pgsql"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -20,14 +21,13 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    // Check. Current user is Administrator
-    var admins []tgbotapi.ChatMember
-    config := tgbotapi.ChatConfig{ChatID: chatID}
-    if admins, err = bot.GetChatAdministrators(config); err != nil {
+    var member tgbotapi.ChatMember
+    if member, err = core.GetChatMember(bot, chatID, update.Message.From.ID); err != nil {
         logger(err.Error())
+        return
     }
 
-    if !isAdmin(admins, update.Message.From) {
+    if !canSave(member) {
         msg := tgbotapi.NewMessage(chatID, "Слыш, пёс. Не только лишь все могут это делать.")
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
@@ -57,19 +57,13 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 }
 
-func isAdmin(admins []tgbotapi.ChatMember, user *tgbotapi.User) bool {
-    for _, admin := range admins {
-        if admin.IsCreator() {
-            return true
-        }
+func canSave(member tgbotapi.ChatMember) bool {
+    if member.IsCreator() {
+        return true
+    }
 
-        if admin.User.ID != user.ID {
-            continue
-        }
-
-        if !admin.CanPromoteMembers {
-            continue
-        }
+    if member.IsAdministrator() {
+        return member.CanPromoteMembers
     }
 
     return false
