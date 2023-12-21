@@ -11,7 +11,7 @@ func All(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     logger := getLogger("ALL")
 
     pg := pgsql.GetClient()
-    q := `select id, frog from frog`
+    q := `select id, photoId from frog`
 
     var rows *sql.Rows
     if rows, err = pg.Query(q); err != nil {
@@ -22,14 +22,14 @@ func All(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     msg := tgbotapi.NewPhotoShare(update.Message.Chat.ID, "")
     for rows.Next() {
-        var id, frog string
-        if err = rows.Scan(&id, &frog); err != nil {
+        var id, photoId string
+        if err = rows.Scan(&id, &photoId); err != nil {
             logger(err.Error())
             return
         }
 
         msg.Caption = id
-        msg.FileID = frog
+        msg.FileID = photoId
 
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
