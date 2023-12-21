@@ -3,6 +3,7 @@ package handlerWednesday
 import (
     "embercat/bot/core"
     "embercat/pgsql"
+    "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
@@ -48,6 +49,13 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     q := `insert into frog (photoId) VALUES ($1)`
     if _, err = pg.Exec(q, photoID); err != nil {
         logger("unable to save: ", err.Error())
+
+        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Скорее всего такая жаба уже есть или что-то пошло не так"))
+
+        if _, err = bot.Send(msg); err != nil {
+            logger(err.Error())
+        }
+
         return
     }
 
