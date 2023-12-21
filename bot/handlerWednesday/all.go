@@ -11,7 +11,7 @@ func All(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     logger := getLogger("ALL")
 
     pg := pgsql.GetClient()
-    q := `select id, photoId from frog`
+    q := `select id, photoId from frog offset 20`
 
     var rows *sql.Rows
     if rows, err = pg.Query(q); err != nil {
