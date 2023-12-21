@@ -5,7 +5,6 @@ import (
     "embercat/assets"
     "embercat/pgsql"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-    "time"
 )
 
 func Check(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -13,7 +12,7 @@ func Check(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     chatID := update.Message.Chat.ID
     logger := getLogger("CHECK")
 
-    if time.Now().Weekday() == time.Wednesday {
+    if ItIsWednesdayMyDudes() {
         pg := pgsql.GetClient()
 
         var row *sql.Row

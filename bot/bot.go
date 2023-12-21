@@ -12,6 +12,7 @@ import (
     "embercat/bot/handlerWednesday"
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
     "log"
+    "math/rand"
     "strings"
 )
 
@@ -47,6 +48,10 @@ func Start(config Config) {
                         go handler(API, update)
                     }
                 } else {
+                    if handlerWednesday.ItIsWednesdayMyDudes() && rand.Intn(3) == 0 {
+                        handlerWednesday.Check(API, update)
+                    }
+
                     go ai.HandlerTextAnalizer(API, update)
                 }
             } else if update.CallbackQuery != nil {

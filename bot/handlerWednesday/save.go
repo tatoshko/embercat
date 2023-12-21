@@ -70,8 +70,6 @@ func checkAdmin(admins []tgbotapi.ChatMember, user *tgbotapi.User) bool {
         if !admin.CanPromoteMembers {
             continue
         }
-
-        return true
     }
 
     return false
