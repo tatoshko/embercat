@@ -94,7 +94,6 @@ func registerCommands() {
     // Wednesday
     Commands["wed"] = handlerWednesday.Check
     Commands["newfrog"] = handlerWednesday.Save
-    Commands["all"] = handlerWednesday.All
 
     // Donates
     Commands["donate"] = handlerDonate.Add
