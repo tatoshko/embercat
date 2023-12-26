@@ -14,10 +14,10 @@ var (
     point         fixed.Point26_6
     srcImg        *image.RGBA
     imageBounds   fixed.Rectangle26_6
-    DPI                         = 72.0
-    white                       = color.RGBA{R: 255, G: 255, B: 255, A: 255}
-    TTF, _                      = truetype.Parse(gobold.TTF)
-    StartFontSize fixed.Int26_6 = 42.0
+    DPI           = 72.0
+    white         = color.RGBA{R: 255, G: 255, B: 255, A: 255}
+    TTF, _        = truetype.Parse(gobold.TTF)
+    StartFontSize = fixed.Int26_6(42)
 )
 
 func AddLabel(img *image.RGBA, label string) {
@@ -42,7 +42,7 @@ func drawString(label string, size fixed.Int26_6) {
         drawer.DrawString(label)
     } else {
         log.Printf("FAIL SIZE: %d | MIN: %s, MAX: %s | POINT: %s", size, sb.Min, sb.Max, point)
-        drawString(label, size-1)
+        drawString(label, size-fixed.Int26_6(1))
     }
 }
 
