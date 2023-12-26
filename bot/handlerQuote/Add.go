@@ -11,9 +11,17 @@ func Add(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     chatID := update.Message.Chat.ID
     service := NewService()
 
-    quote := NewQuoteFromMessage(update.Message)
-
     msg := tgbotapi.NewMessage(chatID, "")
+
+    if update.Message.ReplyToMessage == nil {
+        msg.Text = "Нужно сделать реплай на сообщение"
+        if _, err = bot.Send(msg); err != nil {
+            logger(err.Error())
+        }
+        return
+    }
+
+    quote := NewQuoteFromMessage(update.Message.ReplyToMessage)
 
     if err = service.Add(quote); err != nil {
         logger(err.Error())
