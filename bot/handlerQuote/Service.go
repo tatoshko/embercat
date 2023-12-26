@@ -2,6 +2,12 @@ package handlerQuote
 
 import (
     "embercat/pgsql"
+    "errors"
+    "strings"
+)
+
+var (
+    ErrEmptyText = errors.New("nothing to save")
 )
 
 type Service struct {
@@ -12,6 +18,10 @@ func NewService() *Service {
 }
 
 func (s Service) Add(quote *Quote) (err error) {
+    if strings.Trim(quote.Text, " ") == "" {
+        return ErrEmptyText
+    }
+
     pg := pgsql.GetClient()
     q := `insert into quote (userid, username, text) values ($1, $2, $3)`
 

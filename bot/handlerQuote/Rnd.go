@@ -74,9 +74,10 @@ func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
 func addLabel(img *image.RGBA, label string, face font.Face) {
     x := 0
-    y := 0
+    b := img.Bounds()
+
     col := color.RGBA{255, 255, 255, 255}
-    point := fixed.Point26_6{fixed.Int26_6(x * 64), fixed.Int26_6(y * 64)}
+    point := fixed.Point26_6{fixed.Int26_6(x * 64), fixed.Int26_6((b.Max.Y - 50) * 64)}
 
     d := &font.Drawer{
         Dst:  img,
