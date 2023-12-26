@@ -32,16 +32,16 @@ func drawString(label string, size fixed.Int26_6) {
         return
     }
 
-    point = fixed.P(16, int(imageBounds.Max.Y-size-16))
+    point = fixed.Point26_6{X: 16, Y: imageBounds.Max.Y - size - 16}
     drawer := &font.Drawer{Dst: srcImg, Src: image.NewUniform(white), Face: getFace(size), Dot: point}
 
-    sb, ad := drawer.BoundString(label)
+    sb, _ := drawer.BoundString(label)
 
     if sb.In(imageBounds) {
         log.Printf("OK")
         drawer.DrawString(label)
     } else {
-        log.Printf("FAIL SIZE: %d | STRING_BOUND: %v | IGMBOUND: %v | ADVANCE? %q", size, sb, imageBounds, ad)
+        log.Printf("FAIL SIZE: %d | STRING_BOUND: %v | IGMBOUND: %v | ADVANCE? %q", size, sb, imageBounds)
         drawString(label, size-1)
     }
 }
