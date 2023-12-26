@@ -30,7 +30,7 @@ func AddLabel(img *image.RGBA, text string) {
 
     scrText = text
 
-    fakeImg = image.NewRGBA(image.Rect(0, 0, ib.Max.X-padding*2, ib.Max.Y))
+    fakeImg = image.NewRGBA(image.Rect(0, 0, ib.Max.X-padding*2*fixed.Int26_6(DPI/4).Round(), ib.Max.Y))
     fb := fakeImg.Bounds()
     fakeBounds = fixed.R(fb.Min.X, fb.Min.Y, fb.Max.X, fb.Max.Y)
     draw(computeSize(StartFontSize))
