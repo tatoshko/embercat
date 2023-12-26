@@ -14,7 +14,6 @@ var (
     point         fixed.Point26_6
     srcImg        *image.RGBA
     imageBounds   fixed.Rectangle26_6
-    DPI           = 72.0
     white         = color.RGBA{R: 255, G: 255, B: 255, A: 255}
     TTF, _        = truetype.Parse(gobold.TTF)
     StartFontSize = fixed.Int26_6(42)
@@ -32,7 +31,7 @@ func drawString(label string, size fixed.Int26_6) {
         return
     }
 
-    point = fixed.Point26_6{X: 16, Y: imageBounds.Max.Y - size}
+    point = fixed.Point26_6{X: 16, Y: imageBounds.Max.Y - size*72}
     drawer := &font.Drawer{Dst: srcImg, Src: image.NewUniform(white), Face: getFace(size), Dot: point}
 
     sb, _ := drawer.BoundString(label)
@@ -42,10 +41,10 @@ func drawString(label string, size fixed.Int26_6) {
         drawer.DrawString(label)
     } else {
         log.Printf("FAIL SIZE: %d | MIN: %s, MAX: %s | POINT: %s", size, sb.Min, sb.Max, point)
-        drawString(label, size-fixed.Int26_6(1))
+        drawString(label, size-1)
     }
 }
 
 func getFace(size fixed.Int26_6) font.Face {
-    return truetype.NewFace(TTF, &truetype.Options{Size: float64(size), DPI: DPI, Hinting: font.HintingNone})
+    return truetype.NewFace(TTF, &truetype.Options{Size: float64(size)})
 }
