@@ -14,9 +14,10 @@ var (
     point         fixed.Point26_6
     srcImg        *image.RGBA
     imageBounds   fixed.Rectangle26_6
-    white         = color.RGBA{R: 255, G: 255, B: 255, A: 255}
-    TTF, _        = truetype.Parse(gobold.TTF)
-    StartFontSize = fixed.Int26_6(42)
+    white                 = color.RGBA{R: 255, G: 255, B: 255, A: 255}
+    TTF, _                = truetype.Parse(gobold.TTF)
+    StartFontSize         = fixed.Int26_6(42)
+    DPI           float64 = 72
 )
 
 func AddLabel(img *image.RGBA, label string) {
@@ -31,7 +32,7 @@ func drawString(label string, size fixed.Int26_6) {
         return
     }
 
-    point = fixed.Point26_6{X: 16, Y: imageBounds.Max.Y - size*18}
+    point = fixed.Point26_6{X: 16, Y: imageBounds.Max.Y - size*fixed.Int26_6(DPI/4)}
     drawer := &font.Drawer{Dst: srcImg, Src: image.NewUniform(white), Face: getFace(size), Dot: point}
 
     sb, _ := drawer.BoundString(label)
@@ -46,5 +47,5 @@ func drawString(label string, size fixed.Int26_6) {
 }
 
 func getFace(size fixed.Int26_6) font.Face {
-    return truetype.NewFace(TTF, &truetype.Options{Size: float64(size)})
+    return truetype.NewFace(TTF, &truetype.Options{Size: float64(size), DPI: DPI})
 }
