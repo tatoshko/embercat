@@ -2,12 +2,10 @@ package handlerQuote
 
 import (
     "bytes"
+    "embercat/bot/handlerQuote/drawer"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-    "golang.org/x/image/font"
-    "golang.org/x/image/math/fixed"
     "image"
-    "image/color"
     "image/draw"
     "image/jpeg"
     "log"
@@ -57,7 +55,7 @@ func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    addLabel(img, quote.ToString(), face1)
+    drawer.AddLabel(img, quote.ToString())
 
     buf := new(bytes.Buffer)
     if err := jpeg.Encode(buf, img, nil); err != nil {
@@ -70,22 +68,6 @@ func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     if _, err := bot.Send(msg); err != nil {
         log.Printf("Wednesday send error %s\n", err.Error())
     }
-}
-
-func addLabel(img *image.RGBA, label string, face font.Face) {
-    x := 0
-    b := img.Bounds()
-
-    col := color.RGBA{255, 255, 255, 255}
-    point := fixed.Point26_6{fixed.Int26_6(x * 64), fixed.Int26_6((b.Max.Y - 50) * 64)}
-
-    d := &font.Drawer{
-        Dst:  img,
-        Src:  image.NewUniform(col),
-        Face: face,
-        Dot:  point,
-    }
-    d.DrawString(label)
 }
 
 func getSourceImg(fileURL string) (m *image.RGBA, err error) {
