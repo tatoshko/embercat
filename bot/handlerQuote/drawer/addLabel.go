@@ -7,6 +7,7 @@ import (
     "golang.org/x/image/math/fixed"
     "image"
     "image/color"
+    "log"
 )
 
 var (
@@ -33,8 +34,10 @@ func drawString(label string, size fixed.Int26_6) {
     sb, _ := drawer.BoundString(label)
 
     if sb.In(imageBounds) {
+        log.Printf("OK")
         drawer.DrawString(label)
     } else {
+        log.Printf("FAIL %d", size)
         drawString(label, size-1)
     }
 }
