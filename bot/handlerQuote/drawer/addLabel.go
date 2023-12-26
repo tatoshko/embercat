@@ -15,6 +15,7 @@ var (
     srcImg        *image.RGBA
     fakeImg       *image.RGBA
     imageBounds   fixed.Rectangle26_6
+    fakeBounds    fixed.Rectangle26_6
     white                 = color.RGBA{R: 255, G: 255, B: 255, A: 255}
     TTF, _                = truetype.Parse(gobold.TTF)
     StartFontSize         = fixed.Int26_6(42)
@@ -30,6 +31,8 @@ func AddLabel(img *image.RGBA, text string) {
     scrText = text
 
     fakeImg = image.NewRGBA(image.Rect(0, 0, ib.Max.X-padding*2, ib.Max.Y))
+    fb := fakeImg.Bounds()
+    fakeBounds = fixed.R(fb.Min.X, fb.Min.Y, fb.Max.X, fb.Max.Y)
     draw(computeSize(StartFontSize))
 }
 
@@ -38,12 +41,12 @@ func computeSize(size fixed.Int26_6) fixed.Int26_6 {
         return 0
     }
 
-    point = fixed.Point26_6{X: 0, Y: imageBounds.Max.Y - size*fixed.Int26_6(DPI/4)}
+    point = fixed.Point26_6{X: 0, Y: fakeBounds.Max.Y - size*fixed.Int26_6(DPI/4)}
     drawer := &font.Drawer{Dst: fakeImg, Src: image.NewUniform(white), Face: getFace(size), Dot: point}
 
     sb, _ := drawer.BoundString(scrText)
 
-    if !sb.In(imageBounds) {
+    if !sb.In(fakeBounds) {
         return size
     } else {
         return computeSize(size - 1)
