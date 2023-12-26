@@ -7,6 +7,7 @@ import (
     "embercat/bot/handlerCatacul"
     "embercat/bot/handlerDonate"
     "embercat/bot/handlerPic"
+    "embercat/bot/handlerQuote"
     "embercat/bot/handlerThreat"
     "embercat/bot/handlerTurbo"
     "embercat/bot/handlerWednesday"
@@ -103,4 +104,9 @@ func registerCommands() {
     Commands["aserver"] = handlerPic.RndServer
     Commands["ashare"] = handlerPic.RndShare
     Commands["asave"] = handlerPic.Save
+
+    // Quote
+    handlerQuote.Init()
+    Commands["add"] = handlerQuote.Add
+    Commands["make"] = handlerQuote.Make
 }
