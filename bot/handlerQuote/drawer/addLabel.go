@@ -28,6 +28,10 @@ func AddLabel(img *image.RGBA, label string) {
 }
 
 func drawString(label string, size fixed.Int26_6) {
+    if size == 0 {
+        return
+    }
+
     point = fixed.P(16, int(imageBounds.Max.Y-size-16))
     drawer := &font.Drawer{Dst: srcImg, Src: image.NewUniform(white), Face: getFace(size), Dot: point}
 
