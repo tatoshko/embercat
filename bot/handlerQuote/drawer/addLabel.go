@@ -38,10 +38,10 @@ func drawString(label string, size fixed.Int26_6) {
     sb, _ := drawer.BoundString(label)
 
     if sb.In(imageBounds) {
-        log.Printf("OK")
+        log.Printf("OK SIZE: %d | MIN: %s, MAX: %s", size, sb.Min, sb.Max)
         drawer.DrawString(label)
     } else {
-        log.Printf("FAIL SIZE: %d | STRING_BOUND: %v | IGMBOUND: %v", size, sb, imageBounds)
+        log.Printf("FAIL SIZE: %d | MIN: %s, MAX: %s", size, sb.Min, sb.Max)
         drawString(label, size-1)
     }
 }
