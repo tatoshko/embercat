@@ -10,7 +10,7 @@ import (
 )
 
 var (
-    text          string
+    scrText       string
     point         fixed.Point26_6
     srcImg        *image.RGBA
     fakeImg       *image.RGBA
@@ -27,7 +27,7 @@ func AddLabel(img *image.RGBA, text string) {
     ib := img.Bounds()
     imageBounds = fixed.R(ib.Min.X, ib.Min.Y, ib.Max.X, ib.Max.Y)
 
-    text = text
+    scrText = text
 
     fakeImg = image.NewRGBA(image.Rect(0, 0, ib.Max.X-padding*2, ib.Max.Y))
     draw(computeSize(StartFontSize))
@@ -41,7 +41,7 @@ func computeSize(size fixed.Int26_6) fixed.Int26_6 {
     point = fixed.Point26_6{X: 0, Y: imageBounds.Max.Y - size*fixed.Int26_6(DPI/4)}
     drawer := &font.Drawer{Dst: fakeImg, Src: image.NewUniform(white), Face: getFace(size), Dot: point}
 
-    sb, _ := drawer.BoundString(text)
+    sb, _ := drawer.BoundString(scrText)
 
     if !sb.In(imageBounds) {
         return size
@@ -57,7 +57,7 @@ func draw(size fixed.Int26_6) {
 
     point = fixed.Point26_6{X: fixed.Int26_6(padding) * fixed.Int26_6(DPI/4), Y: imageBounds.Max.Y - size*fixed.Int26_6(DPI/4)}
     drawer := &font.Drawer{Dst: srcImg, Src: image.NewUniform(white), Face: getFace(size), Dot: point}
-    drawer.DrawString(text)
+    drawer.DrawString(scrText)
 }
 
 func getFace(size fixed.Int26_6) font.Face {
