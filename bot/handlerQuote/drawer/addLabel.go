@@ -41,7 +41,7 @@ func drawString(label string, size fixed.Int26_6) {
         log.Printf("OK")
         drawer.DrawString(label)
     } else {
-        log.Printf("FAIL %d | %v | %v | %v", size, sb, imageBounds, ad)
+        log.Printf("FAIL SIZE: %d | STRING_BOUND: %v | IGMBOUND: %v | ADVANCE? %q", size, sb, imageBounds, ad)
         drawString(label, size-1)
     }
 }
