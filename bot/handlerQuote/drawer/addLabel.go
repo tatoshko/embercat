@@ -41,7 +41,7 @@ func drawString(label string, size fixed.Int26_6) {
         log.Printf("OK SIZE: %d | MIN: %s, MAX: %s | POINT: %s", size, sb.Min, sb.Max, point)
         drawer.DrawString(label)
     } else {
-        log.Printf("FAIL SIZE: %d | MIN: %s, MAX: %s", size, sb.Min, sb.Max)
+        log.Printf("FAIL SIZE: %d | MIN: %s, MAX: %s | POINT: %s", size, sb.Min, sb.Max, point)
         drawString(label, size-1)
     }
 }
