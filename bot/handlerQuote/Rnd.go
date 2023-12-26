@@ -32,7 +32,6 @@ func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var photoID string
     for _, pic := range *replay.Photo {
         photoID = pic.FileID
-        break
     }
 
     var fileURL string
