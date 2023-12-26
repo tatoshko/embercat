@@ -31,7 +31,7 @@ func drawString(label string, size fixed.Int26_6) {
         return
     }
 
-    point = fixed.Point26_6{X: 16, Y: imageBounds.Max.Y - size*36}
+    point = fixed.Point26_6{X: 16, Y: imageBounds.Max.Y - size*18}
     drawer := &font.Drawer{Dst: srcImg, Src: image.NewUniform(white), Face: getFace(size), Dot: point}
 
     sb, _ := drawer.BoundString(label)
