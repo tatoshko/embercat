@@ -37,3 +37,12 @@ create or replace function calc_word_len() returns trigger as $cwl$
 $cwl$ LANGUAGE plpgsql;
 create or replace trigger set_word_len before insert or update on words
     for each row execute procedure calc_word_len();
+
+drop table if exists quote;
+create table if not exists quote (
+    id uuid default uuid_generate_v4() primary key,
+    userId int not null,
+    userName varchar(32) not null,
+    text varchar(255) not null,
+    createdAt timestamp default current_timestamp
+);

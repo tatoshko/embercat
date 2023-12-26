@@ -13,8 +13,8 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     logger := getLogger("SAVE")
 
     // Check. Message is replay with photo
-    reply := update.Message.ReplyToMessage
-    if reply == nil || reply.Photo == nil {
+    replay := update.Message.ReplyToMessage
+    if replay == nil || replay.Photo == nil {
         msg := tgbotapi.NewMessage(chatID, "Вызов этой команды возможен только в ответ на сообщение с картинкой")
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
@@ -38,7 +38,7 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     // Get photoID
     var photoID string
-    for _, pic := range *reply.Photo {
+    for _, pic := range *replay.Photo {
         photoID = pic.FileID
         break
     }
