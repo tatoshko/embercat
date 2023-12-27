@@ -1,6 +1,7 @@
 package handlerQuote
 
 import (
+    "embercat/bot/core"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -9,8 +10,22 @@ func Add(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
     logger := getLogger("ADD")
     chatID := update.Message.Chat.ID
-    service := NewService()
 
+    var member tgbotapi.ChatMember
+    if member, err = core.GetChatMember(bot, chatID, update.Message.From.ID); err != nil {
+        logger(err.Error())
+        return
+    }
+
+    if !canSave(member) {
+        msg := tgbotapi.NewMessage(chatID, "Слыш, пёс. Не только лишь все могут это делать.")
+        if _, err = bot.Send(msg); err != nil {
+            logger(err.Error())
+        }
+        return
+    }
+
+    service := NewService()
     msg := tgbotapi.NewMessage(chatID, "")
 
     if update.Message.ReplyToMessage == nil {
@@ -33,4 +48,16 @@ func Add(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     if _, err = bot.Send(msg); err != nil {
         logger(err.Error())
     }
+}
+
+func canSave(member tgbotapi.ChatMember) bool {
+    if member.IsCreator() {
+        return true
+    }
+
+    if member.IsAdministrator() {
+        return member.CanPromoteMembers
+    }
+
+    return false
 }
