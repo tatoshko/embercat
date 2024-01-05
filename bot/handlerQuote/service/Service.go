@@ -1,4 +1,4 @@
-package handlerQuote
+package service
 
 import (
     "embercat/pgsql"
@@ -30,7 +30,7 @@ func (s Service) Add(quote *Quote) (err error) {
     return
 }
 
-func (s Service) findRND() (quote *Quote, err error) {
+func (s Service) FindRND() (quote *Quote, err error) {
     pg := pgsql.GetClient()
     q := `select id, userId, userName, text, createdAt from quote order by random() limit 1`
 

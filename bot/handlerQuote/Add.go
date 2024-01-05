@@ -2,6 +2,7 @@ package handlerQuote
 
 import (
     "embercat/bot/core"
+    "embercat/bot/handlerQuote/service"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -25,7 +26,7 @@ func Add(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    service := NewService()
+    quoteService := service.NewService()
     msg := tgbotapi.NewMessage(chatID, "")
 
     if update.Message.ReplyToMessage == nil {
@@ -36,9 +37,9 @@ func Add(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    quote := NewQuoteFromMessage(update.Message.ReplyToMessage)
+    quote := service.NewQuoteFromMessage(update.Message.ReplyToMessage)
 
-    if err = service.Add(quote); err != nil {
+    if err = quoteService.Add(quote); err != nil {
         logger(err.Error())
         msg.Text = fmt.Sprintf("Что-то не так: %s", err.Error())
     } else {

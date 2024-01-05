@@ -3,13 +3,12 @@ package handlerQuote
 import (
     "bytes"
     "embercat/bot/handlerQuote/drawer"
+    "embercat/bot/handlerQuote/loader"
+    "embercat/bot/handlerQuote/service"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-    "image"
-    "image/draw"
     "image/jpeg"
     "log"
-    "net/http"
 )
 
 func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -17,8 +16,8 @@ func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     logger := getLogger("RND")
     chatID := update.Message.Chat.ID
 
+    // get replay message
     replay := update.Message.ReplyToMessage
-
     if replay == nil || replay.Photo == nil {
         msg := tgbotapi.NewMessage(chatID, "Ты че пёс, сообщение должно быть с картинкой")
         if _, err = bot.Send(msg); err != nil {
@@ -27,11 +26,12 @@ func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    var photoID string
-    for _, pic := range *replay.Photo {
-        photoID = pic.FileID
-    }
+    photos := *replay.Photo
 
+    // get last photoID from replay
+    photoID := photos[len(photos)-1].FileID
+
+    // get direct lint to file
     var fileURL string
     if fileURL, err = bot.GetFileDirectURL(photoID); err != nil {
         msg := tgbotapi.NewMessage(chatID, "Не смог получить картинку")
@@ -41,12 +41,13 @@ func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    img, err := getSourceImg(fileURL)
+    img, err := loader.LoadPicByURL(fileURL)
 
-    service := NewService()
+    quoteService := service.NewService()
 
-    var quote *Quote
-    if quote, err = service.findRND(); err != nil {
+    // load rnd quote
+    var quote *service.Quote
+    if quote, err = quoteService.FindRND(); err != nil {
         logger(err.Error())
         msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("что-то пошло не так %s", err.Error()))
         if _, err = bot.Send(msg); err != nil {
@@ -55,8 +56,17 @@ func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    drawer.AddLabel(img, quote.ToString())
+    // make quoted image
+    if err = drawer.AddQuoteBottom(quote, img); err != nil {
+        logger(err.Error())
+        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("что-то пошло не так %s", err.Error()))
+        if _, err = bot.Send(msg); err != nil {
+            logger(err.Error())
+        }
+        return
+    }
 
+    // send result to chat
     buf := new(bytes.Buffer)
     if err := jpeg.Encode(buf, img, nil); err != nil {
         log.Printf("ERROR: %s", err.Error())
@@ -68,21 +78,4 @@ func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     if _, err := bot.Send(msg); err != nil {
         log.Printf("Wednesday send error %s\n", err.Error())
     }
-}
-
-func getSourceImg(fileURL string) (m *image.RGBA, err error) {
-    var resp *http.Response
-    if resp, err = http.Get(fileURL); err != nil {
-        return nil, err
-    }
-    defer resp.Body.Close()
-
-    var pic image.Image
-    pic, _, err = image.Decode(resp.Body)
-
-    b := pic.Bounds()
-    m = image.NewRGBA(image.Rect(0, 0, b.Dx(), b.Dy()))
-    draw.Draw(m, m.Bounds(), pic, b.Min, draw.Src)
-
-    return
 }
