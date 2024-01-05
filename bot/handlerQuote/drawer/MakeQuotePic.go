@@ -2,11 +2,11 @@ package drawer
 
 import (
     "embercat/bot/handlerQuote/service"
-    "github.com/golang/freetype/truetype"
     "golang.org/x/image/font"
-    "golang.org/x/image/font/gofont/gobold"
+    "golang.org/x/image/font/basicfont"
     "golang.org/x/image/math/fixed"
     "image"
+    "image/color"
     "log"
     "strings"
 )
@@ -25,9 +25,7 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle) (img *image.R
 
     img = image.NewRGBA(r)
 
-    ttf, _ := truetype.Parse(gobold.TTF)
-    face := truetype.NewFace(ttf, &truetype.Options{Size: float64(defaultFontSize)})
-    drawer := font.Drawer{Dst: img, Src: img, Face: face}
+    drawer := font.Drawer{Dst: img, Src: image.NewUniform(color.RGBA{B: 0xFF, A: 0xFF}), Face: basicfont.Face7x13}
 
     for i, row := range rows {
         log.Printf("Trying '%s' at %dx%d", row, 0, fixed.Int26_6(defaultFontSize*i*72))
