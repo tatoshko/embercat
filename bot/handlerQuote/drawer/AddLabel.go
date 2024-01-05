@@ -5,24 +5,24 @@ import (
     "image"
 )
 
-func MakeQuoted(quote *service.Quote, src *image.RGBA, position Position) (err error) {
-    var quotedPic *image.RGBA
-
+func MakeQuoted(quote *service.Quote, src *image.RGBA, position Position) (quotedPic *image.RGBA, err error) {
     if quotedPic, err = MakeQuotePic(quote, src.Bounds()); err != nil {
         return
     }
 
-    return Combine(src, quotedPic, position)
+    err = Combine(src, quotedPic, position)
+
+    return
 }
 
-func AddQuoteBottom(quote *service.Quote, src *image.RGBA) error {
+func AddQuoteBottom(quote *service.Quote, src *image.RGBA) (*image.RGBA, error) {
     return MakeQuoted(quote, src, PositionBelow)
 }
 
-func AddQuoteTop(quote *service.Quote, src *image.RGBA) error {
+func AddQuoteTop(quote *service.Quote, src *image.RGBA) (*image.RGBA, error) {
     return MakeQuoted(quote, src, PositionAbove)
 }
 
-func MixQuote(quote *service.Quote, src *image.RGBA) error {
+func MixQuote(quote *service.Quote, src *image.RGBA) (*image.RGBA, error) {
     return MakeQuoted(quote, src, PositionMix)
 }
