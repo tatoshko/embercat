@@ -20,7 +20,7 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle) (img *image.R
     rows := makeRows(quote.Words())
 
     rowsCount := len(rows)
-    height := (rowsCount + 1) * defaultFontSize
+    height := (rowsCount + 1) * defaultFontSize * 72
 
     r := image.Rect(0, 0, srcBounds.Max.X, height)
 
@@ -37,7 +37,7 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle) (img *image.R
         drawer.DrawString(row)
     }
 
-    drawer.Dot = fixed.Point26_6{X: 0, Y: fixed.Int26_6(defaultFontSize * (rowsCount + 1))}
+    drawer.Dot = fixed.Point26_6{X: 0, Y: fixed.Int26_6(height)}
     drawer.DrawString(quote.UserName)
 
     return
