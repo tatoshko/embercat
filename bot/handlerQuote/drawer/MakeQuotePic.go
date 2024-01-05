@@ -29,7 +29,7 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle) (img *image.R
     ttf, _ := truetype.Parse(gobold.TTF)
     face := truetype.NewFace(ttf, &truetype.Options{Size: float64(defaultFontSize)})
 
-    drawer := font.Drawer{Dst: img, Src: image.NewUniform(color.Alpha{A: 0}), Face: face}
+    drawer := font.Drawer{Dst: img, Src: image.NewUniform(color.White), Face: face}
     for i, row := range rows {
         fmt.Printf("Trying '%s' at %dx%d", row, 0, fixed.Int26_6(defaultFontSize*i))
 
