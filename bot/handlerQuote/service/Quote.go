@@ -1,9 +1,10 @@
-package handlerQuote
+package service
 
 import (
     "embercat/bot/core"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    "regexp"
     "time"
 )
 
@@ -28,6 +29,15 @@ func NewQuoteFromMessage(message *tgbotapi.Message) *Quote {
     return q
 }
 
-func (q Quote) ToString() string {
+func (q *Quote) Len() int {
+    return len(q.Text)
+}
+
+func (q *Quote) Words() []string {
+    r := regexp.MustCompile(`\S+`)
+    return r.FindAllString(q.Text, -1)
+}
+
+func (q *Quote) ToString() string {
     return fmt.Sprintf("%s. %s (c)", q.Text, q.UserName)
 }
