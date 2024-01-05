@@ -8,7 +8,6 @@ import (
     "golang.org/x/image/math/fixed"
     "image"
     "image/color"
-    "log"
     "strings"
 )
 
@@ -31,9 +30,7 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle) (img *image.R
     drawer := font.Drawer{Dst: img, Src: image.NewUniform(color.White), Face: face}
 
     for i, row := range rows {
-        log.Printf("Trying '%s' at %dx%d", row, 0, fixed.Int26_6(defaultFontSize*i*72))
-
-        drawer.Dot = fixed.P(0, defaultFontSize*i)
+        drawer.Dot = fixed.P(0, defaultFontSize*(i+1))
         drawer.DrawString(row)
     }
 
