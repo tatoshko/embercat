@@ -20,7 +20,7 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle) (img *image.R
     rows := makeRows(quote.Words())
 
     rowsCount := len(rows)
-    height := (rowsCount + 1) * defaultFontSize * 72
+    height := (rowsCount + 1) * defaultFontSize
 
     r := image.Rect(0, 0, srcBounds.Max.X, height)
 
@@ -28,10 +28,10 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle) (img *image.R
 
     ttf, _ := truetype.Parse(gobold.TTF)
     face := truetype.NewFace(ttf, &truetype.Options{Size: float64(defaultFontSize)})
-
     drawer := font.Drawer{Dst: img, Src: image.NewUniform(color.White), Face: face}
+
     for i, row := range rows {
-        log.Printf("Trying '%s' at %dx%d", row, 0, fixed.Int26_6(defaultFontSize*i))
+        log.Printf("Trying '%s' at %dx%d", row, 0, fixed.Int26_6(defaultFontSize*i*72))
 
         drawer.Dot = fixed.Point26_6{X: 0, Y: fixed.Int26_6(defaultFontSize * i * 72)}
         drawer.DrawString(row)
