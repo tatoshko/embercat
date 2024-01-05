@@ -106,7 +106,6 @@ func registerCommands() {
     Commands["asave"] = handlerPic.Save
 
     // Quote
-    handlerQuote.Init()
     Commands["add"] = handlerQuote.Add
     Commands["make"] = handlerQuote.Make
 }
