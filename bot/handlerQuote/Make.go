@@ -7,13 +7,14 @@ import (
     "embercat/bot/handlerQuote/service"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    "image"
     "image/jpeg"
     "log"
 )
 
 func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
-    logger := getLogger("RND")
+    logger := getLogger("MAKE")
     chatID := update.Message.Chat.ID
 
     // get replay message
@@ -57,7 +58,8 @@ func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 
     // make quoted image
-    if err = drawer.AddQuoteBottom(quote, img); err != nil {
+    var quotedPic *image.RGBA
+    if quotedPic, err = drawer.AddQuoteBottom(quote, img); err != nil {
         logger(err.Error())
         msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("что-то пошло не так %s", err.Error()))
         if _, err = bot.Send(msg); err != nil {
@@ -68,7 +70,7 @@ func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     // send result to chat
     buf := new(bytes.Buffer)
-    if err := jpeg.Encode(buf, img, nil); err != nil {
+    if err := jpeg.Encode(buf, quotedPic, nil); err != nil {
         log.Printf("ERROR: %s", err.Error())
         return
     }
