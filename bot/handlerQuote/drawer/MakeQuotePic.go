@@ -2,13 +2,13 @@ package drawer
 
 import (
     "embercat/bot/handlerQuote/service"
-    "fmt"
     "github.com/golang/freetype/truetype"
     "golang.org/x/image/font"
     "golang.org/x/image/font/gofont/gobold"
     "golang.org/x/image/math/fixed"
     "image"
     "image/color"
+    "log"
     "strings"
 )
 
@@ -31,7 +31,7 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle) (img *image.R
 
     drawer := font.Drawer{Dst: img, Src: image.NewUniform(color.White), Face: face}
     for i, row := range rows {
-        fmt.Printf("Trying '%s' at %dx%d", row, 0, fixed.Int26_6(defaultFontSize*i))
+        log.Printf("Trying '%s' at %dx%d", row, 0, fixed.Int26_6(defaultFontSize*i))
 
         drawer.Dot = fixed.Point26_6{X: 0, Y: fixed.Int26_6(defaultFontSize * i)}
         drawer.DrawString(row)
