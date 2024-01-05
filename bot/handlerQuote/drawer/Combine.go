@@ -19,29 +19,30 @@ const (
     PositionMix
 )
 
-func Combine(dst *image.RGBA, src *image.RGBA, position Position) error {
+func Combine(dst *image.RGBA, src *image.RGBA, position Position) (*image.RGBA, error) {
     if dst == nil {
-        return NilDstError
+        return nil, NilDstError
     }
 
     if src == nil {
-        return NilSrcError
+        return nil, NilSrcError
     }
+
+    var combined *image.RGBA
 
     switch position {
     case PositionAbove:
-        combined := image.NewRGBA(image.Rect(0, 0, dst.Bounds().Max.X, dst.Bounds().Max.Y+src.Bounds().Max.Y))
+        combined = image.NewRGBA(image.Rect(0, 0, dst.Bounds().Max.X, dst.Bounds().Max.Y+src.Bounds().Max.Y))
         draw.Draw(combined, src.Bounds(), src, image.Point{X: 0, Y: 0}, draw.Src)
         draw.Draw(combined, dst.Bounds(), dst, image.Point{X: 0, Y: src.Bounds().Max.Y}, draw.Src)
-        dst = combined
     case PositionBelow:
-        combined := image.NewRGBA(image.Rect(0, 0, dst.Bounds().Max.X, dst.Bounds().Max.Y+src.Bounds().Max.Y))
+        combined = image.NewRGBA(image.Rect(0, 0, dst.Bounds().Max.X, dst.Bounds().Max.Y+src.Bounds().Max.Y))
         draw.Draw(combined, dst.Bounds(), dst, image.Point{X: 0, Y: 0}, draw.Src)
         draw.Draw(combined, src.Bounds(), src, image.Point{X: 0, Y: dst.Bounds().Max.Y}, draw.Src)
-        dst = combined
     case PositionMix:
+        combined = image.NewRGBA(dst.Bounds())
         draw.Draw(dst, dst.Bounds(), src, dst.Bounds().Min, draw.Src)
     }
 
-    return nil
+    return combined, nil
 }

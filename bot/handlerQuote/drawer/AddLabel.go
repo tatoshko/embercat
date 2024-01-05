@@ -10,9 +10,7 @@ func MakeQuoted(quote *service.Quote, src *image.RGBA, position Position) (quote
         return
     }
 
-    err = Combine(src, quotedPic, position)
-
-    return
+    return Combine(src, quotedPic, position)
 }
 
 func AddQuoteBottom(quote *service.Quote, src *image.RGBA) (*image.RGBA, error) {
