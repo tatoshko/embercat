@@ -33,7 +33,7 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle) (img *image.R
     for i, row := range rows {
         log.Printf("Trying '%s' at %dx%d", row, 0, fixed.Int26_6(defaultFontSize*i))
 
-        drawer.Dot = fixed.Point26_6{X: 0, Y: fixed.Int26_6(defaultFontSize*i + defaultFontSize)}
+        drawer.Dot = fixed.Point26_6{X: 0, Y: fixed.Int26_6(defaultFontSize * i * 72)}
         drawer.DrawString(row)
     }
 
