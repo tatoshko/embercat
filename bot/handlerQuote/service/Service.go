@@ -32,10 +32,9 @@ func (s Service) Add(quote *Quote) (err error) {
 
 func (s Service) FindRND() (quote *Quote, err error) {
     pg := pgsql.GetClient()
-    q := `select id, userId, userName, text, createdAt from quote where id = $1 order by random() limit 1`
+    q := `select id, userId, userName, text, createdAt from quote order by random() limit 1`
 
-    // TODO: Remove after test
-    row := pg.QueryRow(q, "a2d9365c-7780-4a53-ba77-0cdbe478fcb8")
+    row := pg.QueryRow(q)
 
     if row.Err() != nil {
         return nil, row.Err()
