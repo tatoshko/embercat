@@ -52,6 +52,7 @@ func makeRows(words []string) (rows []string) {
         if len(rows[currentRowIdx])+l > inRowCharsCount {
             strings.TrimSpace(rows[currentRowIdx])
             currentRowIdx++
+            rows[currentRowIdx] = ""
         }
 
         rows[currentRowIdx] += fmt.Sprintf("%s ", word)
