@@ -3,6 +3,7 @@ package drawer
 import (
     "embercat/bot/handlerQuote/service"
     "github.com/golang/freetype/truetype"
+    "golang.org/x/image/draw"
     "golang.org/x/image/font"
     "golang.org/x/image/font/gofont/gobold"
     "golang.org/x/image/math/fixed"
@@ -22,12 +23,11 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle) (img *image.R
     height := (rowsCount + 1) * defaultFontSize
 
     r := image.Rect(0, 0, srcBounds.Max.X, height)
-
-    img = image.NewRGBA(r)
+    alpha := image.NewAlpha(r)
 
     ttf, _ := truetype.Parse(gobold.TTF)
     face := truetype.NewFace(ttf, &truetype.Options{Size: float64(defaultFontSize)})
-    drawer := font.Drawer{Dst: img, Src: image.NewUniform(color.White), Face: face}
+    drawer := font.Drawer{Dst: alpha, Src: image.NewUniform(color.White), Face: face}
 
     for i, row := range rows {
         drawer.Dot = fixed.P(0, defaultFontSize*(i+1))
@@ -36,6 +36,8 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle) (img *image.R
 
     drawer.Dot = fixed.P(0, height)
     drawer.DrawString(quote.UserName)
+
+    draw.Draw(img, img.Bounds(), alpha, image.Point{X: 0, Y: 0}, draw.Src)
 
     return
 }
