@@ -2,27 +2,24 @@ package drawer
 
 import (
     "embercat/bot/handlerQuote/service"
+    "fmt"
     "github.com/golang/freetype/truetype"
     "golang.org/x/image/font"
     "golang.org/x/image/font/gofont/gobold"
     "golang.org/x/image/math/fixed"
     "image"
     "image/color"
-    "log"
     "strings"
 )
 
 const (
-    defaultCountWordsInRow = 5
-    inRowCharsCount        = 30
+    inRowCharsCount = 30
 )
 
 func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.Color) (alpha *image.Alpha, err error) {
-    fontSize := srcBounds.Bounds().Max.X/inRowCharsCount + 5
+    fontSize := srcBounds.Bounds().Max.X/inRowCharsCount + 6
 
-    log.Printf("FONT_SIZE: %d", fontSize)
-
-    rows := makeRows(quote.Words(), defaultCountWordsInRow)
+    rows := makeRows(quote.Words())
 
     rowsCount := len(rows)
     height := (rowsCount + 1) * fontSize
@@ -45,7 +42,25 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.C
     return
 }
 
-func makeRows(words []string, inRowCount int) (rows []string) {
+func makeRows(words []string) (rows []string) {
+    rows = []string{}
+
+    currentRowIdx := 0
+    for _, word := range words {
+        l := len(word)
+
+        if len(rows[currentRowIdx])+l > inRowCharsCount {
+            strings.TrimSpace(rows[currentRowIdx])
+            currentRowIdx++
+        }
+
+        rows[currentRowIdx] += fmt.Sprintf("%s ", word)
+    }
+
+    return
+}
+
+func makeRowsOld(words []string, inRowCount int) (rows []string) {
     for len(words) > 0 {
         l := len(words)
 
