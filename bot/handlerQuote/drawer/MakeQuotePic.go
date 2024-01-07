@@ -8,6 +8,7 @@ import (
     "golang.org/x/image/math/fixed"
     "image"
     "image/color"
+    "log"
     "strings"
 )
 
@@ -17,7 +18,9 @@ const (
 )
 
 func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.Color) (alpha *image.Alpha, err error) {
-    fontSize := (srcBounds.Bounds().Max.X / inRowCharsCount) - 1
+    fontSize := srcBounds.Bounds().Max.X / inRowCharsCount
+
+    log.Printf("FONT_SIZE: %d", fontSize)
 
     rows := makeRows(quote.Words(), defaultCountWordsInRow)
 
