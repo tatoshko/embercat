@@ -11,25 +11,28 @@ import (
     "strings"
 )
 
-var (
-    defaultFontSize = 42
+const (
+    defaultCountWordsInRow = 5
+    inRowCharsCount        = 30
 )
 
 func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.Color) (alpha *image.Alpha, err error) {
-    rows := makeRows(quote.Words())
+    fontSize := (srcBounds.Bounds().Max.X / inRowCharsCount) - 1
+
+    rows := makeRows(quote.Words(), defaultCountWordsInRow)
 
     rowsCount := len(rows)
-    height := (rowsCount + 1) * defaultFontSize
+    height := (rowsCount + 1) * fontSize
 
     r := image.Rect(0, 0, srcBounds.Max.X, height)
     alpha = image.NewAlpha(r)
 
     ttf, _ := truetype.Parse(gobold.TTF)
-    face := truetype.NewFace(ttf, &truetype.Options{Size: float64(defaultFontSize)})
+    face := truetype.NewFace(ttf, &truetype.Options{Size: float64(fontSize)})
     drawer := font.Drawer{Dst: alpha, Src: image.NewUniform(color), Face: face}
 
     for i, row := range rows {
-        drawer.Dot = fixed.P(0, defaultFontSize*(i+1))
+        drawer.Dot = fixed.P(0, fontSize*(i+1))
         drawer.DrawString(row)
     }
 
@@ -39,9 +42,7 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.C
     return
 }
 
-func makeRows(words []string) (rows []string) {
-    inRowCount := 5
-
+func makeRows(words []string, inRowCount int) (rows []string) {
     for len(words) > 0 {
         l := len(words)
 
