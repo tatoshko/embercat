@@ -10,7 +10,6 @@ import (
     "golang.org/x/image/math/fixed"
     "image"
     "image/color"
-    "log"
 )
 
 var (
@@ -21,13 +20,13 @@ const (
     fontSize = 28
 )
 
-func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.Color) (alpha *image.Alpha, err error) {
+func MakeQuotePic(quote *service.Quote, srcRect image.Rectangle, color color.Color) (alpha *image.Alpha, err error) {
     if quote.Len() <= 0 {
         return nil, EmptyStringErr
     }
 
     // Make rows
-    r := image.Rect(0, 0, srcBounds.Max.X, fontSize)
+    r := image.Rect(0, 0, srcRect.Max.X, fontSize)
     a := image.NewAlpha(r)
 
     ttf, _ := truetype.Parse(gobold.TTF)
@@ -35,16 +34,17 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.C
     drawer := font.Drawer{Dst: a, Src: image.NewUniform(color), Face: face}
 
     words := quote.Words()
+    fixedR := fixed.R(srcRect.Min.X, srcRect.Min.Y, srcRect.Max.X, srcRect.Max.Y)
 
     currentRow := 0
     rows := []string{words[0]}
     for _, word := range words[1:] {
-        newStrWidth := int(drawer.MeasureString(rows[currentRow] + word))
+        newString := fmt.Sprintf("%s %s", rows[currentRow], word)
 
-        log.Printf("STR_W %d, MESURED: %d", newStrWidth, drawer.MeasureString(rows[currentRow]+word))
+        bounds, _ := drawer.BoundString(newString)
 
-        if newStrWidth < srcBounds.Bounds().Max.X {
-            rows[currentRow] += fmt.Sprintf(" %s", word)
+        if bounds.In(fixedR) {
+            rows[currentRow] = newString
         } else {
             rows = append(rows, word)
             currentRow++
@@ -54,7 +54,7 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.C
     // Print to dst
     height := (len(rows) + 1) * fontSize
 
-    r = image.Rect(0, 0, srcBounds.Max.X, height)
+    r = image.Rect(0, 0, srcRect.Max.X, height)
     alpha = image.NewAlpha(r)
 
     drawer.Dst = alpha
