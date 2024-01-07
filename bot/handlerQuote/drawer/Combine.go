@@ -41,7 +41,8 @@ func Combine(dst *image.RGBA, src *image.RGBA, position Position) (*image.RGBA, 
         draw.Draw(combined, src.Bounds(), src, image.Point{X: 0, Y: dst.Bounds().Max.Y}, draw.Src)
     case PositionMix:
         combined = image.NewRGBA(dst.Bounds())
-        draw.Draw(dst, dst.Bounds(), src, dst.Bounds().Min, draw.Src)
+        draw.Draw(combined, dst.Bounds(), dst, image.Point{X: 0, Y: 0}, draw.Src)
+        draw.Draw(combined, src.Bounds(), src, image.Point{X: 0, Y: 0}, draw.Src)
     }
 
     return combined, nil
