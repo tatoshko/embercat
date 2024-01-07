@@ -49,7 +49,7 @@ func makeRows(words []string) (rows []string) {
     for _, word := range words {
         l := len(word)
 
-        if len(rows[currentRowIdx])+l > inRowCharsCount {
+        if (len(rows[currentRowIdx]) + l) > inRowCharsCount {
             strings.TrimSpace(rows[currentRowIdx])
             rows = append(rows, "")
             currentRowIdx++
