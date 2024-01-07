@@ -10,6 +10,7 @@ import (
     "golang.org/x/image/math/fixed"
     "image"
     "image/color"
+    "log"
 )
 
 var (
@@ -42,6 +43,8 @@ func MakeQuotePic(quote *service.Quote, srcRect image.Rectangle, color color.Col
         newString := fmt.Sprintf("%s %s", rows[currentRow], word)
 
         bounds, _ := drawer.BoundString(newString)
+
+        log.Printf("%v %v", bounds, fixedR)
 
         if bounds.In(fixedR) {
             rows[currentRow] = newString
