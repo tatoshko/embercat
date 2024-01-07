@@ -64,11 +64,11 @@ func MakeQuotePic(quote *service.Quote, srcRect image.Rectangle, color color.Col
     drawer.Dst = alpha
 
     for i, row := range rows {
-        drawer.Dot = fixed.P(paddingX, fontSize*(i+1))
+        drawer.Dot = fixed.P(0, fontSize*(i+1))
         drawer.DrawString(row)
     }
 
-    drawer.Dot = fixed.P(paddingX, height)
+    drawer.Dot = fixed.P(0, height)
     drawer.DrawString(quote.UserName)
 
     return
