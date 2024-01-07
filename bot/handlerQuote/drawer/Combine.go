@@ -38,7 +38,8 @@ func Combine(dst *image.RGBA, src *image.Alpha, position Position) (*image.RGBA,
         log.Printf("ABOVE")
         combined = image.NewRGBA(image.Rect(0, 0, dst.Bounds().Max.X, dst.Bounds().Max.Y+src.Bounds().Max.Y))
         draw.Draw(combined, src.Bounds(), src, zeroPoint, draw.Src)
-        draw.Draw(combined, dst.Bounds(), dst, image.Pt(0, src.Bounds().Max.Y), draw.Src)
+        log.Printf("SIZE of ALpha", src.Bounds())
+        //draw.Draw(combined, dst.Bounds(), dst, image.Pt(0, src.Bounds().Max.Y), draw.Src)
     case PositionBelow:
         log.Printf("Below")
         combined = image.NewRGBA(image.Rect(0, 0, dst.Bounds().Max.X, dst.Bounds().Max.Y+src.Bounds().Max.Y))
