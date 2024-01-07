@@ -68,7 +68,9 @@ func MakeQuotePic(quote *service.Quote, srcRect image.Rectangle, color color.Col
         drawer.DrawString(row)
     }
 
-    drawer.Dot = fixed.P(0, height)
+    ad := drawer.MeasureString(quote.UserName)
+
+    drawer.Dot = fixed.P(srcRect.Max.X-paddingY-ad.Round(), height-paddingY)
     drawer.DrawString(quote.UserName)
 
     return
