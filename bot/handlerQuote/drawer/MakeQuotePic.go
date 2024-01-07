@@ -10,7 +10,6 @@ import (
     "golang.org/x/image/math/fixed"
     "image"
     "image/color"
-    "log"
 )
 
 var (
@@ -19,6 +18,8 @@ var (
 
 const (
     fontSize = 28
+    paddingY = 14
+    paddingX = 28
 )
 
 func MakeQuotePic(quote *service.Quote, srcRect image.Rectangle, color color.Color) (alpha *image.Alpha, err error) {
@@ -27,15 +28,17 @@ func MakeQuotePic(quote *service.Quote, srcRect image.Rectangle, color color.Col
     }
 
     // Make rows
-    r := image.Rect(0, 0, srcRect.Max.X, fontSize)
-    a := image.NewAlpha(r)
-
     ttf, _ := truetype.Parse(gobold.TTF)
     face := truetype.NewFace(ttf, &truetype.Options{Size: float64(fontSize)})
-    drawer := font.Drawer{Dst: a, Src: image.NewUniform(color), Face: face}
+    drawer := font.Drawer{Src: image.NewUniform(color), Face: face}
 
     words := quote.Words()
-    fixedR := fixed.R(srcRect.Min.X, srcRect.Min.Y, srcRect.Max.X, srcRect.Max.Y)
+    fixedR := fixed.R(
+        srcRect.Min.X+paddingX,
+        srcRect.Min.Y+paddingY,
+        srcRect.Max.X-paddingX,
+        srcRect.Max.Y-paddingY,
+    )
 
     currentRow := 0
     rows := []string{words[0]}
@@ -43,8 +46,6 @@ func MakeQuotePic(quote *service.Quote, srcRect image.Rectangle, color color.Col
         newString := fmt.Sprintf("%s %s", rows[currentRow], word)
 
         _, advice := drawer.BoundString(newString)
-
-        log.Printf("%v %v", advice, fixedR)
 
         if advice <= fixedR.Max.X {
             rows[currentRow] = newString
@@ -55,19 +56,19 @@ func MakeQuotePic(quote *service.Quote, srcRect image.Rectangle, color color.Col
     }
 
     // Print to dst
-    height := (len(rows) + 1) * fontSize
+    height := ((len(rows) + 1) * fontSize) + paddingY*2
 
-    r = image.Rect(0, 0, srcRect.Max.X, height)
+    r := image.Rect(paddingX, paddingY, srcRect.Max.X, height)
     alpha = image.NewAlpha(r)
 
     drawer.Dst = alpha
 
     for i, row := range rows {
-        drawer.Dot = fixed.P(0, fontSize*(i+1))
+        drawer.Dot = fixed.P(paddingX, fontSize*(i+1))
         drawer.DrawString(row)
     }
 
-    drawer.Dot = fixed.P(0, height)
+    drawer.Dot = fixed.P(paddingX, height)
     drawer.DrawString(quote.UserName)
 
     return
