@@ -9,6 +9,7 @@ import (
     "golang.org/x/image/math/fixed"
     "image"
     "image/color"
+    "log"
     "strings"
 )
 
@@ -48,6 +49,8 @@ func makeRows(words []string) (rows []string) {
     currentRowIdx := 0
     for _, word := range words {
         l := len(word)
+
+        log.Printf("%d > %d. l: %d, curIdx: %d, cur: %s", len(rows[currentRowIdx])+l, inRowCharsCount, l, currentRowIdx, rows[currentRowIdx])
 
         if (len(rows[currentRowIdx]) + l) > inRowCharsCount {
             strings.TrimSpace(rows[currentRowIdx])
