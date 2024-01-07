@@ -2,6 +2,7 @@ package drawer
 
 import (
     "embercat/bot/handlerQuote/service"
+    "errors"
     "fmt"
     "github.com/golang/freetype/truetype"
     "golang.org/x/image/font"
@@ -9,27 +10,51 @@ import (
     "golang.org/x/image/math/fixed"
     "image"
     "image/color"
-    "strings"
+)
+
+var (
+    EmptyStringErr = errors.New("empty string")
 )
 
 const (
-    inRowCharsCount = 30
+    fontSize = 28
 )
 
 func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.Color) (alpha *image.Alpha, err error) {
-    fontSize := int((float64(srcBounds.Bounds().Max.X) * 0.6) / inRowCharsCount)
+    if quote.Len() <= 0 {
+        return nil, EmptyStringErr
+    }
 
-    rows := makeRows(quote.Words())
-
-    rowsCount := len(rows)
-    height := (rowsCount + 1) * fontSize
-
-    r := image.Rect(0, 0, srcBounds.Max.X, height)
-    alpha = image.NewAlpha(r)
+    // Make rows
+    r := image.Rect(0, 0, srcBounds.Max.X, fontSize)
+    a := image.NewAlpha(r)
 
     ttf, _ := truetype.Parse(gobold.TTF)
     face := truetype.NewFace(ttf, &truetype.Options{Size: float64(fontSize)})
-    drawer := font.Drawer{Dst: alpha, Src: image.NewUniform(color), Face: face}
+    drawer := font.Drawer{Dst: a, Src: image.NewUniform(color), Face: face}
+
+    words := quote.Words()
+
+    currentRow := 0
+    rows := []string{words[0]}
+    for _, word := range words[1:] {
+        newStrWidth := int(drawer.MeasureString(rows[currentRow] + word))
+
+        if newStrWidth < srcBounds.Bounds().Max.X {
+            rows[currentRow] += fmt.Sprintf(" %s", word)
+        } else {
+            rows = append(rows, word)
+            currentRow++
+        }
+    }
+
+    // Print to dst
+    height := len(rows) * fontSize
+
+    r = image.Rect(0, 0, srcBounds.Max.X, height)
+    alpha = image.NewAlpha(r)
+
+    drawer.Dst = alpha
 
     for i, row := range rows {
         drawer.Dot = fixed.P(0, fontSize*(i+1))
@@ -38,25 +63,6 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.C
 
     drawer.Dot = fixed.P(0, height)
     drawer.DrawString(quote.UserName)
-
-    return
-}
-
-func makeRows(words []string) (rows []string) {
-    rows = []string{""}
-
-    currentRowIdx := 0
-    for _, word := range words {
-        lenOfNewStr := len([]rune(rows[currentRowIdx])) + len([]rune(word))
-
-        if lenOfNewStr > inRowCharsCount {
-            strings.TrimSpace(rows[currentRowIdx])
-            rows = append(rows, "")
-            currentRowIdx++
-        }
-
-        rows[currentRowIdx] += fmt.Sprintf("%s ", word)
-    }
 
     return
 }
