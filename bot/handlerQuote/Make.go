@@ -11,7 +11,7 @@ import (
     "log"
 )
 
-func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func MakeRND(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
     logger := getLogger("MAKE")
     chatID := update.Message.Chat.ID

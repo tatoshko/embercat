@@ -107,5 +107,5 @@ func registerCommands() {
 
     // Quote
     Commands["add"] = handlerQuote.Add
-    Commands["make"] = handlerQuote.Make
+    Commands["rnd"] = handlerQuote.MakeRND
 }
