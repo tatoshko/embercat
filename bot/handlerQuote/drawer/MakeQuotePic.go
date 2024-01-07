@@ -24,6 +24,7 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle) (img *image.R
 
     r := image.Rect(0, 0, srcBounds.Max.X, height)
     alpha := image.NewAlpha(r)
+    img = image.NewRGBA(r)
 
     ttf, _ := truetype.Parse(gobold.TTF)
     face := truetype.NewFace(ttf, &truetype.Options{Size: float64(defaultFontSize)})
