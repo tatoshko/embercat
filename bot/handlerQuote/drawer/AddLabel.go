@@ -9,7 +9,7 @@ func MakeQuoted(quote *service.Quote, src *image.RGBA, position Position) (quote
     if quotedPic, err = MakeQuotePic(quote, src.Bounds()); err != nil {
         return
     }
-
+    return quotedPic, nil
     return Combine(src, quotedPic, position)
 }
 
