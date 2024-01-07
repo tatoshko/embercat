@@ -43,7 +43,7 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.C
 }
 
 func makeRows(words []string) (rows []string) {
-    rows = []string{}
+    rows = []string{""}
 
     currentRowIdx := 0
     for _, word := range words {
