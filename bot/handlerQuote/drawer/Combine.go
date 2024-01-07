@@ -19,7 +19,7 @@ const (
     PositionMix
 )
 
-func Combine(dst *image.RGBA, src *image.RGBA, position Position) (*image.RGBA, error) {
+func Combine(dst *image.RGBA, src *image.Alpha, position Position) (*image.RGBA, error) {
     if dst == nil {
         return nil, NilDstError
     }

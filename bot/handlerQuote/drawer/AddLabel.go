@@ -6,11 +6,13 @@ import (
 )
 
 func MakeQuoted(quote *service.Quote, src *image.RGBA, position Position) (quotedPic *image.RGBA, err error) {
-    if quotedPic, err = MakeQuotePic(quote, src.Bounds()); err != nil {
+    var alpha *image.Alpha
+
+    if alpha, err = MakeQuotePic(quote, src.Bounds()); err != nil {
         return
     }
 
-    return Combine(src, quotedPic, position)
+    return Combine(src, alpha, position)
 }
 
 func AddQuoteBelow(quote *service.Quote, src *image.RGBA) (*image.RGBA, error) {
