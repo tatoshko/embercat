@@ -58,7 +58,7 @@ func Make(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     // make quoted image
     //var quotedPic *image.RGBA
-    if img, err = drawer.AddQuoteAbove(quote, img); err != nil {
+    if img, err = drawer.AddQuoteBelow(quote, img); err != nil {
         logger(err.Error())
         msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("что-то пошло не так %s", err.Error()))
         if _, err = bot.Send(msg); err != nil {
