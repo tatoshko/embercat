@@ -17,7 +17,7 @@ const (
 )
 
 func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.Color) (alpha *image.Alpha, err error) {
-    fontSize := srcBounds.Bounds().Max.X/inRowCharsCount + 6
+    fontSize := int((float64(srcBounds.Bounds().Max.X) * 0.6) / inRowCharsCount)
 
     rows := makeRows(quote.Words())
 
@@ -49,29 +49,13 @@ func makeRows(words []string) (rows []string) {
     for _, word := range words {
         lenOfNewStr := len([]rune(rows[currentRowIdx])) + len([]rune(word))
 
-        if lenOfNewStr > inRowCharsCount+6 {
+        if lenOfNewStr > inRowCharsCount {
             strings.TrimSpace(rows[currentRowIdx])
             rows = append(rows, "")
             currentRowIdx++
         }
 
         rows[currentRowIdx] += fmt.Sprintf("%s ", word)
-    }
-
-    return
-}
-
-func makeRowsOld(words []string, inRowCount int) (rows []string) {
-    for len(words) > 0 {
-        l := len(words)
-
-        if l < inRowCount {
-            rows = append(rows, strings.Join(words[:l], " "))
-            words = words[l:]
-        } else {
-            rows = append(rows, strings.Join(words[:inRowCount], " "))
-            words = words[inRowCount:]
-        }
     }
 
     return
