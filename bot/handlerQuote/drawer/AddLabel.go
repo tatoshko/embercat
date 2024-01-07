@@ -9,18 +9,18 @@ func MakeQuoted(quote *service.Quote, src *image.RGBA, position Position) (quote
     if quotedPic, err = MakeQuotePic(quote, src.Bounds()); err != nil {
         return
     }
-    return quotedPic, nil
+
     return Combine(src, quotedPic, position)
 }
 
-func AddQuoteBottom(quote *service.Quote, src *image.RGBA) (*image.RGBA, error) {
+func AddQuoteBelow(quote *service.Quote, src *image.RGBA) (*image.RGBA, error) {
     return MakeQuoted(quote, src, PositionBelow)
 }
 
-func AddQuoteTop(quote *service.Quote, src *image.RGBA) (*image.RGBA, error) {
+func AddQuoteAbove(quote *service.Quote, src *image.RGBA) (*image.RGBA, error) {
     return MakeQuoted(quote, src, PositionAbove)
 }
 
-func MixQuote(quote *service.Quote, src *image.RGBA) (*image.RGBA, error) {
+func AddQupteMix(quote *service.Quote, src *image.RGBA) (*image.RGBA, error) {
     return MakeQuoted(quote, src, PositionMix)
 }
