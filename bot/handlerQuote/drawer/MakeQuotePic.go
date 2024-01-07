@@ -42,11 +42,11 @@ func MakeQuotePic(quote *service.Quote, srcRect image.Rectangle, color color.Col
     for _, word := range words[1:] {
         newString := fmt.Sprintf("%s %s", rows[currentRow], word)
 
-        bounds, _ := drawer.BoundString(newString)
+        _, advice := drawer.BoundString(newString)
 
-        log.Printf("%v %v", bounds, fixedR)
+        log.Printf("%v %v", advice, fixedR)
 
-        if bounds.In(fixedR) {
+        if advice <= fixedR.Max.X {
             rows[currentRow] = newString
         } else {
             rows = append(rows, word)
