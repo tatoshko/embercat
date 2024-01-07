@@ -15,7 +15,7 @@ var (
     defaultFontSize = 42
 )
 
-func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle) (alpha *image.Alpha, err error) {
+func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.Color) (alpha *image.Alpha, err error) {
     rows := makeRows(quote.Words())
 
     rowsCount := len(rows)
@@ -26,7 +26,7 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle) (alpha *image
 
     ttf, _ := truetype.Parse(gobold.TTF)
     face := truetype.NewFace(ttf, &truetype.Options{Size: float64(defaultFontSize)})
-    drawer := font.Drawer{Dst: alpha, Src: image.NewUniform(color.White), Face: face}
+    drawer := font.Drawer{Dst: alpha, Src: image.NewUniform(color), Face: face}
 
     for i, row := range rows {
         drawer.Dot = fixed.P(0, defaultFontSize*(i+1))
