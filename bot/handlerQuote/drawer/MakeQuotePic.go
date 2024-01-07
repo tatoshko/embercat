@@ -10,6 +10,7 @@ import (
     "golang.org/x/image/math/fixed"
     "image"
     "image/color"
+    "log"
 )
 
 var (
@@ -40,6 +41,8 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.C
     for _, word := range words[1:] {
         newStrWidth := int(drawer.MeasureString(rows[currentRow] + word))
 
+        log.Printf("STR_W %d, MESURED: %d", newStrWidth, drawer.MeasureString(rows[currentRow]+word))
+
         if newStrWidth < srcBounds.Bounds().Max.X {
             rows[currentRow] += fmt.Sprintf(" %s", word)
         } else {
@@ -49,7 +52,7 @@ func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.C
     }
 
     // Print to dst
-    height := len(rows) * fontSize
+    height := (len(rows) + 1) * fontSize
 
     r = image.Rect(0, 0, srcBounds.Max.X, height)
     alpha = image.NewAlpha(r)
