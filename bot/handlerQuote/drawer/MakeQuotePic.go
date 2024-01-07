@@ -18,7 +18,7 @@ const (
 )
 
 func MakeQuotePic(quote *service.Quote, srcBounds image.Rectangle, color color.Color) (alpha *image.Alpha, err error) {
-    fontSize := srcBounds.Bounds().Max.X / inRowCharsCount
+    fontSize := srcBounds.Bounds().Max.Y / inRowCharsCount
 
     log.Printf("FONT_SIZE: %d", fontSize)
 
