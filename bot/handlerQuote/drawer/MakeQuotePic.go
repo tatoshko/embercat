@@ -58,7 +58,7 @@ func MakeQuotePic(quote *service.Quote, srcRect image.Rectangle, color color.Col
     // Print to dst
     height := ((len(rows) + 1) * fontSize) + paddingY*2
 
-    r := image.Rect(0, 0, srcRect.Max.X, height)
+    r := image.Rect(0, 0, srcRect.Max.X+paddingX, height+paddingY)
     alpha = image.NewAlpha(r)
 
     drawer.Dst = alpha
@@ -70,7 +70,7 @@ func MakeQuotePic(quote *service.Quote, srcRect image.Rectangle, color color.Col
 
     ad := drawer.MeasureString(quote.UserName)
 
-    drawer.Dot = fixed.P(srcRect.Max.X-paddingY-ad.Round(), height-paddingY)
+    drawer.Dot = fixed.P(srcRect.Max.X-paddingX-ad.Round(), height-paddingY)
     drawer.DrawString(quote.UserName)
 
     return
