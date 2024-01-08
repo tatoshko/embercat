@@ -33,12 +33,7 @@ func MakeQuotePic(quote *service.Quote, srcRect image.Rectangle, color color.Col
     drawer := font.Drawer{Src: image.NewUniform(color), Face: face}
 
     words := quote.Words()
-    fixedR := fixed.R(
-        srcRect.Min.X+paddingX,
-        srcRect.Min.Y+paddingY,
-        srcRect.Max.X-paddingX,
-        srcRect.Max.Y-paddingY,
-    )
+    fixedR := fixed.R(0, 0, srcRect.Max.X-paddingX*2, srcRect.Max.Y-paddingY*2)
 
     currentRow := 0
     rows := []string{words[0]}
