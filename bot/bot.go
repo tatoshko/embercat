@@ -50,7 +50,11 @@ func Start(config Config) {
                     }
                 } else {
                     if handlerWednesday.ItIsWednesdayMyDudes() && rand.Intn(3) == 0 {
-                        handlerWednesday.Check(API, update)
+                        go handlerWednesday.Check(API, update)
+                    }
+
+                    if rand.Intn(10) == 0 {
+                        go handlerQuote.Rnd(API, update)
                     }
 
                     go ai.HandlerTextAnalizer(API, update)
@@ -107,5 +111,5 @@ func registerCommands() {
 
     // Quote
     Commands["add"] = handlerQuote.Add
-    Commands["rnd"] = handlerQuote.MakeRND
+    Commands["pic"] = handlerQuote.Pic
 }

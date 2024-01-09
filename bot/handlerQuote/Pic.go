@@ -11,9 +11,9 @@ import (
     "log"
 )
 
-func MakeRND(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
-    logger := getLogger("MAKE")
+    logger := getLogger("PIC")
     chatID := update.Message.Chat.ID
 
     // get replay message
