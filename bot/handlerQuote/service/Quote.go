@@ -39,5 +39,5 @@ func (q *Quote) Words() []string {
 }
 
 func (q *Quote) ToString() string {
-    return fmt.Sprintf("%s. %s (c)", q.Text, q.UserName)
+    return fmt.Sprintf("%s\n%s (c)", q.Text, q.UserName)
 }
