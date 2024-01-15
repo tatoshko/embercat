@@ -23,7 +23,7 @@ func NewQuote() *Quote {
 func NewQuoteFromMessage(message *tgbotapi.Message) *Quote {
     q := NewQuote()
     q.UserId = message.From.ID
-    q.UserName = core.GetUserName(message.From, true)
+    q.UserName = core.GetUserName(message.From, false)
     q.Text = message.Text
 
     return q
