@@ -53,7 +53,7 @@ func Start(config Config) {
                         go handlerWednesday.Check(API, update)
                     }
 
-                    if rand.Intn(9) == 0 {
+                    if rand.Intn(19) == 0 {
                         go handlerQuote.Rnd(API, update)
                     }
 
