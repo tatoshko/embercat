@@ -49,11 +49,11 @@ func Start(config Config) {
                         go handler(API, update)
                     }
                 } else {
-                    if handlerWednesday.ItIsWednesdayMyDudes() && rand.Intn(3) == 0 {
+                    if handlerWednesday.ItIsWednesdayMyDudes() && rand.Intn(9) == 0 {
                         go handlerWednesday.Check(API, update)
                     }
 
-                    if rand.Intn(10) == 0 {
+                    if rand.Intn(9) == 0 {
                         go handlerQuote.Rnd(API, update)
                     }
 
