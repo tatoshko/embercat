@@ -1,4 +1,3 @@
-// +heroku goVersion go1.16
 module embercat
 
 go 1.16
