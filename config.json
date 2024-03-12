@@ -11,7 +11,7 @@
   "pg": {
     "host": "127.0.0.1",
     "port": 5432,
-    "user": "bot",
+    "user": "embercat",
     "password": "K3H27ppDcNOe",
     "dbname": "bot"
   }
