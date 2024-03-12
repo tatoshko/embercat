@@ -13,6 +13,6 @@
     "port": 5432,
     "user": "embercat",
     "password": "K3H27ppDcNOe",
-    "dbname": "bot"
+    "dbname": "embercat"
   }
 }
