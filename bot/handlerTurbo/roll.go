@@ -15,7 +15,7 @@ func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     // Only one gum per day
     pg := pgsql.GetClient()
-    q := `select 1 from turbo where userid = $1 and date(createdAt) = current_date`
+    q := `select 1 from turbo where userId = $1 and date(createdAt) = current_date`
     r, _ := pg.Exec(q, userID)
 
     if exists, err := r.RowsAffected(); err != nil {

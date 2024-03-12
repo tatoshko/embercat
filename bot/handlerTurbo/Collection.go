@@ -27,7 +27,7 @@ func LoadCollection(userId int64) (collection Collection, err error) {
     logger := getLogger("LoadCollection")
 
     collection.userId = userId
-    q := `select linerid, count(linerid) from turbo where userid = $1 group by userId, linerid order by linerid`
+    q := `select linerId, count(linerId) from turbo where userId = $1 group by userId, linerId order by linerId`
 
     var rows *sql.Rows
     if rows, err = pg.Query(q, collection.userId); err != nil {
@@ -54,6 +54,16 @@ func LoadCollection(userId int64) (collection Collection, err error) {
     return
 }
 
+func (c Collection) GetDuplicates() (duplicates []Liner) {
+    for _, liner := range c.data {
+        if c.ScoreOf(liner) > 1 {
+            duplicates = append(duplicates, liner)
+        }
+    }
+
+    return
+}
+
 func (c Collection) Count() int {
     return len(c.data)
 }
@@ -74,7 +84,7 @@ func (c Collection) ScoreOf(liner Liner) int64 {
 
 func (c Collection) Add(liner Liner) (collection Collection, err error) {
     pg := pgsql.GetClient()
-    q := `insert into turbo (userid, linerid) values ($1, $2)`
+    q := `insert into turbo (userId, linerId) values ($1, $2)`
     if _, err = pg.Exec(q, c.userId, liner.ID); err != nil {
         return
     }
@@ -85,7 +95,7 @@ func (c Collection) Add(liner Liner) (collection Collection, err error) {
 // RemoveOne liner and returns new collection. If liner total count is one removes liner from collection
 func (c Collection) RemoveOne(liner Liner) (collection Collection, err error) {
     pg := pgsql.GetClient()
-    q := `delete from turbo where createdat = (select createdat from turbo where userid = $1 and linerid = $2 order by createdat limit 1)`
+    q := `delete from turbo where createdAt = (select createdAt from turbo where userId = $1 and linerId = $2 order by createdAt limit 1)`
     if _, err = pg.Exec(q, c.userId, liner.ID); err != nil {
         return
     }
