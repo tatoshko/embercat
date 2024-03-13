@@ -27,7 +27,7 @@ func LoadCollection(userId int64) (collection Collection, err error) {
     logger := getLogger("LoadCollection")
 
     collection.userId = userId
-    q := `select linerId, count(linerId) from turbo where userId = $1 group by userId, linerId order by linerId`
+    q := `select "linerId", count("linerId") from turbo where "userId" = $1 group by "userId", "linerId" order by "linerId"`
 
     var rows *sql.Rows
     if rows, err = pg.Query(q, collection.userId); err != nil {
