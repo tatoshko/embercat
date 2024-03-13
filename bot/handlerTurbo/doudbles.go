@@ -35,7 +35,8 @@ func Double(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
             text += fmt.Sprintf("#%-15d(%d)\n", liner.ID, liner.Count)
         }
 
-        msg := tgbotapi.NewMessage(chatID, text)
+        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("<code>%s</code>", text))
+        msg.ParseMode = tgbotapi.ModeHTML
         if _, err = bot.Send(msg); err != nil {
             logger("bot send error: %s", err.Error())
         }
