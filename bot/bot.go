@@ -94,6 +94,7 @@ func registerCommands() {
     Commands["collection"] = handlerTurbo.MyCollection
     Commands["show"] = handlerTurbo.Show
     Commands["want"] = handlerTurbo.Want
+    Commands["doubles"] = handlerTurbo.Double
     callbacks.RegisterCallback("wantans", handlerTurbo.CallbackWant)
 
     // Wednesday
