@@ -23,18 +23,18 @@ func (s Service) Add(quote *Quote) (err error) {
     }
 
     pg := pgsql.GetClient()
-    q := `insert into quote (userid, username, text) values ($1, $2, $3)`
+    q := `insert into quote (chat_id, user_id, username, text) values ($1, $2, $3, $4)`
 
-    _, err = pg.Exec(q, quote.UserId, quote.UserName, quote.Text)
+    _, err = pg.Exec(q, quote.ChatID, quote.UserId, quote.UserName, quote.Text)
 
     return
 }
 
-func (s Service) FindRND() (quote *Quote, err error) {
+func (s Service) FindRND(chatId int64) (quote *Quote, err error) {
     pg := pgsql.GetClient()
-    q := `select id, userId, userName, text, createdAt from quote order by random() limit 1`
+    q := `select id, user_id, username, text, created_at from quote where chat_id = $1 order by random() limit 1`
 
-    row := pg.QueryRow(q)
+    row := pg.QueryRow(q, chatId)
 
     if row.Err() != nil {
         return nil, row.Err()
@@ -43,6 +43,7 @@ func (s Service) FindRND() (quote *Quote, err error) {
     quote = NewQuote()
     row.Scan(
         &quote.Id,
+        &quote.ChatID,
         &quote.UserId,
         &quote.UserName,
         &quote.Text,

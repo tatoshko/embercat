@@ -19,7 +19,7 @@ func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     // get replay message
     replay := update.Message.ReplyToMessage
     if replay == nil || replay.Photo == nil {
-        msg := tgbotapi.NewMessage(chatID, "Ты че пёс, сообщение должно быть с картинкой")
+        msg := tgbotapi.NewMessage(chatID, "Ты че, пёс, сообщение должно быть с картинкой")
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
         }
@@ -47,7 +47,7 @@ func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     // load rnd quote
     var quote *service.Quote
-    if quote, err = quoteService.FindRND(); err != nil {
+    if quote, err = quoteService.FindRND(chatID); err != nil {
         logger(err.Error())
         msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("что-то пошло не так %s", err.Error()))
         if _, err = bot.Send(msg); err != nil {
