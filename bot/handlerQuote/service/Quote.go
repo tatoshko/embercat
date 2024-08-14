@@ -14,6 +14,7 @@ type Quote struct {
     UserName  string    `json:"userName"`
     Text      string    `json:"text"`
     CreatedAt time.Time `json:"createdAt"`
+    ChatID    int64     `json:"chatID"`
 }
 
 func NewQuote() *Quote {
@@ -22,6 +23,7 @@ func NewQuote() *Quote {
 
 func NewQuoteFromMessage(message *tgbotapi.Message) *Quote {
     q := NewQuote()
+    q.ChatID = message.Chat.ID
     q.UserId = message.From.ID
     q.UserName = core.GetUserName(message.From, false)
     q.Text = message.Text
