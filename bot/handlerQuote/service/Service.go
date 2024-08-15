@@ -43,7 +43,6 @@ func (s Service) FindRND(chatId int64) (quote *Quote, err error) {
     quote = NewQuote()
     row.Scan(
         &quote.Id,
-        &quote.ChatID,
         &quote.UserId,
         &quote.UserName,
         &quote.Text,
