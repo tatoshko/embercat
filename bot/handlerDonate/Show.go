@@ -12,7 +12,7 @@ func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     logger := getLogger("SHOW")
     pg := pgsql.GetClient()
 
-    q := `select username, sum from donate order by sum desc`
+    q := `select username, sum(sum) as sum from donate group by username order by sum desc`
 
     var err error
     var rows *sql.Rows
