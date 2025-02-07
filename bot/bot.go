@@ -59,6 +59,7 @@ func Start(config Config) {
                     }
 
                     if update.Message.Photo != nil && rand.Intn(20) == 0 {
+                        update.Message.ReplyToMessage = update.Message
                         go handlerQuote.Pic(API, update)
                     }
 
