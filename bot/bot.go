@@ -62,7 +62,7 @@ func Start(config Config) {
                         go handlerQuote.Pic(API, update)
                     }
 
-                    if strings.HasPrefix(update.Message.Text, "Уголек") {
+                    if strings.HasPrefix(strings.ToLower(update.Message.Text), "уголек") {
                         go handlerDeepSeek.Prompt(API, update)
                     }
 
