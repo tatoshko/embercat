@@ -19,7 +19,7 @@ func Add(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 
     if !canSave(member) {
-        msg := tgbotapi.NewMessage(chatID, "Слыш, пёс. Не только лишь все могут это делать.")
+        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Слыш, пёс. Не только лишь все могут это делать. %s", chatID))
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
         }
