@@ -8,6 +8,10 @@
     "token": "1770006177:AAF1ygiZExj5M7RQSyqz6fegdYDViXfoc-g",
     "hook": "https://embercat.useful.team"
   },
+  "deepseek" : {
+    "api": "https://api.deepseek.com",
+    "token": "sk-0d5f798737f64e828ddae37965d317f9"
+  },
   "pg": {
     "host": "127.0.0.1",
     "port": 5432,
