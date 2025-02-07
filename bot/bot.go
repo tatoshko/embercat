@@ -5,6 +5,7 @@ import (
     "embercat/bot/callbacks"
     "embercat/bot/core"
     "embercat/bot/handlerCatacul"
+    "embercat/bot/handlerDeepSeek"
     "embercat/bot/handlerDonate"
     "embercat/bot/handlerPic"
     "embercat/bot/handlerQuote"
@@ -55,6 +56,14 @@ func Start(config Config) {
 
                     if rand.Intn(49) == 0 {
                         go handlerQuote.Rnd(API, update)
+                    }
+
+                    if update.Message.Photo != nil && rand.Intn(20) == 0 {
+                        go handlerQuote.Pic(API, update)
+                    }
+
+                    if strings.HasPrefix(update.Message.Text, "Уголек") {
+                        go handlerDeepSeek.Prompt(API, update)
                     }
 
                     go ai.HandlerTextAnalizer(API, update)
