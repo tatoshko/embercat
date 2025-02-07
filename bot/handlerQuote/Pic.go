@@ -18,15 +18,21 @@ func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     // get replay message
     replay := update.Message.ReplyToMessage
-    if replay == nil || replay.Photo == nil {
+    var photos []tgbotapi.PhotoSize
+
+    if replay != nil {
+        photos = *replay.Photo
+    } else {
+        photos = *update.Message.Photo
+    }
+
+    if photos == nil {
         msg := tgbotapi.NewMessage(chatID, "Ты че, пёс, сообщение должно быть с картинкой")
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
         }
         return
     }
-
-    photos := *replay.Photo
 
     // get last photoID from replay
     photoID := photos[len(photos)-1].FileID
