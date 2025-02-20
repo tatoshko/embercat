@@ -1,36 +1,63 @@
 package handlerDeepSeek
 
 import (
-    "context"
-    ds "embercat/deepseek"
-    "github.com/go-deepseek/deepseek"
-    "github.com/go-deepseek/deepseek/request"
+    "bytes"
+    "crypto/tls"
+    "encoding/json"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    "net/http"
+    "net/url"
+    "strings"
 )
+
+type Request struct {
+    Question string `json:"question"`
+}
+
+type Response struct {
+    Answer string `json:"answer"`
+}
 
 func Prompt(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var logger = getLogger("Prompt")
-    var client = ds.GetClient()
 
-    chatReq := &request.ChatCompletionsRequest{
-        Model:  deepseek.DEEPSEEK_CHAT_MODEL,
-        Stream: false,
-        Messages: []*request.Message{
-            {
-                Role:    "user",
-                Content: update.Message.Text, // set your input message
-            },
-        },
+    text := strings.TrimPrefix(update.Message.Text, "уголек")
+    text = strings.TrimPrefix(update.Message.Text, ",")
+    text = strings.TrimPrefix(update.Message.Text, " ")
+
+    reqBody := Request{Question: text}
+    jsonBody, err := json.Marshal(reqBody)
+    if err != nil {
+        logger(err.Error())
+        return
     }
 
-    if chatResp, err := client.CallChatCompletionsChat(context.Background(), chatReq); err != nil {
-        logger(err.Error())
-    } else {
-        msg := tgbotapi.NewMessage(update.Message.Chat.ID, chatResp.Choices[0].Message.Content)
-        msg.ReplyToMessageID = update.Message.MessageID
+    purl := url.URL{}
+    url_proxy, _ := purl.Parse("socks5://127.0.0.1:10808")
 
-        if _, err = bot.Send(msg); err != nil {
-            logger(err.Error())
-        }
+    transport := http.Transport{}
+    transport.Proxy = http.ProxyURL(url_proxy)
+    transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+    client := &http.Client{Transport: &transport}
+
+    url := "https://api.xai.com/grok/ask"
+    resp, err := client.Post(url, "application/json", bytes.NewBuffer(jsonBody))
+    if err != nil {
+        logger(err.Error())
+        return
+    }
+    defer resp.Body.Close()
+
+    var result Response
+    if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
+        logger(err.Error())
+        return
+    }
+
+    msg := tgbotapi.NewMessage(update.Message.Chat.ID, result.Answer)
+    msg.ReplyToMessageID = update.Message.MessageID
+
+    if _, err = bot.Send(msg); err != nil {
+        logger(err.Error())
     }
 }
