@@ -5,6 +5,8 @@ import (
     "crypto/tls"
     "encoding/json"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    "io"
+    "log"
     "net/http"
     "net/url"
     "strings"
@@ -51,6 +53,16 @@ func Prompt(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var result Response
     if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
         logger("Decode error", err.Error())
+
+        if resp.StatusCode == http.StatusOK {
+            bodyBytes, err := io.ReadAll(resp.Body)
+            if err != nil {
+                log.Fatal(err)
+            }
+            bodyString := string(bodyBytes)
+            logger("ACTUAL RESPONSE", bodyString)
+        }
+
         return
     }
 
