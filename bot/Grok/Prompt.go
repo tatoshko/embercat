@@ -61,6 +61,8 @@ func Prompt(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
             }
             bodyString := string(bodyBytes)
             logger("ACTUAL RESPONSE", bodyString)
+        } else {
+            logger("ACTUAL Code", resp.StatusCode)
         }
 
         return
