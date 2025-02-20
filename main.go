@@ -3,7 +3,6 @@ package main
 import (
     "embercat/assets"
     "embercat/bot"
-    "embercat/deepseek"
     "embercat/pgsql"
     "encoding/json"
     "fmt"
@@ -21,10 +20,9 @@ type ServerConfig struct {
 }
 
 type Config struct {
-    Bot      bot.Config      `json:"bot"`
-    Pg       pgsql.Config    `json:"pg"`
-    Server   ServerConfig    `json:"server"`
-    DeepSeek deepseek.Config `json:"deepSeek"`
+    Bot    bot.Config   `json:"bot"`
+    Pg     pgsql.Config `json:"pg"`
+    Server ServerConfig `json:"server"`
 }
 
 func main() {
@@ -33,7 +31,6 @@ func main() {
     assets.InitBox()
     go initHttpServer(config.Server)
     go pgsql.Init(config.Pg)
-    go deepseek.Init(config.DeepSeek)
     bot.Start(config.Bot)
 
 }
