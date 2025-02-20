@@ -6,7 +6,6 @@ toolchain go1.23.6
 
 require (
 	github.com/GeertJohan/go.rice v1.0.2
-	github.com/go-deepseek/deepseek v0.6.0
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/lib/pq v1.10.9

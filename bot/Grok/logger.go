@@ -1,4 +1,4 @@
-package handlerDeepSeek
+package Grok
 
 import (
     "fmt"
@@ -7,6 +7,6 @@ import (
 
 func getLogger(scope string) func(s ...string) {
     return func(s ...string) {
-        fmt.Printf("DeepSeek [%s] %s\n", scope, strings.Join(s, ""))
+        fmt.Printf("GROK [%s] %s\n", scope, strings.Join(s, ": "))
     }
 }

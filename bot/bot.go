@@ -1,11 +1,11 @@
 package bot
 
 import (
+    "embercat/bot/Grok"
     "embercat/bot/ai"
     "embercat/bot/callbacks"
     "embercat/bot/core"
     "embercat/bot/handlerCatacul"
-    "embercat/bot/handlerDeepSeek"
     "embercat/bot/handlerDonate"
     "embercat/bot/handlerPic"
     "embercat/bot/handlerQuote"
@@ -63,7 +63,7 @@ func Start(config Config) {
                     }
 
                     if strings.HasPrefix(strings.ToLower(update.Message.Text), "уголек") {
-                        go handlerDeepSeek.Prompt(API, update)
+                        go Grok.Prompt(API, update)
                     }
 
                     go ai.HandlerTextAnalizer(API, update)
