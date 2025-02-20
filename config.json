@@ -9,7 +9,7 @@
     "hook": "https://embercat.useful.team"
   },
   "deepseek" : {
-    "api": "https://api.deepseek.com",
+    "api": "127.0.0.1:8080",
     "token": "sk-0d5f798737f64e828ddae37965d317f9"
   },
   "pg": {
