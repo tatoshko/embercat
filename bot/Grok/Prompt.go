@@ -4,6 +4,7 @@ import (
     "bytes"
     "crypto/tls"
     "encoding/json"
+    "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
     "io"
     "log"
@@ -62,7 +63,7 @@ func Prompt(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
             bodyString := string(bodyBytes)
             logger("ACTUAL RESPONSE", bodyString)
         } else {
-            logger("ACTUAL Code", string(resp.StatusCode))
+            logger("ACTUAL Code", fmt.Sprintf("%d", resp.StatusCode))
         }
 
         return
