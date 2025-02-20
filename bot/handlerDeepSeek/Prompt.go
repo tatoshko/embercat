@@ -28,7 +28,7 @@ func Prompt(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     reqBody := Request{Question: text}
     jsonBody, err := json.Marshal(reqBody)
     if err != nil {
-        logger(err.Error())
+        logger("Unmurshal error", err.Error())
         return
     }
 
@@ -43,14 +43,14 @@ func Prompt(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     url := "https://api.xai.com/grok/ask"
     resp, err := client.Post(url, "application/json", bytes.NewBuffer(jsonBody))
     if err != nil {
-        logger(err.Error())
+        logger("Request error", err.Error())
         return
     }
     defer resp.Body.Close()
 
     var result Response
     if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
-        logger(err.Error())
+        logger("Decode error", err.Error())
         return
     }
 
@@ -58,6 +58,6 @@ func Prompt(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     msg.ReplyToMessageID = update.Message.MessageID
 
     if _, err = bot.Send(msg); err != nil {
-        logger(err.Error())
+        logger("Message send error", err.Error())
     }
 }
