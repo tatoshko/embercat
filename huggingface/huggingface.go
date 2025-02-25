@@ -78,7 +78,7 @@ func (hf *HuggingFaceClient) Ask(text string) (result string, err error) {
                 return
             }
 
-            return "", errors.New(fmt.Sprintf("Unexpected response body. Actual body: %s", string(bodyBytes)))
+            return "", errors.New(fmt.Sprintf("Unexpected response body. Actual body: %s", bodyBytes))
         }
     } else {
         return "", errors.New(fmt.Sprintf("Ask http code error. ACTUAL CODE [%d]", resp.StatusCode))
