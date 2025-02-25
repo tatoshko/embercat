@@ -35,6 +35,7 @@ func Prompt(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
+    logger("Connect to socket5")
     purl := url.URL{}
     url_proxy, _ := purl.Parse("socks5://127.0.0.1:10808")
 
