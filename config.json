@@ -8,9 +8,11 @@
     "token": "1770006177:AAF1ygiZExj5M7RQSyqz6fegdYDViXfoc-g",
     "hook": "https://embercat.useful.team"
   },
-  "deepseek" : {
-    "api": "127.0.0.1:8080",
-    "token": "sk-0d5f798737f64e828ddae37965d317f9"
+  "huggingface" : {
+    "api": "https://api-inference.huggingface.co/models",
+    "model": "gpt2",
+    "token": "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",
+    "proxy": "socks5://127.0.0.1:10808"
   },
   "pg": {
     "host": "127.0.0.1",
