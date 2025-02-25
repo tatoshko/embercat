@@ -55,7 +55,17 @@ func (hf *HuggingFaceClient) Ask(text string) (result string, err error) {
     }
 
     var resp *http.Response
-    if resp, err = hf.client.Post(hf.config.Api, "application/json", bytes.NewBuffer(jsonBody)); err != nil {
+    var req *http.Request
+
+    if req, err = http.NewRequest("POST", hf.config.Api, bytes.NewBuffer(jsonBody)); err != nil {
+        return
+    }
+
+    req.Header.Set("Authorization", "Bearer "+hf.config.Token)
+    req.Header.Set("Content-Type", "application/json ")
+    req.Header.Set("Accept", "application/json")
+
+    if resp, err = hf.client.Do(req); err != nil {
         return
     }
     defer resp.Body.Close()
