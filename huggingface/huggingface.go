@@ -73,15 +73,15 @@ func (hf *HuggingFaceClient) Ask(text string) (result string, err error) {
         var resultBody struct {
             GeneratedText string `json:"generated_text,omitempty"`
         }
+
+        var bodyBytes []byte
+        if bodyBytes, err = io.ReadAll(resp.Body); err != nil {
+            return
+        }
+        fmt.Printf("%v", string(bodyBytes[:]))
+
         if err = json.NewDecoder(resp.Body).Decode(&resultBody); err != nil {
-
-            var bodyBytes []byte
-            if bodyBytes, err = io.ReadAll(resp.Body); err != nil {
-                return
-            }
-            fmt.Printf("%v", bodyBytes)
-
-            return "", errors.New(fmt.Sprintf("Unexpected response body. Actual body: %s", string(bodyBytes[:])))
+            return "", errors.New(fmt.Sprintf("Unexpected response body"))
         } else {
             result = resultBody.GeneratedText
         }
