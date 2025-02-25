@@ -35,7 +35,6 @@ func Init(config Config) {
     transport := http.Transport{}
     transport.Proxy = http.ProxyURL(url_proxy)
     transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-    transport.ProxyConnectHeader.Set("Authorization", "Bearer "+config.Token)
     client = &HuggingFaceClient{client: &http.Client{Transport: &transport}, config: config}
 }
 
