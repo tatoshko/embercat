@@ -9,7 +9,7 @@
     "hook": "https://embercat.useful.team"
   },
   "huggingface" : {
-    "api": "https://api-inference.huggingface.co/models",
+    "api": "https://api-inference.huggingface.co/models/gpt2",
     "model": "gpt2",
     "token": "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",
     "proxy": "socks5://127.0.0.1:10808"
