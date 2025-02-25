@@ -70,10 +70,7 @@ func (hf *HuggingFaceClient) Ask(text string) (result string, err error) {
     defer resp.Body.Close()
 
     if resp.StatusCode == http.StatusOK {
-        var resultBody []struct {
-            GeneratedText string `json:"generated_text,omitempty"`
-        }
-
+        var resultBody map[string]string
         var bodyBytes []byte
         if bodyBytes, err = io.ReadAll(resp.Body); err != nil {
             return
@@ -83,7 +80,7 @@ func (hf *HuggingFaceClient) Ask(text string) (result string, err error) {
         if err = json.NewDecoder(resp.Body).Decode(&resultBody); err != nil {
             return "", errors.New(fmt.Sprintf("Unexpected response body"))
         } else {
-            result = resultBody[0].GeneratedText
+            result = resultBody["generated_text"]
         }
     } else {
         return "", errors.New(fmt.Sprintf("Ask http code error. ACTUAL CODE [%d]", resp.StatusCode))
