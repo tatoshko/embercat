@@ -64,19 +64,12 @@ func (hf *HuggingFaceClient) Ask(text string) (result string, err error) {
     req.Header.Set("Content-Type", "application/json ")
     req.Header.Set("Accept", "application/json")
 
-    fmt.Printf("%v", req)
-    // &{
-    //  POST https://api-inference.huggingface.co/models/gpt2 HTTP/1.1
-    // 1 1
-    //map[Accept:[application/json] Authorization:[Bearer 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]
-    //Content-Type:[application/json ]]
-    //{{"inputs":"уголек, привет!"}}
-    //0x695d40 40 [] false api-inference.huggingface.co map[] map[] <nil> map[]   <nil> <nil> <nil>  {{}} <nil> [] map[]}{"error":"Your auth method doesn't allow you to make inference requests"}
-
     if resp, err = hf.client.Do(req); err != nil {
         return
     }
     defer resp.Body.Close()
+
+    fmt.Sprintf("\n\n\n%v\n\n\n", resp)
 
     if resp.StatusCode == http.StatusOK {
         if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
