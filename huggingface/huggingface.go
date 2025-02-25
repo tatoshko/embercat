@@ -78,7 +78,7 @@ func (hf *HuggingFaceClient) Ask(text string) (result string, err error) {
         fmt.Printf("%v", string(bodyBytes[:]))
 
         if err = json.NewDecoder(resp.Body).Decode(&resultBody); err != nil {
-            return "", errors.New(fmt.Sprintf("Unexpected response body"))
+            return "", errors.New(fmt.Sprintf("Unexpected response body %s", err.Error()))
         } else {
             result = resultBody["generated_text"]
         }
