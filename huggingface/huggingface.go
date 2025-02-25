@@ -74,7 +74,7 @@ func (hf *HuggingFaceClient) Ask(text string) (result string, err error) {
         if bodyBytes, err = io.ReadAll(resp.Body); err != nil {
             return
         }
-        fmt.Printf("\nBODYBYTES: %v\n", bodyBytes)
+        fmt.Printf("\nBODYBYTES: #%v#\n", string(bodyBytes[:]))
 
         if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
 
