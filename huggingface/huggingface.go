@@ -64,6 +64,8 @@ func (hf *HuggingFaceClient) Ask(text string) (result string, err error) {
     req.Header.Set("Content-Type", "application/json ")
     req.Header.Set("Accept", "application/json")
 
+    fmt.Printf("%v", req)
+
     if resp, err = hf.client.Do(req); err != nil {
         return
     }
