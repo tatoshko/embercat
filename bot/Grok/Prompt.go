@@ -14,7 +14,7 @@ import (
 )
 
 type Request struct {
-    Question string `json:"question"`
+    Inputs string `json:"inputs"`
 }
 
 type Response struct {
@@ -28,10 +28,10 @@ func Prompt(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     text = strings.TrimPrefix(update.Message.Text, ",")
     text = strings.TrimPrefix(update.Message.Text, " ")
 
-    reqBody := Request{Question: text}
+    reqBody := Request{Inputs: text}
     jsonBody, err := json.Marshal(reqBody)
     if err != nil {
-        logger("Unmurshal error", err.Error())
+        logger("Marshal error", err.Error())
         return
     }
 
@@ -41,9 +41,10 @@ func Prompt(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     transport := http.Transport{}
     transport.Proxy = http.ProxyURL(url_proxy)
     transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+    transport.ProxyConnectHeader.Set("Authorization", "Bearer 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")
     client := &http.Client{Transport: &transport}
 
-    url := "https://api.xai.com/grok/ask"
+    url := "https://api-inference.huggingface.co/models/gpt2"
     resp, err := client.Post(url, "application/json", bytes.NewBuffer(jsonBody))
     if err != nil {
         logger("Request error", err.Error())
