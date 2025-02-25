@@ -69,7 +69,7 @@ func (hf *HuggingFaceClient) Ask(text string) (result string, err error) {
     }
     defer resp.Body.Close()
 
-    fmt.Printf("\n\n\n%v\n\n\n", resp)
+    fmt.Printf("\n\n\n%q\n\n\n", resp)
 
     if resp.StatusCode == http.StatusOK {
         if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
