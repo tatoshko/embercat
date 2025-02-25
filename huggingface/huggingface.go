@@ -72,6 +72,7 @@ func (hf *HuggingFaceClient) Ask(text string) (result string, err error) {
     if resp.StatusCode == http.StatusOK {
         var bodyBytes []byte
         if bodyBytes, err = io.ReadAll(resp.Body); err != nil {
+            fmt.Print("HERE WE GO!")
             return
         }
         fmt.Printf("\nBODYBYTES: #%v#\n", string(bodyBytes[:]))
