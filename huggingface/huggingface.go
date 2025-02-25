@@ -69,14 +69,14 @@ func (hf *HuggingFaceClient) Ask(text string) (result string, err error) {
     }
     defer resp.Body.Close()
 
-    fmt.Printf("\n\n\n%q\n\n\n", resp)
-
     if resp.StatusCode == http.StatusOK {
         if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
             var bodyBytes []byte
             if bodyBytes, err = io.ReadAll(resp.Body); err != nil {
                 return
             }
+
+            fmt.Printf("%v", bodyBytes)
 
             return "", errors.New(fmt.Sprintf("Unexpected response body. Actual body: %s", string(bodyBytes[:])))
         }
