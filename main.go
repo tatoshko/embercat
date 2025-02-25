@@ -3,6 +3,7 @@ package main
 import (
     "embercat/assets"
     "embercat/bot"
+    "embercat/huggingface"
     "embercat/pgsql"
     "encoding/json"
     "fmt"
@@ -20,9 +21,10 @@ type ServerConfig struct {
 }
 
 type Config struct {
-    Bot    bot.Config   `json:"bot"`
-    Pg     pgsql.Config `json:"pg"`
-    Server ServerConfig `json:"server"`
+    Bot         bot.Config         `json:"bot"`
+    Pg          pgsql.Config       `json:"pg"`
+    Server      ServerConfig       `json:"server"`
+    Huggingface huggingface.Config `json:"huggingface"`
 }
 
 func main() {
@@ -31,6 +33,7 @@ func main() {
     assets.InitBox()
     go initHttpServer(config.Server)
     go pgsql.Init(config.Pg)
+    go huggingface.Init(config.Huggingface)
     bot.Start(config.Bot)
 
 }
