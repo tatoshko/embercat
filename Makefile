@@ -6,5 +6,5 @@ deploy:
 build:
 	@ git pull origin master
 	@ cd assets && rice embed-go && cd ..
-	@ go build -ldflags="-s -w"
+	@ ~/go/bin/go1.19 build -ldflags="-s -w"
 	@ sudo systemctl restart embercat
