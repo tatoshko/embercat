@@ -28,7 +28,7 @@ func Start(config Config) {
             log.Printf("SetHoook error %s\n", err.Error())
         }
 
-        API.Debug = false
+        API.Debug = true
 
         registerCommands()
 
