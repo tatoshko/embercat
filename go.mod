@@ -1,6 +1,6 @@
 module embercat
 
-go 1.19
+go 1.25.3
 
 require (
 	github.com/GeertJohan/go.rice v1.0.2
