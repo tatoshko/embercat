@@ -1,8 +1,6 @@
 package bot
 
 import (
-    "embercat/bot/Grok"
-    "embercat/bot/ai"
     "embercat/bot/callbacks"
     "embercat/bot/core"
     "embercat/bot/handlerCatacul"
@@ -28,7 +26,7 @@ func Start(config Config) {
             log.Printf("SetHoook error %s\n", err.Error())
         }
 
-        API.Debug = true
+        API.Debug = false
 
         registerCommands()
 
@@ -61,12 +59,6 @@ func Start(config Config) {
                     if update.Message.Photo != nil && rand.Intn(20) == 0 {
                         go handlerQuote.Pic(API, update)
                     }
-
-                    if strings.HasPrefix(strings.ToLower(update.Message.Text), "уголек") {
-                        go Grok.Prompt(API, update)
-                    }
-
-                    go ai.HandlerTextAnalizer(API, update)
                 }
             } else if update.CallbackQuery != nil {
                 data := update.CallbackQuery.Data

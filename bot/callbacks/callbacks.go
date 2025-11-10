@@ -19,9 +19,3 @@ func GetHandler(data string) (core.Handler, bool) {
 func RegisterCallback(id string, f core.Handler) {
     Callbacks[id] = f
 }
-
-func UnregisterCallback(id string) {
-    if _, found := Callbacks[id]; found {
-        delete(Callbacks, id)
-    }
-}
