@@ -36,8 +36,8 @@ func Next(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 
     keyboard := tgbotapi.NewInlineKeyboardMarkup(tgbotapi.NewInlineKeyboardRow(
-        tgbotapi.NewInlineKeyboardButtonData("☦ Remove", fmt.Sprintf("/%s %s", CBFRRemove, reviewItem.FrogId)),
-        tgbotapi.NewInlineKeyboardButtonData("✅ Stay", fmt.Sprintf("/%s %s", CBFRStay, reviewItem.FrogId)),
+        tgbotapi.NewInlineKeyboardButtonData("☦ Remove", fmt.Sprintf("/%s %s", CBFRRemove, reviewItem.Id)),
+        tgbotapi.NewInlineKeyboardButtonData("✅ Stay", fmt.Sprintf("/%s %s", CBFRStay, reviewItem.Id)),
     ))
 
     msg := tgbotapi.NewPhotoShare(chatID, reviewItem.PhotoId)
@@ -61,9 +61,27 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 
     userID := query.From.ID
-    data := strings.Split(strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRRemove)), " ")
+    chatID := query.Message.Chat.ID
+    itemId := strings.Split(strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRRemove)), " ")[0]
 
-    logger(fmt.Sprintf("%v %v", userID, data))
+    frogReviewService := service.NewFrogReviewService(userID)
+    if reviewItem, err := frogReviewService.FindById(itemId); err != nil {
+        if err == sql.ErrNoRows {
+            msg := tgbotapi.NewMessage(chatID, "Такой жабы уже нет")
+            if _, err := bot.Send(msg); err != nil {
+                logger(err.Error())
+            }
+        }
+    } else {
+        if err = frogReviewService.Reject(reviewItem); err != nil {
+            logger(err.Error())
+        } else {
+            msg := tgbotapi.NewMessage(chatID, "Минус жаба")
+            if _, err := bot.Send(msg); err != nil {
+                logger(err.Error())
+            }
+        }
+    }
 }
 
 func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -78,7 +96,25 @@ func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 
     userID := query.From.ID
-    data := strings.Split(strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRStay)), " ")
+    chatID := query.Message.Chat.ID
+    itemId := strings.Split(strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRStay)), " ")[0]
 
-    logger(fmt.Sprintf("%v %v", userID, data))
+    frogReviewService := service.NewFrogReviewService(userID)
+    if reviewItem, err := frogReviewService.FindById(itemId); err != nil {
+        if err == sql.ErrNoRows {
+            msg := tgbotapi.NewMessage(chatID, "Такой жабы уже нет")
+            if _, err := bot.Send(msg); err != nil {
+                logger(err.Error())
+            }
+        }
+    } else {
+        if err = frogReviewService.Approve(reviewItem); err != nil {
+            logger(err.Error())
+        } else {
+            msg := tgbotapi.NewMessage(chatID, "Пусть живет")
+            if _, err := bot.Send(msg); err != nil {
+                logger(err.Error())
+            }
+        }
+    }
 }

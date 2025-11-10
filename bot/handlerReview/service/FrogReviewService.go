@@ -13,6 +13,22 @@ func NewFrogReviewService(userId int) *FrogReviewService {
     return &FrogReviewService{UserId: userId}
 }
 
+func (s *FrogReviewService) FindById(itemId string) (reviewItem *FrogReviewItem, err error) {
+    pg := pgsql.GetClient()
+    q := `select id, frog_review_id, frog_id, photo_id from frog_review_item where id = $1`
+
+    reviewItem = NewFrogReviewItem()
+    row := pg.QueryRow(q, itemId)
+    err = row.Scan(
+        &reviewItem.Id,
+        &reviewItem.FrogReviewId,
+        &reviewItem.FrogId,
+        &reviewItem.PhotoId,
+    )
+
+    return
+}
+
 func (s *FrogReviewService) Start() (id string, err error) {
     pg := pgsql.GetClient()
     qSelect := `select id from frog_review where user_id = $1`
