@@ -10,11 +10,11 @@ import (
 
 type Quote struct {
     Id        string    `json:"id"`
+    ChatID    int64     `json:"chatID"`
     UserId    int       `json:"userId"`
     UserName  string    `json:"userName"`
     Text      string    `json:"text"`
     CreatedAt time.Time `json:"createdAt"`
-    ChatID    int64     `json:"chatID"`
 }
 
 func NewQuote() *Quote {

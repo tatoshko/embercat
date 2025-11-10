@@ -62,6 +62,8 @@ func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
+    go quoteService.AddStat(quote.Id, service.PlaceENDPic)
+
     // make quoted image
     //var quotedPic *image.RGBA
     if img, err = drawer.AddQuoteBelow(quote, img); err != nil {
