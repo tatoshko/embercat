@@ -41,6 +41,8 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
             }
         }
     } else {
+        logger(fmt.Sprintf("Удаляем жабу %s", reviewItem.FrogId))
+
         if err = frogReviewService.Reject(reviewItem); err != nil {
             logger(err.Error())
         } else {
