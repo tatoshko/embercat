@@ -68,7 +68,7 @@ func Start(config Config) {
 
                 var handlerID string
                 if strings.HasPrefix(data, "/") {
-                    parts := strings.SplitN(data, " ", -1)
+                    parts := strings.SplitN(data, " ", 2)
                     handlerID = strings.TrimPrefix(parts[0], "/")
                 } else {
                     handlerID = data
