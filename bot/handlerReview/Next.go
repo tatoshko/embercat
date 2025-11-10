@@ -99,6 +99,8 @@ func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     chatID := query.Message.Chat.ID
     itemId := strings.Split(strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRStay)), " ")[0]
 
+    logger(fmt.Sprintf("Stay %s", itemId))
+
     frogReviewService := service.NewFrogReviewService(userID)
     if reviewItem, err := frogReviewService.FindById(itemId); err != nil {
         if err == sql.ErrNoRows {
