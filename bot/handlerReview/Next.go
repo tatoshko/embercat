@@ -44,12 +44,10 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
             logger(err.Error())
         }
     } else {
-        logger(fmt.Sprintf("Удаляем жабу %s", reviewItem.FrogId))
-
         if err = frogReviewService.Reject(reviewItem); err != nil {
             logger(err.Error())
         } else {
-            msg := tgbotapi.NewMessage(chatID, "Минус жаба")
+            msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Минус жаба %s", reviewItem.PhotoId))
             if _, err := bot.Send(msg); err != nil {
                 logger(err.Error())
             }
