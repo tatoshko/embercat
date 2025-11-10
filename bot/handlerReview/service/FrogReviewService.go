@@ -22,16 +22,8 @@ func (s *FrogReviewService) Start() (err error) {
         qInsert := `insert into frog_review (user_id) values ($1) on conflict do nothing`
         qFill := `insert into frog_review_item (select uuid_generate_v4(), $1, id, photoid from frog);`
 
-        var tx *sql.Tx
-        if tx, err = pg.Begin(); err != nil {
-            return
-        }
-        defer tx.Rollback()
-
-        tx.Exec(qInsert, s.UserId)
-        tx.Exec(qFill, s.UserId)
-
-        err = tx.Commit()
+        pg.Exec(qInsert, s.UserId)
+        pg.Exec(qFill, s.UserId)
     }
 
     return
