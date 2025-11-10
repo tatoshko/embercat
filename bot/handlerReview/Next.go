@@ -5,6 +5,7 @@ import (
     "embercat/bot/handlerReview/service"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    "log"
     "strings"
 )
 
@@ -18,6 +19,7 @@ func Next(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 }
 
 func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+    log.Println("THIS")
     logger := getLogger("CALLBACK REMOVE")
 
     query := update.CallbackQuery
