@@ -7,6 +7,7 @@ import (
     "embercat/bot/handlerDonate"
     "embercat/bot/handlerPic"
     "embercat/bot/handlerQuote"
+    "embercat/bot/handlerReview"
     "embercat/bot/handlerThreat"
     "embercat/bot/handlerTurbo"
     "embercat/bot/handlerWednesday"
@@ -114,4 +115,9 @@ func registerCommands() {
     // Quote
     Commands["add"] = handlerQuote.Add
     Commands["pic"] = handlerQuote.Pic
+
+    // Frog Review
+    Commands["reviewstart"] = handlerReview.Start
+    Commands["reviewnext"] = handlerReview.Next
+    Commands["reviewstop"] = handlerReview.Stop
 }
