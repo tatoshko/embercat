@@ -9,7 +9,7 @@ import (
 )
 
 const (
-    CBFRRemove = "frremove"
+    CBFRRemove = "frrem"
     CBFRStay   = "frstay"
 )
 
