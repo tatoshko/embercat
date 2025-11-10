@@ -15,15 +15,24 @@ func NewFrogReviewService(userId int) *FrogReviewService {
 
 func (s *FrogReviewService) Start() (err error) {
     pg := pgsql.GetClient()
-    qSelect := `select 1 from frog_review where user_id = $1`
+    qSelect := `select id from frog_review where user_id = $1`
 
     row := pg.QueryRow(qSelect, s.UserId)
     if err = row.Scan(); err == sql.ErrNoRows {
         qInsert := `insert into frog_review (user_id) values ($1) on conflict do nothing`
-        qFill := `insert into frog_review_item (select uuid_generate_v4(), $1, id, photoid from frog);`
 
-        pg.Exec(qInsert, s.UserId)
-        pg.Exec(qFill, s.UserId)
+        if _, err = pg.Exec(qInsert, s.UserId); err != nil {
+            return
+        }
+
+        row := pg.QueryRow(qSelect, s.UserId)
+        var id string
+        if err = row.Scan(&id); err != nil {
+            return
+        }
+
+        qFill := `insert into frog_review_item (select uuid_generate_v4(), $1, id, photoid from frog);`
+        _, err = pg.Exec(qFill, id)
     }
 
     return
