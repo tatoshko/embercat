@@ -120,4 +120,6 @@ func registerCommands() {
     Commands["reviewstart"] = handlerReview.Start
     Commands["reviewnext"] = handlerReview.Next
     Commands["reviewstop"] = handlerReview.Stop
+    callbacks.RegisterCallback(handlerReview.CBFRRemove, handlerReview.CallbackRemove)
+    callbacks.RegisterCallback(handlerReview.CBFRStay, handlerReview.CallbackStay)
 }

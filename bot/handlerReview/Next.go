@@ -3,7 +3,14 @@ package handlerReview
 import (
     "database/sql"
     "embercat/bot/handlerReview/service"
+    "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    "strings"
+)
+
+const (
+    CBFRRemove = "frremove"
+    CBFRStay   = "frstay"
 )
 
 func Next(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -29,8 +36,8 @@ func Next(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 
     keyboard := tgbotapi.NewInlineKeyboardMarkup(tgbotapi.NewInlineKeyboardRow(
-        tgbotapi.NewInlineKeyboardButtonData("Remove", reviewItem.FrogId),
-        tgbotapi.NewInlineKeyboardButtonData("Stay", reviewItem.FrogId),
+        tgbotapi.NewInlineKeyboardButtonData("☦ Remove", fmt.Sprintf("/%s %s", CBFRRemove, reviewItem.FrogId)),
+        tgbotapi.NewInlineKeyboardButtonData("✅ Stay", fmt.Sprintf("/%s %s", CBFRStay, reviewItem.FrogId)),
     ))
 
     msg := tgbotapi.NewPhotoShare(chatID, reviewItem.PhotoId)
@@ -40,4 +47,38 @@ func Next(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     if _, err := bot.Send(msg); err != nil {
         logger(err.Error())
     }
+}
+
+func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+    logger := getLogger("CALLBACK REMOVE")
+
+    query := update.CallbackQuery
+    callback := tgbotapi.NewCallback(query.ID, query.Data)
+
+    if _, err := bot.AnswerCallbackQuery(callback); err != nil {
+        logger(err.Error())
+        return
+    }
+
+    userID := query.From.ID
+    data := strings.Split(strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRRemove)), " ")
+
+    logger(fmt.Sprintf("%v %v", userID, data))
+}
+
+func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+    logger := getLogger("CALLBACK STAY")
+
+    query := update.CallbackQuery
+    callback := tgbotapi.NewCallback(query.ID, query.Data)
+
+    if _, err := bot.AnswerCallbackQuery(callback); err != nil {
+        logger(err.Error())
+        return
+    }
+
+    userID := query.From.ID
+    data := strings.Split(strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRStay)), " ")
+
+    logger(fmt.Sprintf("%v %v", userID, data))
 }
