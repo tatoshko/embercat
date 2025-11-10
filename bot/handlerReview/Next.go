@@ -30,6 +30,9 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     userID := query.From.ID
     chatID := query.Message.Chat.ID
+
+    logger(fmt.Sprintf("%v", query.Data))
+
     itemId := strings.Split(strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRRemove)), " ")[0]
 
     frogReviewService := service.NewFrogReviewService(userID)
