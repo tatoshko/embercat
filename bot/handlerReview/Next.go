@@ -28,8 +28,14 @@ func Next(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
+    keyboard := tgbotapi.NewInlineKeyboardMarkup(tgbotapi.NewInlineKeyboardRow(
+        tgbotapi.NewInlineKeyboardButtonData("Remove", reviewItem.FrogId),
+        tgbotapi.NewInlineKeyboardButtonData("Stay", reviewItem.FrogId),
+    ))
+
     msg := tgbotapi.NewPhotoShare(chatID, reviewItem.PhotoId)
     msg.Caption = reviewItem.PhotoId
+    msg.ReplyMarkup = keyboard
 
     if _, err := bot.Send(msg); err != nil {
         logger(err.Error())
