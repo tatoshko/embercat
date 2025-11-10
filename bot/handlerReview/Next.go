@@ -14,39 +14,7 @@ const (
 )
 
 func Next(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
-    var err error
-    var reviewItem *service.FrogReviewItem
-
-    logger := getLogger("NEXT")
-    chatID := update.Message.Chat.ID
-
-    frogReviewService := service.NewFrogReviewService(update.Message.From.ID)
-
-    if reviewItem, err = frogReviewService.Next(); err != nil {
-        if err == sql.ErrNoRows {
-            msg := tgbotapi.NewMessage(chatID, "Ревью закончено, или не начато")
-            if _, err := bot.Send(msg); err != nil {
-                logger(err.Error())
-            }
-            return
-        }
-
-        logger(err.Error())
-        return
-    }
-
-    keyboard := tgbotapi.NewInlineKeyboardMarkup(tgbotapi.NewInlineKeyboardRow(
-        tgbotapi.NewInlineKeyboardButtonData("☦ Remove", fmt.Sprintf("/%s %s", CBFRRemove, reviewItem.Id)),
-        tgbotapi.NewInlineKeyboardButtonData("✅ Stay", fmt.Sprintf("/%s %s", CBFRStay, reviewItem.Id)),
-    ))
-
-    msg := tgbotapi.NewPhotoShare(chatID, reviewItem.PhotoId)
-    msg.Caption = reviewItem.PhotoId
-    msg.ReplyMarkup = keyboard
-
-    if _, err := bot.Send(msg); err != nil {
-        logger(err.Error())
-    }
+    next(bot, update.Message.Chat.ID, update.Message.From.ID)
 }
 
 func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -80,6 +48,8 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
             if _, err := bot.Send(msg); err != nil {
                 logger(err.Error())
             }
+
+            next(bot, chatID, userID)
         }
     }
 }
@@ -99,8 +69,6 @@ func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     chatID := query.Message.Chat.ID
     itemId := strings.Split(strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRStay)), " ")[0]
 
-    logger(fmt.Sprintf("Stay %s", itemId))
-
     frogReviewService := service.NewFrogReviewService(userID)
     if reviewItem, err := frogReviewService.FindById(itemId); err != nil {
         if err == sql.ErrNoRows {
@@ -117,6 +85,43 @@ func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
             if _, err := bot.Send(msg); err != nil {
                 logger(err.Error())
             }
+
+            next(bot, chatID, userID)
         }
+    }
+}
+
+func next(bot *tgbotapi.BotAPI, chatID int64, userID int) {
+    var err error
+    var reviewItem *service.FrogReviewItem
+
+    logger := getLogger("NEXT")
+
+    frogReviewService := service.NewFrogReviewService(userID)
+
+    if reviewItem, err = frogReviewService.Next(); err != nil {
+        if err == sql.ErrNoRows {
+            msg := tgbotapi.NewMessage(chatID, "Ревью закончено, или не начато")
+            if _, err := bot.Send(msg); err != nil {
+                logger(err.Error())
+            }
+            return
+        }
+
+        logger(err.Error())
+        return
+    }
+
+    keyboard := tgbotapi.NewInlineKeyboardMarkup(tgbotapi.NewInlineKeyboardRow(
+        tgbotapi.NewInlineKeyboardButtonData("☦ Remove", fmt.Sprintf("/%s %s", CBFRRemove, reviewItem.Id)),
+        tgbotapi.NewInlineKeyboardButtonData("✅ Stay", fmt.Sprintf("/%s %s", CBFRStay, reviewItem.Id)),
+    ))
+
+    msg := tgbotapi.NewPhotoShare(chatID, reviewItem.PhotoId)
+    msg.Caption = reviewItem.PhotoId
+    msg.ReplyMarkup = keyboard
+
+    if _, err := bot.Send(msg); err != nil {
+        logger(err.Error())
     }
 }
