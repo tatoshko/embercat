@@ -49,6 +49,11 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
                 logger(err.Error())
             }
 
+            del := tgbotapi.NewDeleteMessage(chatID, query.Message.MessageID)
+            if _, err := bot.Send(del); err != nil {
+                logger(err.Error())
+            }
+
             next(bot, chatID, userID)
         }
     }
@@ -83,6 +88,11 @@ func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         } else {
             msg := tgbotapi.NewMessage(chatID, "Пусть живет")
             if _, err := bot.Send(msg); err != nil {
+                logger(err.Error())
+            }
+
+            del := tgbotapi.NewDeleteMessage(chatID, query.Message.MessageID)
+            if _, err := bot.Send(del); err != nil {
                 logger(err.Error())
             }
 
