@@ -31,7 +31,7 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     userID := query.From.ID
     chatID := query.Message.Chat.ID
 
-    logger(fmt.Sprintf("%v", query.Data))
+    logger(fmt.Sprintf("THIS #%s# | #%s#", query.Data, fmt.Sprintf("/%s ", CBFRRemove)), strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRRemove)))
 
     itemId := strings.Split(strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRRemove)), " ")[0]
 
