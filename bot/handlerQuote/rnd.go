@@ -25,7 +25,7 @@ func Rnd(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    go quoteService.AddStat(quote.Id, service.PlaceRNDMsg)
+    go quoteService.AddStat(quote, service.PlaceRNDMsg)
 
     msg := tgbotapi.NewMessage(chatID, quote.ToString())
     msg.ReplyToMessageID = update.Message.MessageID
