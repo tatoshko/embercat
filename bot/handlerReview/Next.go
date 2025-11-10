@@ -5,7 +5,6 @@ import (
     "embercat/bot/handlerReview/service"
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-    "log"
     "strings"
 )
 
@@ -19,7 +18,6 @@ func Next(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 }
 
 func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
-    log.Println("THIS")
     logger := getLogger("CALLBACK REMOVE")
 
     query := update.CallbackQuery
@@ -33,6 +31,8 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     userID := query.From.ID
     chatID := query.Message.Chat.ID
     itemId := strings.Split(strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRRemove)), " ")[0]
+
+    logger("Try to remove", fmt.Sprintf("%d, %d", userID, chatID), itemId)
 
     frogReviewService := service.NewFrogReviewService(userID)
     if reviewItem, err := frogReviewService.FindById(itemId); err != nil {
