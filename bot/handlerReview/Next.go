@@ -85,6 +85,8 @@ func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
             if _, err := bot.Send(msg); err != nil {
                 logger(err.Error())
             }
+        } else {
+            logger(err.Error())
         }
     } else {
         if err = frogReviewService.Approve(reviewItem); err != nil {
