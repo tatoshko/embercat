@@ -11,6 +11,7 @@ const (
 
 type QuoteStat struct {
     id        string    `json:"id"`
+    ChatId    int64     `json:"chatId"`
     Which     Place     `json:"which"`
     CreatedAt time.Time `json:"created_at"`
 }

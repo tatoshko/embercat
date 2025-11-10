@@ -49,11 +49,11 @@ func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     img, err := loader.LoadPicByURL(fileURL)
 
-    quoteService := service.NewService()
+    quoteService := service.NewService(chatID)
 
     // load rnd quote
     var quote *service.Quote
-    if quote, err = quoteService.FindRND(chatID); err != nil {
+    if quote, err = quoteService.FindRND(); err != nil {
         logger(err.Error())
         msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("что-то пошло не так %s", err.Error()))
         if _, err = bot.Send(msg); err != nil {
@@ -62,7 +62,7 @@ func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    go quoteService.AddStat(quote.Id, service.PlaceENDPic)
+    go quoteService.AddStat(quote, service.PlaceENDPic)
 
     // make quoted image
     //var quotedPic *image.RGBA

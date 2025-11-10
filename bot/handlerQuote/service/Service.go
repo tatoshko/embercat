@@ -11,10 +11,11 @@ var (
 )
 
 type Service struct {
+    ChatId int64
 }
 
-func NewService() *Service {
-    return &Service{}
+func NewService(chatId int64) *Service {
+    return &Service{ChatId: chatId}
 }
 
 func (s *Service) Add(quote *Quote) (err error) {
@@ -25,16 +26,16 @@ func (s *Service) Add(quote *Quote) (err error) {
     pg := pgsql.GetClient()
     q := `insert into quote (chat_id, user_id, username, text) values ($1, $2, $3, $4)`
 
-    _, err = pg.Exec(q, quote.ChatID, quote.UserId, quote.UserName, quote.Text)
+    _, err = pg.Exec(q, s.ChatId, quote.UserId, quote.UserName, quote.Text)
 
     return
 }
 
-func (s *Service) FindRND(chatId int64) (quote *Quote, err error) {
+func (s *Service) FindRND() (quote *Quote, err error) {
     pg := pgsql.GetClient()
     q := `select id, chat_id, user_id, username, text, created_at from quote where chat_id = $1 order by random() limit 1`
 
-    row := pg.QueryRow(q, chatId)
+    row := pg.QueryRow(q, s.ChatId)
 
     if row.Err() != nil {
         return nil, row.Err()
@@ -53,11 +54,11 @@ func (s *Service) FindRND(chatId int64) (quote *Quote, err error) {
     return
 }
 
-func (s *Service) AddStat(quoteId string, place Place) (err error) {
+func (s *Service) AddStat(quote *Quote, place Place) (err error) {
     pg := pgsql.GetClient()
-    q := `insert into quote_stat (quote_id, which) values ($1, $2)`
+    q := `insert into quote_stat (chat_id, quote_id, which) values ($1, $2, $3)`
 
-    _, err = pg.Exec(q, quoteId, place)
+    _, err = pg.Exec(q, s.ChatId, quote.Id, place)
 
     return
 }

@@ -26,7 +26,7 @@ func Add(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    quoteService := service.NewService()
+    quoteService := service.NewService(chatID)
     msg := tgbotapi.NewMessage(chatID, "")
 
     if update.Message.ReplyToMessage == nil {
