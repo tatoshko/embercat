@@ -31,9 +31,7 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     userID := query.From.ID
     chatID := query.Message.Chat.ID
 
-    logger(fmt.Sprintf("THIS #%s# | #%s#", query.Data, fmt.Sprintf("/%s ", CBFRRemove)), strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRRemove)))
-
-    itemId := strings.Split(strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRRemove)), " ")[0]
+    itemId := strings.Split(strings.TrimPrefix(query.Data, fmt.Sprintf("/%s ", CBFRRemove)), " ")[0]
 
     frogReviewService := service.NewFrogReviewService(userID)
     if reviewItem, err := frogReviewService.FindById(itemId); err != nil {
@@ -79,7 +77,7 @@ func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     userID := query.From.ID
     chatID := query.Message.Chat.ID
-    itemId := strings.Split(strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRStay)), " ")[0]
+    itemId := strings.Split(strings.TrimPrefix(query.Data, fmt.Sprintf("/%s ", CBFRStay)), " ")[0]
 
     frogReviewService := service.NewFrogReviewService(userID)
     if reviewItem, err := frogReviewService.FindById(itemId); err != nil {
