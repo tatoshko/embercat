@@ -32,8 +32,6 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     chatID := query.Message.Chat.ID
     itemId := strings.Split(strings.TrimLeft(query.Data, fmt.Sprintf("/%s ", CBFRRemove)), " ")[0]
 
-    logger("Try to remove", fmt.Sprintf("%d, %d", userID, chatID), itemId)
-
     frogReviewService := service.NewFrogReviewService(userID)
     if reviewItem, err := frogReviewService.FindById(itemId); err != nil {
         if err == sql.ErrNoRows {
@@ -41,6 +39,8 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
             if _, err := bot.Send(msg); err != nil {
                 logger(err.Error())
             }
+        } else {
+            logger(err.Error())
         }
     } else {
         logger(fmt.Sprintf("Удаляем жабу %s", reviewItem.FrogId))
