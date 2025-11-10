@@ -13,12 +13,12 @@ func NewFrogReviewService(userId int) *FrogReviewService {
     return &FrogReviewService{UserId: userId}
 }
 
-func (s *FrogReviewService) Start() (err error) {
+func (s *FrogReviewService) Start() (id string, err error) {
     pg := pgsql.GetClient()
     qSelect := `select id from frog_review where user_id = $1`
 
     row := pg.QueryRow(qSelect, s.UserId)
-    if err = row.Scan(); err == sql.ErrNoRows {
+    if err = row.Scan(&id); err == sql.ErrNoRows {
         qInsert := `insert into frog_review (user_id) values ($1) on conflict do nothing`
 
         if _, err = pg.Exec(qInsert, s.UserId); err != nil {
@@ -26,7 +26,6 @@ func (s *FrogReviewService) Start() (err error) {
         }
 
         row := pg.QueryRow(qSelect, s.UserId)
-        var id string
         if err = row.Scan(&id); err != nil {
             return
         }

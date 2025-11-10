@@ -11,7 +11,7 @@ func Start(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     logger := getLogger("START")
     frogReviewService := service.NewFrogReviewService(update.Message.From.ID)
 
-    if err = frogReviewService.Start(); err != nil {
+    if _, err = frogReviewService.Start(); err != nil {
         logger(err.Error())
         return
     }
