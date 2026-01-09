@@ -14,6 +14,7 @@ import (
     tba "github.com/go-telegram-bot-api/telegram-bot-api"
     "log"
     "math/rand"
+    "net/http"
     "strings"
 )
 
@@ -22,7 +23,8 @@ var (
 )
 
 func Start(config Config) {
-    if API, err := tba.NewBotAPI(config.Token); err == nil {
+    client := &http.Client{Transport: &http.Transport{ForceAttemptHTTP2: true}}
+    if API, err := tba.NewBotAPIWithClient(config.Token, client); err == nil {
         if _, err := API.SetWebhook(tba.NewWebhook(config.Hook + "/" + config.Token)); err != nil {
             log.Printf("SetHoook error %s\n", err.Error())
         }
