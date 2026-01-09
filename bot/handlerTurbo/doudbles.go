@@ -32,7 +32,7 @@ func Double(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         var text string
 
         for _, liner := range duplicates {
-            text += fmt.Sprintf("#%-15d(%d) ", liner.ID, liner.Count)
+            text += fmt.Sprintf("#%d(%d) ", liner.ID, liner.Count)
         }
 
         msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("<code>%s</code>", text))
