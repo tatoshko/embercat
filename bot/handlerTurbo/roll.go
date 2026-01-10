@@ -3,7 +3,7 @@ package handlerTurbo
 import (
     "embercat/pgsql"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -55,7 +55,7 @@ func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     if b, err := liner.ToPicture(); err != nil {
         logger("liner to pic error: ", err.Error())
     } else {
-        msg := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, tgbotapi.FileBytes{Name: liner.ToString(), Bytes: b})
+        msg := tgbotapi.NewPhoto(update.Message.Chat.ID, tgbotapi.FileBytes{Name: liner.ToString(), Bytes: b})
 
         if _, err = bot.Send(msg); err != nil {
             logger("bot send error", "photo upload", err.Error())

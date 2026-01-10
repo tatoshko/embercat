@@ -2,7 +2,7 @@ package handlerPic
 
 import (
     "embercat/pgsql"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func RndShare(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -20,7 +20,9 @@ func RndShare(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    msg := tgbotapi.NewPhotoShare(update.Message.Chat.ID, photoId)
+    file := tgbotapi.FileID(photoId)
+
+    msg := tgbotapi.NewPhoto(update.Message.Chat.ID, file)
     if _, err = bot.Send(msg); err != nil {
         logger(err.Error())
     }

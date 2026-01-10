@@ -2,7 +2,7 @@ package handlerPic
 
 import (
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "io"
     "net/http"
 )
@@ -32,7 +32,7 @@ func RndServer(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    msg := tgbotapi.NewPhotoUpload(chatID, tgbotapi.FileBytes{Name: pic.URL(), Bytes: b})
+    msg := tgbotapi.NewPhoto(chatID, tgbotapi.FileBytes{Name: pic.URL(), Bytes: b})
     msg.Caption = pic.GetID()
     if _, err := bot.Send(msg); err != nil {
         logger(err.Error())

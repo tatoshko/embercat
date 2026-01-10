@@ -2,7 +2,7 @@ package handlerCatacul
 
 import (
     "embercat/assets"
-    tba "github.com/go-telegram-bot-api/telegram-bot-api"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "log"
     "time"
 )
@@ -32,7 +32,7 @@ func Day(bot *tba.BotAPI, update tba.Update) {
     if b, err := box.Bytes("days/" + pic); err != nil {
         log.Println(err)
     } else {
-        msg := tba.NewPhotoUpload(update.Message.Chat.ID, tba.FileBytes{Name: pic, Bytes: b})
+        msg := tba.NewPhoto(update.Message.Chat.ID, tba.FileBytes{Name: pic, Bytes: b})
 
         if _, err := bot.Send(msg); err != nil {
             log.Printf("Days send error %s\n", err.Error())

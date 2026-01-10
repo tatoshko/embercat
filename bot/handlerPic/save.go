@@ -2,7 +2,7 @@ package handlerPic
 
 import (
     "embercat/pgsql"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -21,7 +21,7 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 
     var photoID string
-    for _, pic := range *reply.Photo {
+    for _, pic := range reply.Photo {
         photoID = pic.FileID
         break
     }
