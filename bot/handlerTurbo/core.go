@@ -7,6 +7,6 @@ import (
 
 func getLogger(scope string) func(s ...string) {
     return func(s ...string) {
-        fmt.Printf("TURBO [%s] %s\n", scope, strings.Join(s, ""))
+        fmt.Printf("TURBO [%s] %s\n", scope, strings.Join(s, " "))
     }
 }
