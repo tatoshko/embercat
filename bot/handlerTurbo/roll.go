@@ -19,11 +19,11 @@ func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     r, _ := pg.Exec(q, userID)
 
     if exists, err := r.RowsAffected(); err != nil {
-        logger(err.Error())
+        logger("can't check exists: ", err.Error())
     } else if exists > 0 {
         msg := tgbotapi.NewMessage(chatID, "Можно только одну жвачку в день.")
         if _, err := bot.Send(msg); err != nil {
-            logger(err.Error())
+            logger("bot send error", "only one", err.Error())
         }
 
         return
@@ -32,14 +32,14 @@ func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     // Load collection
     var collection Collection
     if collection, err = LoadCollection(int64(userID)); err != nil {
-        logger(err.Error())
+        logger("collection load error: ", err.Error())
         return
     }
 
     // Add new liner to collection
     liner := GetRandomLiner()
     if _, err := collection.Add(liner); err != nil {
-        logger(err.Error())
+        logger("add liner error: ", err.Error())
         msg := tgbotapi.NewMessage(
             chatID,
             fmt.Sprintf("Что-то не так с выдачей новых вкладышей, а тебе почти достался <b>%s</b>", liner.ToString()),
@@ -47,18 +47,18 @@ func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         msg.ParseMode = tgbotapi.ModeHTML
 
         if _, err = bot.Send(msg); err != nil {
-            logger(err.Error())
+            logger("bot send error", "add liner", err.Error())
         }
     }
 
     // Load liner's picture
     if b, err := liner.ToPicture(); err != nil {
-        logger(err.Error())
+        logger("liner to pic error: ", err.Error())
     } else {
         msg := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, tgbotapi.FileBytes{Name: liner.ToString(), Bytes: b})
 
         if _, err = bot.Send(msg); err != nil {
-            logger(err.Error())
+            logger("bot send error", "photo upload", err.Error())
         }
     }
 
