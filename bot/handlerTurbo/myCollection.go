@@ -3,7 +3,7 @@ package handlerTurbo
 import (
     "bytes"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "golang.org/x/text/feature/plural"
     "golang.org/x/text/language"
     "golang.org/x/text/message"
@@ -61,7 +61,7 @@ func MyCollection(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         log.Printf("HandlerCollection jpeg.Encode error %s", err.Error())
     }
 
-    msgp := tgbotapi.NewDocumentUpload(chatID, tgbotapi.FileBytes{Bytes: buf.Bytes(), Name: "Collection.jpg"})
+    msgp := tgbotapi.NewDocument(chatID, tgbotapi.FileBytes{Bytes: buf.Bytes(), Name: "Collection.jpg"})
     if _, err := bot.Send(msgp); err != nil {
         log.Printf("HandlerCollection bot.Send error %s", err.Error())
     }

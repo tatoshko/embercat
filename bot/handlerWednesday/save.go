@@ -4,7 +4,7 @@ import (
     "embercat/bot/core"
     "embercat/pgsql"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -38,7 +38,7 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     // Get photoID
     var photoID string
-    for _, pic := range *replay.Photo {
+    for _, pic := range replay.Photo {
         photoID = pic.FileID
         break
     }

@@ -4,7 +4,7 @@ import (
     "database/sql"
     "embercat/assets"
     "embercat/pgsql"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func Check(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -27,7 +27,9 @@ func Check(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
             return
         }
 
-        msg := tgbotapi.NewPhotoShare(chatID, frog)
+        file := tgbotapi.FileID(frog)
+
+        msg := tgbotapi.NewPhoto(chatID, file)
         if _, err := bot.Send(msg); err != nil {
             logger(err.Error())
         }
@@ -36,7 +38,7 @@ func Check(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         if b, err := box.Bytes(NO_WEDNESDAY); err != nil {
             logger(err.Error())
         } else {
-            msg := tgbotapi.NewPhotoUpload(chatID, tgbotapi.FileBytes{Name: NO_WEDNESDAY, Bytes: b})
+            msg := tgbotapi.NewPhoto(chatID, tgbotapi.FileBytes{Name: NO_WEDNESDAY, Bytes: b})
             if _, err := bot.Send(msg); err != nil {
                 logger(err.Error())
             }

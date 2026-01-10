@@ -3,7 +3,7 @@ package service
 import (
     "embercat/bot/core"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "regexp"
     "time"
 )
@@ -11,7 +11,7 @@ import (
 type Quote struct {
     Id        string    `json:"id"`
     ChatID    int64     `json:"chatID"`
-    UserId    int       `json:"userId"`
+    UserId    int64     `json:"userId"`
     UserName  string    `json:"userName"`
     Text      string    `json:"text"`
     CreatedAt time.Time `json:"createdAt"`

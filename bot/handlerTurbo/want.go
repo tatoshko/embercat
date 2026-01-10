@@ -3,7 +3,7 @@ package handlerTurbo
 import (
     "embercat/bot/core"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "regexp"
     "strconv"
     "strings"
@@ -61,7 +61,7 @@ func CallbackWant(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     callback := tgbotapi.NewCallback(query.ID, query.Data)
     chatID := query.Message.Chat.ID
 
-    if _, err := bot.AnswerCallbackQuery(callback); err != nil {
+    if _, err := bot.Request(callback); err != nil {
         logger(err.Error())
         return
     }

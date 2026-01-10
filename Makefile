@@ -4,6 +4,7 @@ deploy:
 	@ git commit -m 'auto'
 	@ git push origin master
 build:
+	@ go mod tidy
 	@ git pull origin master
 	@ cd assets && rice embed-go && cd ..
 	@ ~/go/bin/go1.19 build -ldflags="-s -w"

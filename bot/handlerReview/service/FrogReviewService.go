@@ -6,10 +6,10 @@ import (
 )
 
 type FrogReviewService struct {
-    UserId int `json:"userId"`
+    UserId int64 `json:"userId"`
 }
 
-func NewFrogReviewService(userId int) *FrogReviewService {
+func NewFrogReviewService(userId int64) *FrogReviewService {
     return &FrogReviewService{UserId: userId}
 }
 

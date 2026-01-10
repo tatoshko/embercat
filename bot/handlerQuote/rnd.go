@@ -3,7 +3,7 @@ package handlerQuote
 import (
     "embercat/bot/handlerQuote/service"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func Rnd(bot *tgbotapi.BotAPI, update tgbotapi.Update) {

@@ -4,7 +4,7 @@ import (
     "database/sql"
     "embercat/bot/handlerReview/service"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "strings"
 )
 
@@ -23,7 +23,7 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     query := update.CallbackQuery
     callback := tgbotapi.NewCallback(query.ID, query.Data)
 
-    if _, err := bot.AnswerCallbackQuery(callback); err != nil {
+    if _, err := bot.Request(callback); err != nil {
         logger(err.Error())
         return
     }
@@ -68,7 +68,7 @@ func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     query := update.CallbackQuery
     callback := tgbotapi.NewCallback(query.ID, query.Data)
 
-    if _, err := bot.AnswerCallbackQuery(callback); err != nil {
+    if _, err := bot.Request(callback); err != nil {
         logger(err.Error())
         return
     }
@@ -106,7 +106,7 @@ func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 }
 
-func next(bot *tgbotapi.BotAPI, chatID int64, userID int) {
+func next(bot *tgbotapi.BotAPI, chatID int64, userID int64) {
     var err error
     var reviewItem *service.FrogReviewItem
 
@@ -132,7 +132,9 @@ func next(bot *tgbotapi.BotAPI, chatID int64, userID int) {
         tgbotapi.NewInlineKeyboardButtonData("✅ Stay", fmt.Sprintf("/%s %s", CBFRStay, reviewItem.Id)),
     ))
 
-    msg := tgbotapi.NewPhotoShare(chatID, reviewItem.PhotoId)
+    file := tgbotapi.FileID(reviewItem.PhotoId)
+
+    msg := tgbotapi.NewPhoto(chatID, file)
     msg.Caption = reviewItem.PhotoId
     msg.ReplyMarkup = keyboard
 

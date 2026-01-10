@@ -6,7 +6,7 @@ import (
     "embercat/bot/handlerQuote/loader"
     "embercat/bot/handlerQuote/service"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "image/jpeg"
     "log"
 )
@@ -21,9 +21,9 @@ func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var photos []tgbotapi.PhotoSize
 
     if replay != nil {
-        photos = *replay.Photo
+        photos = replay.Photo
     } else {
-        photos = *update.Message.Photo
+        photos = update.Message.Photo
     }
 
     if photos == nil {
@@ -82,7 +82,7 @@ func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    msg := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, tgbotapi.FileBytes{Name: quote.Id, Bytes: buf.Bytes()})
+    msg := tgbotapi.NewPhoto(update.Message.Chat.ID, tgbotapi.FileBytes{Name: quote.Id, Bytes: buf.Bytes()})
 
     if _, err := bot.Send(msg); err != nil {
         log.Printf("Wednesday send error %s\n", err.Error())

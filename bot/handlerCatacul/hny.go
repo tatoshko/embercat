@@ -4,7 +4,7 @@ import (
     "bytes"
     "embercat/assets"
     "fmt"
-    tba "github.com/go-telegram-bot-api/telegram-bot-api"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "github.com/golang/freetype/truetype"
     "golang.org/x/image/font"
     "golang.org/x/image/font/gofont/gobold"
@@ -77,7 +77,7 @@ func Hny(bot *tba.BotAPI, update tba.Update) {
         return
     }
 
-    msg := tba.NewPhotoUpload(update.Message.Chat.ID, tba.FileBytes{Name: "time", Bytes: buf.Bytes()})
+    msg := tba.NewPhoto(update.Message.Chat.ID, tba.FileBytes{Name: "time", Bytes: buf.Bytes()})
 
     if _, err := bot.Send(msg); err != nil {
         log.Printf("Wednesday send error %s\n", err.Error())

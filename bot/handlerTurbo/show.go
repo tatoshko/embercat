@@ -2,7 +2,7 @@ package handlerTurbo
 
 import (
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "golang.org/x/text/feature/plural"
     "golang.org/x/text/language"
     "golang.org/x/text/message"
@@ -33,7 +33,7 @@ func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    msgp := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, tgbotapi.FileBytes{Name: liner.ToString(), Bytes: b})
+    msgp := tgbotapi.NewPhoto(update.Message.Chat.ID, tgbotapi.FileBytes{Name: liner.ToString(), Bytes: b})
     if _, err := bot.Send(msgp); err != nil {
         logger(err.Error())
     }
