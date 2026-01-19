@@ -59,7 +59,7 @@ func Start(config Config) {
                         go handlerQuote.Rnd(API, update)
                     }
 
-                    log.Printf("%v", update.Message.Photo)
+                    log.Printf("%v %b", update.Message.Photo, update.Message.Photo == nil)
 
                     if update.Message.Photo != nil && len(update.Message.Photo) > 0 && rand.Intn(20) == 0 {
                         go handlerQuote.Pic(API, update)
