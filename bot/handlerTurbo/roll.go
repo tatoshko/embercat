@@ -3,10 +3,10 @@ package handlerTurbo
 import (
     "embercat/pgsql"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func Roll(bot *tba.BotAPI, update tba.Update) {
     var err error
     logger := getLogger("ROLL")
 
@@ -21,7 +21,7 @@ func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     if exists, err := r.RowsAffected(); err != nil {
         logger("can't check exists: ", err.Error())
     } else if exists > 0 {
-        msg := tgbotapi.NewMessage(chatID, "Можно только одну жвачку в день.")
+        msg := tba.NewMessage(chatID, "Можно только одну жвачку в день.")
         if _, err := bot.Send(msg); err != nil {
             logger("bot send error", "only one", err.Error())
         }
@@ -40,11 +40,11 @@ func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     liner := GetRandomLiner()
     if _, err := collection.Add(liner); err != nil {
         logger("add liner error: ", err.Error())
-        msg := tgbotapi.NewMessage(
+        msg := tba.NewMessage(
             chatID,
             fmt.Sprintf("Что-то не так с выдачей новых вкладышей, а тебе почти достался <b>%s</b>", liner.ToString()),
         )
-        msg.ParseMode = tgbotapi.ModeHTML
+        msg.ParseMode = tba.ModeHTML
 
         if _, err = bot.Send(msg); err != nil {
             logger("bot send error", "add liner", err.Error())
@@ -55,7 +55,7 @@ func Roll(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     if b, err := liner.ToPicture(); err != nil {
         logger("liner to pic error: ", err.Error())
     } else {
-        msg := tgbotapi.NewPhoto(update.Message.Chat.ID, tgbotapi.FileBytes{Name: liner.ToString(), Bytes: b})
+        msg := tba.NewPhoto(update.Message.Chat.ID, tba.FileBytes{Name: liner.ToString(), Bytes: b})
 
         if _, err = bot.Send(msg); err != nil {
             logger("bot send error", "photo upload", err.Error())

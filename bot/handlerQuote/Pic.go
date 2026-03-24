@@ -6,19 +6,19 @@ import (
     "embercat/bot/handlerQuote/loader"
     "embercat/bot/handlerQuote/service"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "image/jpeg"
     "log"
 )
 
-func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func Pic(bot *tba.BotAPI, update tba.Update) {
     var err error
     logger := getLogger("PIC")
     chatID := update.Message.Chat.ID
 
     // get replay message
     replay := update.Message.ReplyToMessage
-    var photos []tgbotapi.PhotoSize
+    var photos []tba.PhotoSize
 
     if replay != nil {
         photos = replay.Photo
@@ -27,7 +27,7 @@ func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 
     if photos == nil {
-        msg := tgbotapi.NewMessage(chatID, "Ты че, пёс, сообщение должно быть с картинкой")
+        msg := tba.NewMessage(chatID, "Ты че, пёс, сообщение должно быть с картинкой")
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
         }
@@ -40,7 +40,7 @@ func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     // get direct lint to file
     var fileURL string
     if fileURL, err = bot.GetFileDirectURL(photoID); err != nil {
-        msg := tgbotapi.NewMessage(chatID, "Не смог получить картинку")
+        msg := tba.NewMessage(chatID, "Не смог получить картинку")
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
         }
@@ -55,7 +55,7 @@ func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var quote *service.Quote
     if quote, err = quoteService.FindRND(); err != nil {
         logger(err.Error())
-        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("что-то пошло не так %s", err.Error()))
+        msg := tba.NewMessage(chatID, fmt.Sprintf("что-то пошло не так %s", err.Error()))
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
         }
@@ -68,7 +68,7 @@ func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     //var quotedPic *image.RGBA
     if img, err = drawer.AddQuoteBelow(quote, img); err != nil {
         logger(err.Error())
-        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("что-то пошло не так %s", err.Error()))
+        msg := tba.NewMessage(chatID, fmt.Sprintf("что-то пошло не так %s", err.Error()))
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
         }
@@ -82,7 +82,7 @@ func Pic(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    msg := tgbotapi.NewPhoto(update.Message.Chat.ID, tgbotapi.FileBytes{Name: quote.Id, Bytes: buf.Bytes()})
+    msg := tba.NewPhoto(update.Message.Chat.ID, tba.FileBytes{Name: quote.Id, Bytes: buf.Bytes()})
 
     if _, err := bot.Send(msg); err != nil {
         log.Printf("Wednesday send error %s\n", err.Error())

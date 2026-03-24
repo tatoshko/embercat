@@ -3,12 +3,12 @@ package handlerDonate
 import (
     "embercat/pgsql"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "log"
 )
 
-func Add(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
-    msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+func Add(bot *tba.BotAPI, update tba.Update) {
+    msg := tba.NewMessage(update.Message.Chat.ID, "")
     userID := update.Message.From.UserName
 
     if userID != COLLECTOR {

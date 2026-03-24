@@ -3,7 +3,7 @@ package service
 import (
     "embercat/bot/core"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "regexp"
     "time"
 )
@@ -21,7 +21,7 @@ func NewQuote() *Quote {
     return &Quote{}
 }
 
-func NewQuoteFromMessage(message *tgbotapi.Message) *Quote {
+func NewQuoteFromMessage(message *tba.Message) *Quote {
     q := NewQuote()
     q.ChatID = message.Chat.ID
     q.UserId = message.From.ID

@@ -3,11 +3,11 @@ package handlerDonate
 import (
     "database/sql"
     "embercat/pgsql"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "log"
 )
 
-func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func Show(bot *tba.BotAPI, update tba.Update) {
     logger := getLogger("SHOW")
     pg := pgsql.GetClient()
 
@@ -28,8 +28,8 @@ func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         donates.Add(donate)
     }
 
-    msg := tgbotapi.NewMessage(update.Message.Chat.ID, getDonatesList(donates))
-    msg.ParseMode = tgbotapi.ModeHTML
+    msg := tba.NewMessage(update.Message.Chat.ID, getDonatesList(donates))
+    msg.ParseMode = tba.ModeHTML
     if _, err := bot.Send(msg); err != nil {
         log.Printf("Show error %s\n", err.Error())
     }

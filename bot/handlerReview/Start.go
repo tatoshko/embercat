@@ -2,10 +2,10 @@ package handlerReview
 
 import (
     "embercat/bot/handlerReview/service"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func Start(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func Start(bot *tba.BotAPI, update tba.Update) {
     var err error
 
     logger := getLogger("START")

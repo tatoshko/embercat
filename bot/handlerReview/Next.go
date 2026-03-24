@@ -4,7 +4,7 @@ import (
     "database/sql"
     "embercat/bot/handlerReview/service"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "strings"
 )
 
@@ -13,15 +13,15 @@ const (
     CBFRStay   = "frstay"
 )
 
-func Next(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func Next(bot *tba.BotAPI, update tba.Update) {
     next(bot, update.Message.Chat.ID, update.Message.From.ID)
 }
 
-func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func CallbackRemove(bot *tba.BotAPI, update tba.Update) {
     logger := getLogger("CALLBACK REMOVE")
 
     query := update.CallbackQuery
-    callback := tgbotapi.NewCallback(query.ID, query.Data)
+    callback := tba.NewCallback(query.ID, query.Data)
 
     if _, err := bot.Request(callback); err != nil {
         logger(err.Error())
@@ -36,7 +36,7 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     frogReviewService := service.NewFrogReviewService(userID)
     if reviewItem, err := frogReviewService.FindById(itemId); err != nil {
         if err == sql.ErrNoRows {
-            msg := tgbotapi.NewMessage(chatID, "Такой жабы уже нет")
+            msg := tba.NewMessage(chatID, "Такой жабы уже нет")
             if _, err := bot.Send(msg); err != nil {
                 logger(err.Error())
             }
@@ -47,12 +47,12 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         if err = frogReviewService.Reject(reviewItem); err != nil {
             logger(err.Error())
         } else {
-            msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Минус жаба %s", reviewItem.PhotoId))
+            msg := tba.NewMessage(chatID, fmt.Sprintf("Минус жаба %s", reviewItem.PhotoId))
             if _, err := bot.Send(msg); err != nil {
                 logger(err.Error())
             }
 
-            del := tgbotapi.NewDeleteMessage(chatID, query.Message.MessageID)
+            del := tba.NewDeleteMessage(chatID, query.Message.MessageID)
             if _, err := bot.Send(del); err != nil {
                 logger(err.Error())
             }
@@ -62,11 +62,11 @@ func CallbackRemove(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 }
 
-func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func CallbackStay(bot *tba.BotAPI, update tba.Update) {
     logger := getLogger("CALLBACK STAY")
 
     query := update.CallbackQuery
-    callback := tgbotapi.NewCallback(query.ID, query.Data)
+    callback := tba.NewCallback(query.ID, query.Data)
 
     if _, err := bot.Request(callback); err != nil {
         logger(err.Error())
@@ -80,7 +80,7 @@ func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     frogReviewService := service.NewFrogReviewService(userID)
     if reviewItem, err := frogReviewService.FindById(itemId); err != nil {
         if err == sql.ErrNoRows {
-            msg := tgbotapi.NewMessage(chatID, "Такой жабы уже нет")
+            msg := tba.NewMessage(chatID, "Такой жабы уже нет")
             if _, err := bot.Send(msg); err != nil {
                 logger(err.Error())
             }
@@ -91,12 +91,12 @@ func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         if err = frogReviewService.Approve(reviewItem); err != nil {
             logger(err.Error())
         } else {
-            msg := tgbotapi.NewMessage(chatID, "Пусть живет")
+            msg := tba.NewMessage(chatID, "Пусть живет")
             if _, err := bot.Send(msg); err != nil {
                 logger(err.Error())
             }
 
-            del := tgbotapi.NewDeleteMessage(chatID, query.Message.MessageID)
+            del := tba.NewDeleteMessage(chatID, query.Message.MessageID)
             if _, err := bot.Send(del); err != nil {
                 logger(err.Error())
             }
@@ -106,7 +106,7 @@ func CallbackStay(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 }
 
-func next(bot *tgbotapi.BotAPI, chatID int64, userID int64) {
+func next(bot *tba.BotAPI, chatID int64, userID int64) {
     var err error
     var reviewItem *service.FrogReviewItem
 
@@ -116,7 +116,7 @@ func next(bot *tgbotapi.BotAPI, chatID int64, userID int64) {
 
     if reviewItem, err = frogReviewService.Next(); err != nil {
         if err == sql.ErrNoRows {
-            msg := tgbotapi.NewMessage(chatID, "Ревью закончено, или не начато")
+            msg := tba.NewMessage(chatID, "Ревью закончено, или не начато")
             if _, err := bot.Send(msg); err != nil {
                 logger(err.Error())
             }
@@ -127,14 +127,14 @@ func next(bot *tgbotapi.BotAPI, chatID int64, userID int64) {
         return
     }
 
-    keyboard := tgbotapi.NewInlineKeyboardMarkup(tgbotapi.NewInlineKeyboardRow(
-        tgbotapi.NewInlineKeyboardButtonData("☦ Remove", fmt.Sprintf("/%s %s", CBFRRemove, reviewItem.Id)),
-        tgbotapi.NewInlineKeyboardButtonData("✅ Stay", fmt.Sprintf("/%s %s", CBFRStay, reviewItem.Id)),
+    keyboard := tba.NewInlineKeyboardMarkup(tba.NewInlineKeyboardRow(
+        tba.NewInlineKeyboardButtonData("☦ Remove", fmt.Sprintf("/%s %s", CBFRRemove, reviewItem.Id)),
+        tba.NewInlineKeyboardButtonData("✅ Stay", fmt.Sprintf("/%s %s", CBFRStay, reviewItem.Id)),
     ))
 
-    file := tgbotapi.FileID(reviewItem.PhotoId)
+    file := tba.FileID(reviewItem.PhotoId)
 
-    msg := tgbotapi.NewPhoto(chatID, file)
+    msg := tba.NewPhoto(chatID, file)
     msg.Caption = reviewItem.PhotoId
     msg.ReplyMarkup = keyboard
 

@@ -2,10 +2,10 @@ package handlerPic
 
 import (
     "embercat/pgsql"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func RndShare(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func RndShare(bot *tba.BotAPI, update tba.Update) {
     var err error
     logger := getLogger("LOAD")
 
@@ -20,9 +20,9 @@ func RndShare(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    file := tgbotapi.FileID(photoId)
+    file := tba.FileID(photoId)
 
-    msg := tgbotapi.NewPhoto(update.Message.Chat.ID, file)
+    msg := tba.NewPhoto(update.Message.Chat.ID, file)
     if _, err = bot.Send(msg); err != nil {
         logger(err.Error())
     }

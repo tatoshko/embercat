@@ -1,8 +1,8 @@
 package core
 
-import tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+import tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 
-func GetUserName(user *tgbotapi.User, mention bool) string {
+func GetUserName(user *tba.User, mention bool) string {
     if user.UserName != "" {
         if mention {
             return "@" + user.UserName

@@ -3,7 +3,6 @@ package main
 import (
     "embercat/assets"
     "embercat/bot"
-    "embercat/huggingface"
     "embercat/pgsql"
     "encoding/json"
     "fmt"
@@ -21,10 +20,9 @@ type ServerConfig struct {
 }
 
 type Config struct {
-    Bot         bot.Config         `json:"bot"`
-    Pg          pgsql.Config       `json:"pg"`
-    Server      ServerConfig       `json:"server"`
-    Huggingface huggingface.Config `json:"huggingface"`
+    Bot    bot.Config   `json:"bot"`
+    Pg     pgsql.Config `json:"pg"`
+    Server ServerConfig `json:"server"`
 }
 
 func main() {
@@ -33,7 +31,6 @@ func main() {
     assets.InitBox()
     go initHttpServer(config.Server)
     go pgsql.Init(config.Pg)
-    go huggingface.Init(config.Huggingface)
     bot.Start(config.Bot)
 
 }
@@ -57,9 +54,11 @@ func ReadConfig() (config Config) {
 func initHttpServer(config ServerConfig) {
     addr := fmt.Sprintf("%s:%d", config.Host, config.Port)
 
-    log.Printf("Bind to: [%s]", addr)
+    log.Printf("Trying bind to: [%s]", addr)
 
     if err := http.ListenAndServe(addr, nil); err != nil {
         log.Fatalln(err.Error())
     }
+
+    log.Printf("HTTP server is ready\n")
 }

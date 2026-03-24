@@ -4,10 +4,10 @@ import (
     "embercat/bot/core"
     "embercat/pgsql"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func Save(bot *tba.BotAPI, update tba.Update) {
     var err error
     chatID := update.Message.Chat.ID
     logger := getLogger("SAVE")
@@ -15,21 +15,21 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     // Check. Message is replay with photo
     replay := update.Message.ReplyToMessage
     if replay == nil || replay.Photo == nil {
-        msg := tgbotapi.NewMessage(chatID, "Вызов этой команды возможен только в ответ на сообщение с картинкой")
+        msg := tba.NewMessage(chatID, "Вызов этой команды возможен только в ответ на сообщение с картинкой")
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
         }
         return
     }
 
-    var member tgbotapi.ChatMember
+    var member tba.ChatMember
     if member, err = core.GetChatMember(bot, chatID, update.Message.From.ID); err != nil {
         logger(err.Error())
         return
     }
 
     if !canSave(member) {
-        msg := tgbotapi.NewMessage(chatID, "Слыш, пёс. Не только лишь все могут это делать.")
+        msg := tba.NewMessage(chatID, "Слыш, пёс. Не только лишь все могут это делать.")
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
         }
@@ -50,7 +50,7 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     if _, err = pg.Exec(q, photoID); err != nil {
         logger("unable to save: ", err.Error())
 
-        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Скорее всего такая жаба уже есть или что-то пошло не так"))
+        msg := tba.NewMessage(chatID, fmt.Sprintf("Скорее всего такая жаба уже есть или что-то пошло не так"))
 
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
@@ -59,13 +59,13 @@ func Save(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    msg := tgbotapi.NewMessage(chatID, "Схоронил, под сердечком прям")
+    msg := tba.NewMessage(chatID, "Схоронил, под сердечком прям")
     if _, err = bot.Send(msg); err != nil {
         logger(err.Error())
     }
 }
 
-func canSave(member tgbotapi.ChatMember) bool {
+func canSave(member tba.ChatMember) bool {
     if member.IsCreator() {
         return true
     }

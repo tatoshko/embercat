@@ -3,7 +3,7 @@ package handlerTurbo
 import (
     "bytes"
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "golang.org/x/text/feature/plural"
     "golang.org/x/text/language"
     "golang.org/x/text/message"
@@ -11,7 +11,7 @@ import (
     "log"
 )
 
-func MyCollection(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func MyCollection(bot *tba.BotAPI, update tba.Update) {
     var err error
 
     logger := getLogger("MY COLLECTION")
@@ -23,8 +23,8 @@ func MyCollection(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var collection Collection
     if collection, err = LoadCollection(int64(userID)); err != nil {
         logger(err.Error())
-        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Что-то не так с твоей коллекцией\n%s", err.Error()))
-        msg.ParseMode = tgbotapi.ModeHTML
+        msg := tba.NewMessage(chatID, fmt.Sprintf("Что-то не так с твоей коллекцией\n%s", err.Error()))
+        msg.ParseMode = tba.ModeHTML
 
         return
     }
@@ -47,8 +47,8 @@ func MyCollection(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     printer := message.NewPrinter(language.Russian)
     result := printer.Sprintf("В твоей коллекции %d вкладышей", collection.Count())
-    msg := tgbotapi.NewMessage(chatID, result)
-    msg.ParseMode = tgbotapi.ModeHTML
+    msg := tba.NewMessage(chatID, result)
+    msg.ParseMode = tba.ModeHTML
     if _, err := bot.Send(msg); err != nil {
         log.Printf("HandlerCollection send error %s", err.Error())
     }
@@ -61,7 +61,7 @@ func MyCollection(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         log.Printf("HandlerCollection jpeg.Encode error %s", err.Error())
     }
 
-    msgp := tgbotapi.NewDocument(chatID, tgbotapi.FileBytes{Bytes: buf.Bytes(), Name: "Collection.jpg"})
+    msgp := tba.NewDocument(chatID, tba.FileBytes{Bytes: buf.Bytes(), Name: "Collection.jpg"})
     if _, err := bot.Send(msgp); err != nil {
         log.Printf("HandlerCollection bot.Send error %s", err.Error())
     }

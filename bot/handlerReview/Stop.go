@@ -2,10 +2,10 @@ package handlerReview
 
 import (
     "embercat/bot/handlerReview/service"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func Stop(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func Stop(bot *tba.BotAPI, update tba.Update) {
     var err error
 
     logger := getLogger("STOP")
@@ -17,7 +17,7 @@ func Stop(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         logger(err.Error())
     }
 
-    msg := tgbotapi.NewMessage(chatID, "Ревью остановленно")
+    msg := tba.NewMessage(chatID, "Ревью остановленно")
 
     if _, err = bot.Send(msg); err != nil {
         logger(err.Error())

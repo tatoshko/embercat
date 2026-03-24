@@ -2,13 +2,13 @@ package handlerTurbo
 
 import (
     "fmt"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+    tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "golang.org/x/text/feature/plural"
     "golang.org/x/text/language"
     "golang.org/x/text/message"
 )
 
-func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func Show(bot *tba.BotAPI, update tba.Update) {
     var err error
 
     logger := getLogger("Show")
@@ -18,8 +18,8 @@ func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     var liner Liner
     if liner, err = NewLinerFromString(args); err != nil {
-        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Неверный номер вкладыша <b>%s</b>", args))
-        msg.ParseMode = tgbotapi.ModeHTML
+        msg := tba.NewMessage(chatID, fmt.Sprintf("Неверный номер вкладыша <b>%s</b>", args))
+        msg.ParseMode = tba.ModeHTML
 
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
@@ -33,7 +33,7 @@ func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    msgp := tgbotapi.NewPhoto(update.Message.Chat.ID, tgbotapi.FileBytes{Name: liner.ToString(), Bytes: b})
+    msgp := tba.NewPhoto(update.Message.Chat.ID, tba.FileBytes{Name: liner.ToString(), Bytes: b})
     if _, err := bot.Send(msgp); err != nil {
         logger(err.Error())
     }
@@ -42,8 +42,8 @@ func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     if collection, err = LoadCollection(int64(update.Message.From.ID)); err != nil {
         logger(err.Error())
 
-        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Что-то не так с твоей колекцией/n%s", err.Error()))
-        msg.ParseMode = tgbotapi.ModeHTML
+        msg := tba.NewMessage(chatID, fmt.Sprintf("Что-то не так с твоей колекцией/n%s", err.Error()))
+        msg.ParseMode = tba.ModeHTML
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
         }
@@ -66,8 +66,8 @@ func Show(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     printer := message.NewPrinter(language.Russian)
     txt := fmt.Sprintf("%s <b>%s</b>", printer.Sprintf("В твоей коллекции %d вкладышей", score), liner.ToString())
 
-    msg := tgbotapi.NewMessage(chatID, txt)
-    msg.ParseMode = tgbotapi.ModeHTML
+    msg := tba.NewMessage(chatID, txt)
+    msg.ParseMode = tba.ModeHTML
 
     if _, err := bot.Send(msg); err != nil {
         logger(err.Error())
