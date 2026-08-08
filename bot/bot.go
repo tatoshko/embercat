@@ -5,7 +5,6 @@ import (
     "embercat/bot/core"
     "embercat/bot/handlerCatacul"
     "embercat/bot/handlerDonate"
-    "embercat/bot/handlerPic"
     "embercat/bot/handlerQuote"
     "embercat/bot/handlerReview"
     "embercat/bot/handlerThreat"
@@ -35,21 +34,6 @@ func Start(config Config) {
         TLSHandshakeTimeout: 10 * time.Second,
         // Force using specific IP for api.telegram.org
     }
-
-    // "Пока" не надо, поменяли сервер, все работает, вроде
-    // Подменяем разрешение имени
-    //transport.DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
-    //    if addr == "api.telegram.org:443" {
-    //        // Используем один из известных IP Telegram
-    //        // Можно попробовать несколько: 149.154.167.220, 149.154.167.221, 149.154.167.51
-    //        addr = "149.154.167.220:443"
-    //    }
-    //    // Для всех остальных адресов используем стандартный Dialer
-    //    return (&net.Dialer{
-    //        Timeout:   30 * time.Second,
-    //        KeepAlive: 30 * time.Second,
-    //    }).DialContext(ctx, network, addr)
-    //}
 
     hc := &http.Client{
         Transport: transport,
@@ -167,11 +151,6 @@ func registerCommands() {
     // Donates
     Commands["donate"] = handlerDonate.Add
     Commands["donates"] = handlerDonate.Show
-
-    // Pictures
-    Commands["aserver"] = handlerPic.RndServer
-    Commands["ashare"] = handlerPic.RndShare
-    Commands["asave"] = handlerPic.Save
 
     // Quote
     Commands["add"] = handlerQuote.Add

@@ -2,8 +2,8 @@ package handlerQuote
 
 import (
     "bytes"
+    "embercat/bot/core/loader"
     "embercat/bot/handlerQuote/drawer"
-    "embercat/bot/handlerQuote/loader"
     "embercat/bot/handlerQuote/service"
     "fmt"
     tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"

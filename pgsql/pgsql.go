@@ -21,8 +21,8 @@ func Init(config Config) *sql.DB {
 
     storedConfig = config
     psqlInfo := fmt.Sprintf(
-        "host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-        config.Host, config.Port, config.User, config.Password, config.DBName,
+        "host=%s port=%d user=%s password=%s dbname=%s sslmode=%s\n",
+        config.Host, config.Port, config.User, config.Password, config.DBName, config.SSLMode,
     )
 
     logger("Trying to connect to: ", psqlInfo)

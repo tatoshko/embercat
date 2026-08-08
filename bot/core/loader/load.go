@@ -16,6 +16,10 @@ func LoadPicByURL(fileURL string) (m *image.RGBA, err error) {
     var pic image.Image
     pic, _, err = image.Decode(resp.Body)
 
+    if err != nil {
+        return nil, err
+    }
+
     b := pic.Bounds()
     m = image.NewRGBA(image.Rect(0, 0, b.Dx(), b.Dy()))
     draw.Draw(m, m.Bounds(), pic, b.Min, draw.Src)

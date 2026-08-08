@@ -21,13 +21,13 @@ func Check(bot *tba.BotAPI, update tba.Update) {
             logger(err.Error())
         }
 
-        var frog string
-        if err = row.Scan(&frog); err != nil {
+        var photoID string
+        if err = row.Scan(&photoID); err != nil {
             logger(err.Error())
             return
         }
 
-        file := tba.FileID(frog)
+        file := tba.FileID(photoID)
 
         msg := tba.NewPhoto(chatID, file)
         if _, err := bot.Send(msg); err != nil {

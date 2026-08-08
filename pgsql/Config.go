@@ -6,4 +6,5 @@ type Config struct {
     User     string `json:"user"`
     Password string `json:"password"`
     DBName   string `json:"dbname"`
+    SSLMode  string `json:"sslmode"`
 }
