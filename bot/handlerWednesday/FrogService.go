@@ -3,6 +3,7 @@ package handlerWednesday
 import (
     "database/sql"
     "embercat/pgsql"
+    "log"
 )
 
 type Frog struct {
@@ -16,7 +17,7 @@ type FrogService struct {
 }
 
 func NewFrogService() *FrogService {
-    return &FrogService{Threshold: 10}
+    return &FrogService{Threshold: 10.0}
 }
 
 func (f *FrogService) Add(photoId string, vector string) (err error) {
@@ -43,6 +44,8 @@ func (f *FrogService) IsExists(vector string) (isExists bool, frog *Frog, err er
     if err != nil {
         return false, nil, err
     }
+
+    log.Printf("Distance %.f", distance)
 
     return distance < f.Threshold, frog, nil
 }
