@@ -16,7 +16,7 @@ type FrogService struct {
 }
 
 func NewFrogService() *FrogService {
-    return &FrogService{Threshold: 6}
+    return &FrogService{Threshold: 10}
 }
 
 func (f *FrogService) Add(photoId string, vector string) (err error) {
